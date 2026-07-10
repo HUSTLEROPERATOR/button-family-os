@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Button's Family OS</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%230d0d10'/%3E%3Ctext x='32' y='45' font-family='Georgia,serif' font-size='38' font-weight='bold' fill='%23d4a94e' text-anchor='middle'%3EB%3C/text%3E%3C/svg%3E">
+<style>
+body{margin:0;background:#0d0d10;color:#a09da8;font-family:'Segoe UI',system-ui,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh}
+.box{text-align:center}
+.crest{font-size:52px;animation:pulse 1.4s infinite;color:#d4a94e;font-family:Georgia,serif;font-weight:bold}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+p{letter-spacing:2px;text-transform:uppercase;font-size:12px}
+.err{color:#e5453d;max-width:340px;text-transform:none;letter-spacing:0;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="box"><div class="crest">B</div><p id="msg">Caricamento&#8230;</p></div>
+<script>
+/* Button's Family OS - loader: scarica l'app da Supabase e la esegue.
+   Per aggiornare l'app basta ricaricare l'HTML su Supabase: questo file non cambia mai. */
+const SB_URL='https://mbdezsmpkajcmnlrpzzv.supabase.co';
+const SB_KEY='sb_publishable_Qpb1WbPWevDvrCNrXlziIw_PG5LBamd';
+fetch(SB_URL+'/rest/v1/bfos_assets?key=eq.app&select=content',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}})
+.then(r=>{ if(!r.ok) throw new Error('HTTP '+r.status); return r.json(); })
+.then(d=>{
+  if(!d.length || !d[0].content) throw new Error('App non trovata nel database');
+  document.open(); document.write(d[0].content); document.close();
+})
+.catch(e=>{
+  document.getElementById('msg').innerHTML='<span class="err">Errore di caricamento: '+e.message+'<br>Se il progetto Supabase &egrave; in pausa, la Direzione deve riattivarlo dalla dashboard. Poi ricarica.</span>';
+});
+</script>
+</body>
+</html>
