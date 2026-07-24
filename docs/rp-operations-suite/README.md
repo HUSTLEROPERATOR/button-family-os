@@ -12,6 +12,16 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 - Ogni calcolo economico deve essere spiegabile, versionato e sottoposto ad approvazione.
 - Nessun requisito approvato può rimanere soltanto in chat: deve essere collegato a roadmap, task e test.
 
+## Percorso di lettura operativo
+
+Per decidere cosa fare adesso:
+
+1. `30_EXECUTION_BOARD.md` — attività realmente eseguibili e blocker.
+2. `19_MASTER_ROADMAP.md` — cammino critico, gate e MVP cut line.
+3. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
+4. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
+5. `20_MASTER_TODO.md` — catalogo completo del backlog.
+
 ## Mappa documenti
 
 1. `00_EXECUTIVE_OVERVIEW.md` — sintesi e decisioni approvate.
@@ -33,8 +43,8 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 17. `16_DISCORD_INTEGRATION.md` — integrazione e confini.
 18. `17_ROLES_PERMISSIONS_AND_AUDIT.md` — accessi e tracciabilità.
 19. `18_WIPE_AND_SEASON_MANAGEMENT.md` — versionamento per wipe.
-20. `19_MASTER_ROADMAP.md` — fasi, gate e dipendenze.
-21. `20_MASTER_TODO.md` — backlog operativo.
+20. `19_MASTER_ROADMAP.md` — fasi, workstream, MVP cut line, gate ed evidenze.
+21. `20_MASTER_TODO.md` — catalogo completo del backlog.
 22. `21_REQUIREMENTS_TRACEABILITY_MATRIX.md` — requisito → task → test → release.
 23. `22_TEST_AND_ACCEPTANCE_PLAN.md` — strategia QA.
 24. `23_MIGRATION_PLAN.md` — migrazione controllata Button.
@@ -42,8 +52,10 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 26. `25_SECURITY_AND_BACKUP_PLAN.md` — sicurezza, backup e restore.
 27. `26_RISK_REGISTER.md` — rischi e contromisure.
 28. `27_DECISION_LOG.md` — decisioni approvate.
-29. `28_OPEN_QUESTIONS.md` — decisioni ancora da prendere.
+29. `28_OPEN_QUESTIONS.md` — decision queue con priorità e raccomandazioni.
 30. `29_IMPLEMENTATION_CHECKLIST.md` — controlli prima di fase, merge, deploy e chiusura task.
+31. `30_EXECUTION_BOARD.md` — work in progress, blocker ed evidenze immediate.
+32. `31_MVP_RELEASE_SLICES.md` — demo verticali, acceptance e rollback per ogni slice.
 
 ## Regola di aggiornamento
 
