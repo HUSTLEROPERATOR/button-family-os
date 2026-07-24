@@ -43,6 +43,7 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 27. `26_RISK_REGISTER.md` — rischi e contromisure.
 28. `27_DECISION_LOG.md` — decisioni approvate.
 29. `28_OPEN_QUESTIONS.md` — decisioni ancora da prendere.
+30. `29_IMPLEMENTATION_CHECKLIST.md` — controlli prima di fase, merge, deploy e chiusura task.
 
 ## Regola di aggiornamento
 
