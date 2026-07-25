@@ -37,6 +37,27 @@
 - **FR-AUTH-009** — Staging deve prevedere gli alias `demo-admin`, `demo-direzione` e `demo-staff`, con credenziali conservate fuori dal repository.
 - **FR-AUTH-010** — Una persona può avere più ruoli, ma ogni azione deve registrare il ruolo e lo scope utilizzati.
 
+## Organization OS
+
+- **FR-ORG-001** — Gestire principi, manuali e procedure versionati con stato `DRAFT`, `IN_REVIEW`, `APPROVED`, `SUSPENDED` o `RETIRED`.
+- **FR-ORG-002** — Assegnare un tutor a un affiliato in formazione, con responsabilità, periodo, evidenze e report.
+- **FR-ORG-003** — Gestire periodi di prova configurabili con obiettivi, checklist, valutazioni ed esito approvato dalla Direzione.
+- **FR-ORG-004** — Gestire depositi comuni, kit personali, outfit, veicoli operativi, inventari e differenze.
+- **FR-ORG-005** — Pianificare revisioni periodiche degli accessi e registrare revoche, motivazioni e approvazioni.
+- **FR-ORG-006** — Registrare attività e transazioni con responsabile, partecipanti, risorse, denaro, divisioni, problemi e conseguenze.
+- **FR-ORG-007** — Gestire mission plan, preavviso, autorizzazioni, partecipanti, asset, piano alternativo e debrief.
+- **FR-ORG-008** — Configurare target e soglie per organizzazione e stagione senza hardcode e senza attivazione automatica dalla fonte.
+- **FR-ORG-009** — Gestire intelligence RP con fonte, grado di verifica, visibilità, collegamenti, rischi e opportunità.
+- **FR-ORG-010** — Gestire eventi, relazioni, contatti, collaborazioni e voucher collegati all'organizzazione.
+- **FR-ORG-011** — Gestire quote, cauzioni, vantaggi, sconti e bonus con regole versionate e approvazione.
+- **FR-ORG-012** — Gestire segnalazioni di problemi procedurali, cavilli, soluzioni proposte e decisioni temporanee/definitive.
+- **FR-ORG-013** — Gestire valutazioni, riconoscimenti, correzioni, osservazioni, limitazioni, sospensioni ed esclusioni con decisione umana.
+- **FR-ORG-014** — Creare checklist ricorrenti configurabili con owner, esito, note, follow-up, scadenza ed evidenza.
+- **FR-ORG-015** — Registrare l'approvazione formale di procedure e configurazioni con versione, approvatore, data ed efficacia.
+- **FR-ORG-016** — Consentire un quick log da Discord senza considerarlo record ufficiale fino alla compilazione strutturata nell'app.
+- **FR-ORG-017** — Distinguere un errore dichiarato e corretto da un comportamento intenzionale, ripetuto o finalizzato ad aggirare la procedura.
+- **FR-ORG-018** — Impedire a Staff di approvare autonomamente il proprio esito, bonus, limitazione o provvedimento.
+
 ## Business
 
 - **FR-BUS-001** — Gestire personale, onboarding e stati.
@@ -97,3 +118,5 @@
 - **NFR-008** — Nessun segreto nel repository.
 - **NFR-009** — Migrazioni reversibili quando possibile.
 - **NFR-010** — Osservabilità e log sanitizzati.
+- **NFR-011** — Nessuna configurazione proveniente da una fonte `SOURCE_DRAFT` può diventare attiva senza approvazione esplicita.
+- **NFR-012** — Le informazioni classificate devono essere protette per organizzazione, ruolo, record e livello di visibilità.
