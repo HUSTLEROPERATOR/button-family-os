@@ -2,18 +2,26 @@
 
 ## Scopo
 
-Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro realmente eseguibile nel prossimo passaggio, con stato, dipendenze ed evidenze. Evita di trasformare oltre 180 task in una massa indistinta.
+Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro realmente eseguibile nel prossimo passaggio, con stato, dipendenze ed evidenze. Evita di trasformare il backlog in una massa indistinta.
 
 ## Stato attuale verificato
 
 - Blueprint documentale presente su branch dedicato.
-- Draft PR aperta.
+- Draft PR #1 aperta per la documentazione generale.
+- Draft PR #2 aperta per Slice 0 e secure-foundation planning.
 - Nessuna modifica applicativa, Supabase o deploy.
 - Domini Button/Organization OS e Business Operations OS definiti.
-- Roadmap, requisiti, data model preliminare, risk register e test plan presenti.
 - Modello utenti iniziale approvato: `ADMIN`, `DIREZIONE`, `STAFF`.
 - Separazione Admin/Direzione e visibilità Staff documentate.
-- Accesso al codice completo e al progetto Supabase effettivo di Button ancora da verificare.
+- `GTA RP Manuale Operativo Bozza v1.0` registrato come `SOURCE_DRAFT`.
+- Manuale mappato a moduli, requisiti, entità, task, test e decisioni aperte.
+- Le soglie numeriche della bozza sono inattive e devono essere approvate per stagione.
+- App live Button recuperata in sola lettura: 192.478 byte, 2.733 righe, SHA-256 registrato.
+- 21 funzioni live confermate, 3 parziali e 2 sconosciute.
+- 13 tabelle `bfos_*` e 2 RPC osservate staticamente.
+- Produzione, `index.html`, dati e Supabase invariati.
+- Accesso nominativo al progetto Supabase, schema, RLS, backup e staging ancora bloccati da B-01.
+- Registro fonti e riconciliazione Slice 0 presenti nei documenti 35 e 36.
 - Processi TNT definitivi dipendono dal prossimo wipe.
 
 ## Regole board
@@ -22,8 +30,20 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 - ogni task ha un solo accountable owner;
 - i task bloccati non entrano nel WIP;
 - nessun task P0 viene chiuso senza evidenza;
-- le issue GitHub si creano solo per task `READY` o `IN_PROGRESS`, non per tutto il backlog;
-- nessuna issue autorizza merge, deploy o modifica a produzione.
+- le issue GitHub si creano solo per task `READY` o `IN_PROGRESS`;
+- nessuna issue autorizza merge, deploy o modifica a produzione;
+- nessuna regola proveniente da `SOURCE_DRAFT` può diventare attiva durante l'audit;
+- `DONE (APP SCOPE)` non equivale alla chiusura del gate M0 backend.
+
+## WIP corrente
+
+| ID | Attività | Stato | Limite |
+|---|---|---|---|
+| B-01 / Q-TECH-002 | Confermare Technical Owner e accesso nominativo Supabase | BLOCKED/OWNER ACTION | fuori WIP tecnico |
+| ORG-023 | Parity iniziale app Button ↔ Manuale Operativo | READY | 1 |
+| Q-BTN-001 | Approvazione lista funzioni Button obbligatorie | IN_REVIEW | 2 |
+
+Non avviare una terza attività tecnica finché non viene chiuso uno dei due elementi attivi.
 
 ## Execution Pack 0 — Governance e accessi
 
@@ -51,26 +71,40 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
-| 1 | AUD-001 | Snapshot `main` e versione live | READY | Migration Owner | Pack 0 | commit, URL/versione, data |
-| 2 | AUD-002 | Esportare app servita da Supabase | BLOCKED | Technical/Migration | accesso Supabase | file sorgente + hash |
-| 3 | AUD-003 | Calcolare hash baseline | BLOCKED | Migration Owner | AUD-002 | checksum report |
-| 4 | AUD-004 | Inventariare asset | BLOCKED | Migration Owner | AUD-002 | manifest asset |
-| 5 | AUD-005 | Inventariare dipendenze/licenze | BLOCKED | Technical Owner | AUD-002 | dependency report |
-| 6 | AUD-006 | Inventariare schema DB | BLOCKED | Data Owner | accesso Supabase | schema report |
+| 1 | AUD-001 | Snapshot repository e versione live | DONE | Migration Owner | — | preflight + commit + data |
+| 2 | AUD-002 | Esportare app servita da Supabase | DONE (APP SCOPE) | Technical/Migration | GET pubblica | export locale ignorato + manifest |
+| 3 | AUD-003 | Calcolare hash baseline | DONE | Migration Owner | AUD-002 | SHA-256 registrato |
+| 4 | AUD-004 | Inventariare asset | IN_REVIEW | Migration Owner | AUD-002 | inline/app inventariati; Storage bloccato |
+| 5 | AUD-005 | Inventariare dipendenze/licenze | IN_REVIEW | Technical Owner | AUD-002 | zero CDN osservate; backend/licenze da completare |
+| 6 | AUD-006 | Inventariare schema DB | BLOCKED | Data Owner | B-01 | schema report |
 | 7 | AUD-007 | Inventariare RLS e ruoli esistenti | BLOCKED | Security Owner | AUD-006 | permission matrix legacy |
-| 8 | AUD-008 | Mappare segreti e variabili | BLOCKED | Security Owner | accesso ambienti | inventory senza valori segreti |
-| 9 | AUD-009 | Backup DB e storage | BLOCKED | Technical Owner | accesso Supabase | backup report |
-| 10 | AUD-010 | Restore isolato | BLOCKED | Technical/QA | AUD-009 | restore evidence |
-| 11 | AUD-011 | Baseline funzionale Button | BLOCKED | Button Owner | AUD-002 | parity checklist |
-| 12 | ORG-001 | Inventario parity Button | BLOCKED | Button Owner | AUD-011 | funzione/schermata/stato |
+| 8 | AUD-008 | Mappare segreti e variabili | BLOCKED | Security Owner | B-01 | inventory senza valori segreti |
+| 9 | AUD-009 | Backup DB e Storage | BLOCKED | Technical Owner | B-01 | backup report |
+| 10 | AUD-010 | Restore isolato | BLOCKED | Technical/QA | AUD-009 + staging | restore evidence |
+| 11 | AUD-011 | Baseline funzionale Button | IN_REVIEW | Button Owner | AUD-002 | 21 CONFIRMED, 3 PARTIAL, 2 UNKNOWN |
+| 12 | ORG-001 | Inventario parity Button | IN_REVIEW | Button Owner | AUD-011 | funzione/schermata/stato |
+| 13 | ORG-023 | Confrontare app Button e Manuale Operativo | READY | Button/Product | AUD-011 + doc 33 | parity source report |
 
 ### Gate Pack 1 / M0
 
-- codice reale versionato;
-- schema, utenti legacy e asset inventariati;
+**Completato lato app:**
+
+- export read-only;
+- hash e dimensione;
+- inventario statico;
+- prima parity checklist;
+- rischi applicativi;
+- runbook ripetibile;
+- produzione invariata.
+
+**Ancora necessario per chiudere M0:**
+
+- schema, Auth, RLS, funzioni, Storage e ambienti inventariati;
 - backup e restore verificati;
-- parity Button documentata;
-- rollback eseguibile.
+- conteggi dati autorizzati;
+- lista baseline approvata dal Button Owner;
+- confronto app/manuale completato;
+- rollback backend eseguibile.
 
 ## Execution Pack 2 — Knowledge discovery
 
@@ -78,18 +112,24 @@ Questo pacchetto può procedere in parallelo a Pack 1 senza toccare produzione.
 
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
-| 1 | AUD-013 | Inventariare manuali e materiali Discord | IN_PROGRESS | Product/Content Owner | — | source register |
-| 2 | AUD-014 | Classificare requisiti | READY | Product Owner | AUD-013 | requirement-source matrix |
-| 3 | ARCH-001 | Confermare domini e confini | DONE | Product Owner | — | blueprint/decision log |
-| 4 | ARCH-004 | Strategia configurazioni | IN_REVIEW | Product/Technical | AUD-014 | config principles |
-| 5 | ARCH-005 | Cataloghi versionati | IN_REVIEW | Product/Data | ARCH-004 | catalog contract |
-| 6 | Q-BTN-001 | Definire baseline obbligatoria Button | BLOCKED | Button Owner | AUD-011 | approved list |
-| 7 | Q-BTN-002 | Definire dati da migrare | BLOCKED | Button/Data Owner | AUD-006/011 | migration scope |
-| 8 | Q-TNT-001 | Confermare processi post-wipe | DEFERRED | TNT Owner | nuovo wipe | process map approvata |
+| 1 | AUD-013 | Inventariare manuali e materiali Discord | IN_PROGRESS | Product/Content Owner | — | `36_SOURCE_REGISTER.md` |
+| 2 | ORG-011 | Registrare Manuale Operativo GTA RP | DONE | Product/Content | — | documento 33 + audit |
+| 3 | ORG-021 | Collegare fonte, requisiti, task e test | IN_REVIEW | Product/Data | ORG-011 | traceability matrix |
+| 4 | ORG-022 | Registrare posizione/hash del PDF originale | READY | Product/Content | file originale disponibile | source register aggiornato |
+| 5 | ORG-023 | Confrontare fonte e app live | READY | Button/Product | parity checklist | report observed/proposed |
+| 6 | ORG-024 | Classificare regole observed/proposed/approved/deferred | READY | Product/Button | ORG-023 | rule register |
+| 7 | AUD-014 | Classificare requisiti | IN_PROGRESS | Product Owner | AUD-013/ORG-011 | requirement-source matrix |
+| 8 | ARCH-001 | Confermare domini e confini | DONE | Product Owner | — | blueprint/decision log |
+| 9 | ARCH-004 | Strategia configurazioni | IN_REVIEW | Product/Technical | AUD-014 | config principles |
+| 10 | ARCH-005 | Cataloghi versionati | IN_REVIEW | Product/Data | ARCH-004 | catalog contract |
+| 11 | Q-BTN-001 | Definire baseline obbligatoria Button | IN_REVIEW | Button Owner | AUD-011 | approved list |
+| 12 | Q-BTN-002 | Definire dati da migrare | BLOCKED | Button/Data Owner | AUD-006/011 | migration scope |
+| 13 | Q-MAN-001..014 | Deliberare proposte del manuale | READY/PARTIAL_BLOCK | Direzione | parity + wipe | decision queue |
+| 14 | Q-TNT-001 | Confermare processi post-wipe | DEFERRED | TNT Owner | nuovo wipe | process map approvata |
 
 ## Execution Pack 3 — Architettura approvabile
 
-Parte solo dopo M0, salvo produzione di bozze non vincolanti.
+Parte solo dopo M0, salvo bozze non vincolanti.
 
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
@@ -97,13 +137,15 @@ Parte solo dopo M0, salvo produzione di bozze non vincolanti.
 | 2 | ARCH-003 | Organizzazioni/sedi/reparti | NOT_READY | Product/Data | discovery | domain model |
 | 3 | ARCH-007 | Ambienti | NOT_READY | Technical Owner | repo strategy | environment plan |
 | 4 | DATA-001 | ERD Shared Core | NOT_READY | Data Owner | ARCH-002/003 | ERD reviewed |
-| 5 | DATA-002 | ERD Organization OS | NOT_READY | Data/Button Owner | Q-BTN-001/002 | ERD reviewed |
+| 5 | DATA-002 | ERD Organization OS | IN_REVIEW | Data/Button Owner | manual mapping + parity | ERD reviewed |
 | 6 | DATA-003 | ERD Business OS | NOT_READY | Data/Business Owner | AUD-014 | ERD reviewed |
 | 7 | DATA-005 | Invarianti economiche | NOT_READY | Finance/Data | payroll decisions | invariant catalog |
 | 8 | AUTH-001 | Modellare ruoli Admin/Direzione/Staff | READY | Security/Data | AUTH-000, M0 | role/permission schema |
 | 9 | AUTH-004 | Disegnare RLS deny-by-default | NOT_READY | Security Owner | AUTH-001, DATA-001 | RLS matrix |
 | 10 | AUTH-010 | Separazione dei compiti | IN_REVIEW | Security/Finance | GOV-005 | approval matrix |
-| 11 | SEC-001 | Threat model | NOT_READY | Security Owner | architecture draft | threat model |
+| 11 | ORG-020 | Configuration approval register | READY | Product/Data | DATA-002 | approval schema |
+| 12 | ORG-043/044/045 | Seed inattivi e protezione regole bozza | READY | Data/Security | ORG-020 | seed template + tests |
+| 13 | SEC-001 | Threat model | READY_FOR_DRAFT | Security Owner | baseline app | threat model iniziale |
 
 ## Profili staging da creare in Slice 1
 
@@ -123,6 +165,8 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 - M1 architettura approvata;
 - Auth, organization, ruoli Admin/Direzione/Staff, RLS e audit;
 - Button parity;
+- manuale operativo classificato e configurazioni inattive;
+- onboarding/tutor, activity ledger, mission/debrief e issue register essenziali;
 - cliente, preventivo, ordine di lavoro, vendita, pagamento e cassa;
 - acquisti/magazzino essenziali;
 - payroll deterministico e approvabile;
@@ -131,6 +175,7 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ### Should — entra solo se non mette a rischio Must
 
+- intelligence avanzata;
 - turni avanzati;
 - formazione completa;
 - convenzioni;
@@ -140,6 +185,8 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ### Later
 
+- quote/cauzioni non approvate;
+- target numerici non approvati;
 - ruoli specializzati HR/Finance/Responsabile/Auditor;
 - finanza avanzata;
 - sponsor e marketing completi;
@@ -151,17 +198,7 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ## Evidenza minima per task
 
-Un link o artefatto verificabile tra:
-
-- commit/PR;
-- report audit;
-- screenshot o demo registrata;
-- query/test result;
-- schema/ERD;
-- decision log;
-- export/checksum;
-- UAT firmata;
-- runbook eseguito.
+Un link o artefatto verificabile tra commit/PR, report audit, screenshot/demo, query/test result, schema/ERD, decision log, export/checksum, UAT o runbook eseguito.
 
 `DONE` senza evidenza non è ammesso.
 
@@ -169,11 +206,13 @@ Un link o artefatto verificabile tra:
 
 Il checkpoint successivo deve produrre:
 
-1. owner e RACI;
-2. esito accesso Supabase Button;
-3. strategia repository;
-4. snapshot baseline;
-5. lista delle funzioni Button da proteggere;
-6. decisione se Pack 1 può partire o resta bloccato.
+1. Technical Owner e conferma del progetto Supabase;
+2. accesso nominativo e autorizzazione audit read-only;
+3. inventario schema/RLS/Auth/Storage;
+4. possibilità di backup e staging;
+5. approvazione della lista delle funzioni Button da proteggere;
+6. parity iniziale app/manuale;
+7. posizione e hash del PDF originale;
+8. decisione se il backend di M0 può essere completato o resta bloccato.
 
-La definizione dei tre profili iniziali è completata; la creazione degli account reali resta bloccata fino alla disponibilità dell'ambiente staging corretto.
+Finché B-01 resta aperto sono autorizzati soltanto documentazione, analisi statica e preparazione di piani non eseguiti.
