@@ -3,6 +3,7 @@
 ## Convenzioni
 
 - `FR-CORE-*`: nucleo condiviso.
+- `FR-AUTH-*`: utenti, ruoli e autorizzazioni.
 - `FR-ORG-*`: Organization OS.
 - `FR-BUS-*`: Business OS.
 - `FR-PAY-*`: payroll.
@@ -22,6 +23,19 @@
 - **FR-CORE-008** — Cercare, filtrare ed esportare dati autorizzati.
 - **FR-CORE-009** — Archiviare senza cancellare lo storico.
 - **FR-CORE-010** — Inviare notifiche configurabili.
+
+## Utenti e autorizzazioni
+
+- **FR-AUTH-001** — L'MVP deve supportare i profili `ADMIN`, `DIREZIONE` e `STAFF`.
+- **FR-AUTH-002** — Admin deve poter gestire utenti, ruoli, configurazioni, integrazioni e supporto tecnico nel proprio perimetro.
+- **FR-AUTH-003** — Direzione deve poter governare personale, attività, finanza, payroll e approvazioni aziendali.
+- **FR-AUTH-004** — Staff deve poter operare sui record propri o assegnati e consultare soltanto i propri dati personali/economici.
+- **FR-AUTH-005** — Admin senza ruolo Direzione non deve approvare payroll o movimenti economici sensibili.
+- **FR-AUTH-006** — Direzione senza ruolo Admin non deve modificare segreti, policy RLS o audit.
+- **FR-AUTH-007** — Le azioni sopra soglia e l'auto-approvazione devono richiedere una seconda approvazione configurabile.
+- **FR-AUTH-008** — I tentativi di accesso negati devono essere verificabili senza esporre dati riservati.
+- **FR-AUTH-009** — Staging deve prevedere gli alias `demo-admin`, `demo-direzione` e `demo-staff`, con credenziali conservate fuori dal repository.
+- **FR-AUTH-010** — Una persona può avere più ruoli, ma ogni azione deve registrare il ruolo e lo scope utilizzati.
 
 ## Business
 
