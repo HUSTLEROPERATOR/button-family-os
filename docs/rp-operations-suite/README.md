@@ -12,6 +12,7 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 - Ogni calcolo economico deve essere spiegabile, versionato e sottoposto ad approvazione.
 - Nessun requisito approvato può rimanere soltanto in chat: deve essere collegato a roadmap, task e test.
 - L'MVP parte con tre profili: `ADMIN`, `DIREZIONE`, `STAFF`.
+- I manuali in stato bozza vengono integrati come fonti e requisiti, non attivati automaticamente come regolamenti.
 
 ## Percorso di lettura operativo
 
@@ -21,8 +22,9 @@ Per decidere cosa fare adesso:
 2. `19_MASTER_ROADMAP.md` — cammino critico, gate e MVP cut line.
 3. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
 4. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — Admin, Direzione, Staff e matrice accessi.
-5. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
-6. `20_MASTER_TODO.md` — catalogo completo del backlog.
+5. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — integrazione della nuova bozza operativa, mapping, requisiti e configurazioni.
+6. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
+7. `20_MASTER_TODO.md` — catalogo completo del backlog.
 
 ## Mappa documenti
 
@@ -59,6 +61,7 @@ Per decidere cosa fare adesso:
 31. `30_EXECUTION_BOARD.md` — work in progress, blocker ed evidenze immediate.
 32. `31_MVP_RELEASE_SLICES.md` — demo verticali, acceptance e rollback per ogni slice.
 33. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — profili iniziali, permessi, account demo e test.
+34. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — fonte PDF, mapping completo, moduli, requisiti, task e decisioni aperte.
 
 ## Regola di aggiornamento
 
