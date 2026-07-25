@@ -30,6 +30,9 @@ Questa attività:
 | `04_BUTTON_PARITY_CHECKLIST.md` | Prima parity checklist funzione/schermata con stato evidenza |
 | `05_ACCESS_AND_BLOCKERS.md` | Cosa è verificato, cosa è bloccato, prossimo comando sicuro |
 | `06_ROLES_MVP_IMPLEMENTATION_PLAN.md` | Piano implementazione ruoli `ADMIN`/`DIREZIONE`/`STAFF` (staging) |
+| `07_TECHNICAL_ACCESS_REQUEST.md` | Richiesta nominativa al Technical Owner per chiudere B-01 |
+| `08_B01_ACCESS_CHECKLIST.md` | Checklist verificabile per owner, progetto, accessi, backup e audit |
+| `09_SLICE_1_SECURE_FOUNDATION_PLAN.md` | Piano della Slice 1: staging, Auth, RLS, audit e rollback |
 | `RUNBOOK.md` | Procedura ripetibile di export read-only e verifica |
 | `scripts/export-button-live-readonly.ps1` | Exporter GET-only, default dry run |
 | `database/roles_mvp_seed_template.sql` | Template SQL idempotente ruoli MVP — **non eseguito** |
