@@ -23,8 +23,9 @@ Per decidere cosa fare adesso:
 3. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
 4. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — Admin, Direzione, Staff e matrice accessi.
 5. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — integrazione della nuova bozza operativa, mapping, requisiti e configurazioni.
-6. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
-7. `20_MASTER_TODO.md` — catalogo completo del backlog.
+6. `34_MANUAL_INTEGRATION_TODO.md` — backlog dedicato al manuale, test e gate.
+7. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
+8. `20_MASTER_TODO.md` — catalogo generale del backlog.
 
 ## Mappa documenti
 
@@ -62,6 +63,7 @@ Per decidere cosa fare adesso:
 32. `31_MVP_RELEASE_SLICES.md` — demo verticali, acceptance e rollback per ogni slice.
 33. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — profili iniziali, permessi, account demo e test.
 34. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — fonte PDF, mapping completo, moduli, requisiti, task e decisioni aperte.
+35. `34_MANUAL_INTEGRATION_TODO.md` — backlog operativo e test derivati dalla fonte.
 
 ## Regola di aggiornamento
 
