@@ -63,3 +63,27 @@ Admin governa configurazione tecnica, utenti, ruoli e integrazioni; Direzione go
 ## DEC-016 — Account demo solo in staging
 **Stato:** APPROVED  
 La foundation deve prevedere `demo-admin`, `demo-direzione` e `demo-staff` in staging. Credenziali e link di accesso non vengono mai salvati nel repository.
+
+## DEC-017 — Manuale Operativo GTA RP integrato come fonte bozza
+**Stato:** APPROVED  
+`GTA RP Manuale Operativo Bozza v1.0` entra nel blueprint come `SOURCE_DRAFT`. Il contenuto genera requisiti, form, task e decisioni aperte, ma non diventa automaticamente regolamento attivo.
+
+## DEC-018 — Target e soglie del manuale sono configurazioni stagionali
+**Stato:** APPROVED  
+Durate, importi, frequenze, quantità, quote e sconti proposti dal manuale non vengono hardcodati. Ogni valore richiede organizzazione, stagione, stato, versione, unità, approvatore e data di efficacia.
+
+## DEC-019 — Appendici trasformate in form digitali
+**Stato:** APPROVED  
+Checklist settimanale, scheda nuovo affiliato, modulo problema/soluzione e scheda missione diventano template configurabili dell'Organization OS.
+
+## DEC-020 — Discord quick log, app record ufficiale
+**Stato:** APPROVED  
+La segnalazione immediata su Discord può alimentare un quick log, ma denaro, risorse, partecipanti, divisioni, autorizzazioni e debrief diventano ufficiali soltanto nel record strutturato dell'app.
+
+## DEC-021 — Promozioni e provvedimenti restano decisioni umane
+**Stato:** APPROVED  
+Valutazioni e punteggi raccolgono evidenze; non producono automaticamente promozioni, limitazioni, sospensioni o esclusioni. Direzione decide, motiva e registra l'efficacia.
+
+## DEC-022 — Decisioni temporanee con revisione obbligatoria
+**Stato:** APPROVED  
+Una soluzione temporanea a un problema procedurale deve avere autore, motivazione, data, review date e successivo esito definitivo o rinvio motivato.
