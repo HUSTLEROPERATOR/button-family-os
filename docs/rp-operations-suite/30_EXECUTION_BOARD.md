@@ -2,7 +2,7 @@
 
 ## Scopo
 
-Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro realmente eseguibile nel prossimo passaggio, con stato, dipendenze ed evidenze. Evita di trasformare oltre 180 task in una massa indistinta.
+Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro realmente eseguibile nel prossimo passaggio, con stato, dipendenze ed evidenze. Evita di trasformare il backlog in una massa indistinta.
 
 ## Stato attuale verificato
 
@@ -13,6 +13,9 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 - Roadmap, requisiti, data model preliminare, risk register e test plan presenti.
 - Modello utenti iniziale approvato: `ADMIN`, `DIREZIONE`, `STAFF`.
 - Separazione Admin/Direzione e visibilità Staff documentate.
+- `GTA RP Manuale Operativo Bozza v1.0` registrato come `SOURCE_DRAFT`.
+- Manuale mappato a moduli, requisiti, entità, task, test e decisioni aperte.
+- Le soglie numeriche della bozza sono inattive e devono essere approvate per stagione.
 - Accesso al codice completo e al progetto Supabase effettivo di Button ancora da verificare.
 - Processi TNT definitivi dipendono dal prossimo wipe.
 
@@ -22,8 +25,9 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 - ogni task ha un solo accountable owner;
 - i task bloccati non entrano nel WIP;
 - nessun task P0 viene chiuso senza evidenza;
-- le issue GitHub si creano solo per task `READY` o `IN_PROGRESS`, non per tutto il backlog;
-- nessuna issue autorizza merge, deploy o modifica a produzione.
+- le issue GitHub si creano solo per task `READY` o `IN_PROGRESS`;
+- nessuna issue autorizza merge, deploy o modifica a produzione;
+- nessuna regola proveniente da `SOURCE_DRAFT` può diventare attiva durante l'audit.
 
 ## Execution Pack 0 — Governance e accessi
 
@@ -63,6 +67,7 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 | 10 | AUD-010 | Restore isolato | BLOCKED | Technical/QA | AUD-009 | restore evidence |
 | 11 | AUD-011 | Baseline funzionale Button | BLOCKED | Button Owner | AUD-002 | parity checklist |
 | 12 | ORG-001 | Inventario parity Button | BLOCKED | Button Owner | AUD-011 | funzione/schermata/stato |
+| 13 | ORG-023 | Confrontare app Button e Manuale Operativo | BLOCKED | Button/Product | AUD-002/011 | parity source report |
 
 ### Gate Pack 1 / M0
 
@@ -70,6 +75,7 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 - schema, utenti legacy e asset inventariati;
 - backup e restore verificati;
 - parity Button documentata;
+- confronto app/manuale completato;
 - rollback eseguibile.
 
 ## Execution Pack 2 — Knowledge discovery
@@ -79,17 +85,21 @@ Questo pacchetto può procedere in parallelo a Pack 1 senza toccare produzione.
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
 | 1 | AUD-013 | Inventariare manuali e materiali Discord | IN_PROGRESS | Product/Content Owner | — | source register |
-| 2 | AUD-014 | Classificare requisiti | READY | Product Owner | AUD-013 | requirement-source matrix |
-| 3 | ARCH-001 | Confermare domini e confini | DONE | Product Owner | — | blueprint/decision log |
-| 4 | ARCH-004 | Strategia configurazioni | IN_REVIEW | Product/Technical | AUD-014 | config principles |
-| 5 | ARCH-005 | Cataloghi versionati | IN_REVIEW | Product/Data | ARCH-004 | catalog contract |
-| 6 | Q-BTN-001 | Definire baseline obbligatoria Button | BLOCKED | Button Owner | AUD-011 | approved list |
-| 7 | Q-BTN-002 | Definire dati da migrare | BLOCKED | Button/Data Owner | AUD-006/011 | migration scope |
-| 8 | Q-TNT-001 | Confermare processi post-wipe | DEFERRED | TNT Owner | nuovo wipe | process map approvata |
+| 2 | ORG-011 | Registrare Manuale Operativo GTA RP | DONE | Product/Content | — | documento 33 + audit |
+| 3 | ORG-021 | Collegare fonte, requisiti, task e test | IN_REVIEW | Product/Data | ORG-011 | traceability matrix |
+| 4 | ORG-024 | Classificare regole observed/proposed/approved/deferred | READY | Product/Button | ORG-023 parziale | rule register |
+| 5 | AUD-014 | Classificare requisiti | IN_PROGRESS | Product Owner | AUD-013/ORG-011 | requirement-source matrix |
+| 6 | ARCH-001 | Confermare domini e confini | DONE | Product Owner | — | blueprint/decision log |
+| 7 | ARCH-004 | Strategia configurazioni | IN_REVIEW | Product/Technical | AUD-014 | config principles |
+| 8 | ARCH-005 | Cataloghi versionati | IN_REVIEW | Product/Data | ARCH-004 | catalog contract |
+| 9 | Q-BTN-001 | Definire baseline obbligatoria Button | BLOCKED | Button Owner | AUD-011 | approved list |
+| 10 | Q-BTN-002 | Definire dati da migrare | BLOCKED | Button/Data Owner | AUD-006/011 | migration scope |
+| 11 | Q-MAN-001..013 | Deliberare proposte del manuale | READY/PARTIAL_BLOCK | Direzione | parity + wipe | decision queue |
+| 12 | Q-TNT-001 | Confermare processi post-wipe | DEFERRED | TNT Owner | nuovo wipe | process map approvata |
 
 ## Execution Pack 3 — Architettura approvabile
 
-Parte solo dopo M0, salvo produzione di bozze non vincolanti.
+Parte solo dopo M0, salvo bozze non vincolanti.
 
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
@@ -97,13 +107,15 @@ Parte solo dopo M0, salvo produzione di bozze non vincolanti.
 | 2 | ARCH-003 | Organizzazioni/sedi/reparti | NOT_READY | Product/Data | discovery | domain model |
 | 3 | ARCH-007 | Ambienti | NOT_READY | Technical Owner | repo strategy | environment plan |
 | 4 | DATA-001 | ERD Shared Core | NOT_READY | Data Owner | ARCH-002/003 | ERD reviewed |
-| 5 | DATA-002 | ERD Organization OS | NOT_READY | Data/Button Owner | Q-BTN-001/002 | ERD reviewed |
+| 5 | DATA-002 | ERD Organization OS | IN_REVIEW | Data/Button Owner | manual mapping + parity | ERD reviewed |
 | 6 | DATA-003 | ERD Business OS | NOT_READY | Data/Business Owner | AUD-014 | ERD reviewed |
 | 7 | DATA-005 | Invarianti economiche | NOT_READY | Finance/Data | payroll decisions | invariant catalog |
 | 8 | AUTH-001 | Modellare ruoli Admin/Direzione/Staff | READY | Security/Data | AUTH-000, M0 | role/permission schema |
 | 9 | AUTH-004 | Disegnare RLS deny-by-default | NOT_READY | Security Owner | AUTH-001, DATA-001 | RLS matrix |
 | 10 | AUTH-010 | Separazione dei compiti | IN_REVIEW | Security/Finance | GOV-005 | approval matrix |
-| 11 | SEC-001 | Threat model | NOT_READY | Security Owner | architecture draft | threat model |
+| 11 | ORG-020 | Configuration approval register | READY | Product/Data | DATA-002 | approval schema |
+| 12 | ORG-043/044/045 | Seed inattivi e protezione regole bozza | READY | Data/Security | ORG-020 | seed template + tests |
+| 13 | SEC-001 | Threat model | NOT_READY | Security Owner | architecture draft | threat model |
 
 ## Profili staging da creare in Slice 1
 
@@ -123,6 +135,8 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 - M1 architettura approvata;
 - Auth, organization, ruoli Admin/Direzione/Staff, RLS e audit;
 - Button parity;
+- manuale operativo classificato e configurazioni inattive;
+- onboarding/tutor, activity ledger, mission/debrief e issue register essenziali;
 - cliente, preventivo, ordine di lavoro, vendita, pagamento e cassa;
 - acquisti/magazzino essenziali;
 - payroll deterministico e approvabile;
@@ -131,6 +145,7 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ### Should — entra solo se non mette a rischio Must
 
+- intelligence avanzata;
 - turni avanzati;
 - formazione completa;
 - convenzioni;
@@ -140,6 +155,8 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ### Later
 
+- quote/cauzioni non approvate;
+- target numerici non approvati;
 - ruoli specializzati HR/Finance/Responsabile/Auditor;
 - finanza avanzata;
 - sponsor e marketing completi;
@@ -151,17 +168,7 @@ Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al proge
 
 ## Evidenza minima per task
 
-Un link o artefatto verificabile tra:
-
-- commit/PR;
-- report audit;
-- screenshot o demo registrata;
-- query/test result;
-- schema/ERD;
-- decision log;
-- export/checksum;
-- UAT firmata;
-- runbook eseguito.
+Un link o artefatto verificabile tra commit/PR, report audit, screenshot/demo, query/test result, schema/ERD, decision log, export/checksum, UAT o runbook eseguito.
 
 `DONE` senza evidenza non è ammesso.
 
@@ -174,6 +181,8 @@ Il checkpoint successivo deve produrre:
 3. strategia repository;
 4. snapshot baseline;
 5. lista delle funzioni Button da proteggere;
-6. decisione se Pack 1 può partire o resta bloccato.
+6. parity iniziale app/manuale;
+7. elenco delle proposte del manuale da approvare, modificare, eliminare o rinviare;
+8. decisione se Pack 1 può partire o resta bloccato.
 
-La definizione dei tre profili iniziali è completata; la creazione degli account reali resta bloccata fino alla disponibilità dell'ambiente staging corretto.
+La definizione dei tre profili iniziali e l'integrazione semantica del manuale sono completate; account reali e regole attive restano bloccati fino allo staging corretto e alle approvazioni.
