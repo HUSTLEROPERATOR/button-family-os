@@ -11,6 +11,8 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 - Nessuna modifica applicativa, Supabase o deploy.
 - Domini Button/Organization OS e Business Operations OS definiti.
 - Roadmap, requisiti, data model preliminare, risk register e test plan presenti.
+- Modello utenti iniziale approvato: `ADMIN`, `DIREZIONE`, `STAFF`.
+- Separazione Admin/Direzione e visibilità Staff documentate.
 - Accesso al codice completo e al progetto Supabase effettivo di Button ancora da verificare.
 - Processi TNT definitivi dipendono dal prossimo wipe.
 
@@ -27,19 +29,21 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 
 | Ordine | ID | Task | Stato | Owner di ruolo | Dipendenza | Evidenza richiesta |
 |---:|---|---|---|---|---|---|
-| 1 | GOV-001 | Formalizzare Product Owner | READY | Product Owner | — | decision log aggiornato |
-| 2 | GOV-002 | Nominare Technical Owner | NEEDS_CLARIFICATION | Product Owner | — | nome/ruolo e responsabilità |
-| 3 | GOV-003 | Nominare owner Button e TNT | READY | Product Owner | — | RACI iniziale |
-| 4 | GOV-004 | Definire RACI minima | READY | Product Owner | GOV-001..003 | tabella approvata |
-| 5 | GOV-005 | Definire approvazioni sensibili | READY | Product + Finance/Security | GOV-004 | matrice azione/approvatore |
-| 6 | Q-TECH-002 | Verificare accesso al progetto Supabase Button | BLOCKED | Technical Owner | GOV-002 | progetto identificato e accessibile |
-| 7 | Q-TECH-003 | Approvare strategia repository | READY | Product + Technical | GOV-002 | ADR/repo decision |
+| 1 | AUTH-000 | Definire profili Admin/Direzione/Staff | DONE | Product/Security | — | decision log + permission matrix |
+| 2 | GOV-001 | Formalizzare Product Owner | READY | Product Owner | — | decision log aggiornato |
+| 3 | GOV-002 | Nominare Technical Owner | NEEDS_CLARIFICATION | Product Owner | — | nome/ruolo e responsabilità |
+| 4 | GOV-003 | Nominare owner Button e TNT | READY | Product Owner | — | RACI iniziale |
+| 5 | GOV-004 | Definire RACI minima | READY | Product Owner | GOV-001..003 | tabella approvata |
+| 6 | GOV-005 | Completare soglie e doppia approvazione | IN_REVIEW | Product + Finance/Security | AUTH-000, GOV-004 | matrice azione/approvatore |
+| 7 | Q-TECH-002 | Verificare accesso al progetto Supabase Button | BLOCKED | Technical Owner | GOV-002 | progetto identificato e accessibile |
+| 8 | Q-TECH-003 | Approvare strategia repository | READY | Product + Technical | GOV-002 | ADR/repo decision |
 
 ### Gate Pack 0
 
+- profili e permessi iniziali approvati;
 - owner nominati;
 - accesso tecnico verificato;
-- RACI approvata;
+- RACI e soglie approvate;
 - repository target deciso;
 - nessuna credenziale inserita nel repo.
 
@@ -53,7 +57,7 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 | 4 | AUD-004 | Inventariare asset | BLOCKED | Migration Owner | AUD-002 | manifest asset |
 | 5 | AUD-005 | Inventariare dipendenze/licenze | BLOCKED | Technical Owner | AUD-002 | dependency report |
 | 6 | AUD-006 | Inventariare schema DB | BLOCKED | Data Owner | accesso Supabase | schema report |
-| 7 | AUD-007 | Inventariare RLS e ruoli | BLOCKED | Security Owner | AUD-006 | permission matrix |
+| 7 | AUD-007 | Inventariare RLS e ruoli esistenti | BLOCKED | Security Owner | AUD-006 | permission matrix legacy |
 | 8 | AUD-008 | Mappare segreti e variabili | BLOCKED | Security Owner | accesso ambienti | inventory senza valori segreti |
 | 9 | AUD-009 | Backup DB e storage | BLOCKED | Technical Owner | accesso Supabase | backup report |
 | 10 | AUD-010 | Restore isolato | BLOCKED | Technical/QA | AUD-009 | restore evidence |
@@ -63,7 +67,7 @@ Il Master Todo è il catalogo completo. Questo documento contiene solo il lavoro
 ### Gate Pack 1 / M0
 
 - codice reale versionato;
-- schema e asset inventariati;
+- schema, utenti legacy e asset inventariati;
 - backup e restore verificati;
 - parity Button documentata;
 - rollback eseguibile.
@@ -96,8 +100,20 @@ Parte solo dopo M0, salvo produzione di bozze non vincolanti.
 | 5 | DATA-002 | ERD Organization OS | NOT_READY | Data/Button Owner | Q-BTN-001/002 | ERD reviewed |
 | 6 | DATA-003 | ERD Business OS | NOT_READY | Data/Business Owner | AUD-014 | ERD reviewed |
 | 7 | DATA-005 | Invarianti economiche | NOT_READY | Finance/Data | payroll decisions | invariant catalog |
-| 8 | AUTH-010 | Separazione dei compiti | NOT_READY | Security/Finance | GOV-005 | approval matrix |
-| 9 | SEC-001 | Threat model | NOT_READY | Security Owner | architecture draft | threat model |
+| 8 | AUTH-001 | Modellare ruoli Admin/Direzione/Staff | READY | Security/Data | AUTH-000, M0 | role/permission schema |
+| 9 | AUTH-004 | Disegnare RLS deny-by-default | NOT_READY | Security Owner | AUTH-001, DATA-001 | RLS matrix |
+| 10 | AUTH-010 | Separazione dei compiti | IN_REVIEW | Security/Finance | GOV-005 | approval matrix |
+| 11 | SEC-001 | Threat model | NOT_READY | Security Owner | architecture draft | threat model |
+
+## Profili staging da creare in Slice 1
+
+| Alias | Ruolo | Stato |
+|---|---|---|
+| `demo-admin` | ADMIN | SPECIFIED — non ancora creato |
+| `demo-direzione` | DIREZIONE | SPECIFIED — non ancora creato |
+| `demo-staff` | STAFF | SPECIFIED — non ancora creato |
+
+Gli account vengono creati soltanto nell'ambiente staging, dopo accesso al progetto corretto e approvazione della foundation. Nessuna password viene salvata su GitHub.
 
 ## MVP priority queue
 
@@ -105,7 +121,7 @@ Parte solo dopo M0, salvo produzione di bozze non vincolanti.
 
 - M0 baseline protetta;
 - M1 architettura approvata;
-- Auth, organization, role, RLS e audit;
+- Auth, organization, ruoli Admin/Direzione/Staff, RLS e audit;
 - Button parity;
 - cliente, preventivo, ordine di lavoro, vendita, pagamento e cassa;
 - acquisti/magazzino essenziali;
@@ -124,6 +140,7 @@ Parte solo dopo M0, salvo produzione di bozze non vincolanti.
 
 ### Later
 
+- ruoli specializzati HR/Finance/Responsabile/Auditor;
 - finanza avanzata;
 - sponsor e marketing completi;
 - prestiti complessi;
@@ -158,3 +175,5 @@ Il checkpoint successivo deve produrre:
 4. snapshot baseline;
 5. lista delle funzioni Button da proteggere;
 6. decisione se Pack 1 può partire o resta bloccato.
+
+La definizione dei tre profili iniziali è completata; la creazione degli account reali resta bloccata fino alla disponibilità dell'ambiente staging corretto.
