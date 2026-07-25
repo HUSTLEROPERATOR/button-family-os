@@ -87,3 +87,19 @@ Valutazioni e punteggi raccolgono evidenze; non producono automaticamente promoz
 ## DEC-022 — Decisioni temporanee con revisione obbligatoria
 **Stato:** APPROVED  
 Una soluzione temporanea a un problema procedurale deve avere autore, motivazione, data, review date e successivo esito definitivo o rinvio motivato.
+
+## DEC-023 — Baseline live recuperata ma M0 non ancora chiuso
+**Stato:** APPROVED  
+La Slice 0 ha recuperato in sola lettura l'HTML live, registrando hash, dimensione, moduli, tabelle referenziate e rischi. Questa evidenza chiude il perimetro applicativo dell'export, ma non chiude M0 finché schema, RLS, Auth, Storage, backup e restore non sono verificati.
+
+## DEC-024 — Gli export live restano fuori da Git
+**Stato:** APPROVED  
+HTML live, manifest runtime e backup contenenti metadati o dati dell'ambiente restano in cartelle ignorate. Git conserva script, hash, inventari sanitizzati, checklist e runbook, non la copia eseguibile della produzione.
+
+## DEC-025 — Registro fonti obbligatorio
+**Stato:** APPROVED  
+Ogni manuale, export, materiale Discord o fonte esterna riceve un Source ID, stato, versione, hash quando disponibile, posizione di conservazione e collegamenti a requisiti e documenti di integrazione.
+
+## DEC-026 — Azioni correttive separate per dominio
+**Stato:** APPROVED  
+Il modello distingue `organization_corrective_actions` e `incident_corrective_actions`. Una tabella generica potrà essere valutata solo con ADR, permessi e retention equivalenti.
