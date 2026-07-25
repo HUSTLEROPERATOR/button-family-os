@@ -22,7 +22,7 @@ Priorità:
 | Q-TECH-004 | Progetto Supabase esistente o nuovo? | M1/M2 | Non riusare produzione per sviluppo; nuovo progetto/branch isolato per staging | Technical Owner | RECOMMENDED |
 | Q-BTN-001 | Quali funzioni Button sono baseline obbligatoria? | M0/M3 | Inventario schermata-per-schermata e parity al 100% per funzioni approvate | Button Owner | OPEN |
 | Q-BTN-002 | Quali dati Button devono migrare? | M3 | Dati attivi + storico necessario; demo separata; nessuna cancellazione implicita | Button Owner | OPEN |
-| Q-SEC-001 | Chi approva ruoli, export e operazioni economiche? | M1/M2 | Matrice RACI e doppia approvazione sopra soglia configurabile | Product/Security Owner | OPEN |
+| Q-SEC-001 | Chi approva ruoli, export e operazioni economiche? | M1/M2 | Admin gestisce utenti/configurazione; Direzione approva operazioni; doppia approvazione per azioni sensibili | Product/Security Owner | APPROVED |
 | Q-PROD-001 | Qual è il perimetro MVP definitivo? | M1 | Button parity + Business vertical slice + Payroll + TNT pilot; advanced modules dopo UAT | Product Owner | RECOMMENDED |
 
 ## Decisioni P1 — da chiudere prima di M4/M5/M6
@@ -43,7 +43,7 @@ Priorità:
 |---|---|---|---|---|---|
 | Q-TNT-001 | Servizi e workflow reali | M6 | Confermare dopo wipe; usare catalogo demo prima | TNT Owner | OPEN |
 | Q-TNT-002 | Listino e ricambi | M6 | Versionati per stagione; nessun valore hardcoded | TNT Owner | RECOMMENDED |
-| Q-TNT-003 | Ruoli e reparti | M6 | Set iniziale configurabile: apprendista, meccanico, senior, responsabile, HR, amministrazione, direzione | TNT Owner | RECOMMENDED |
+| Q-TNT-003 | Ruoli e reparti | M6 | Profili applicativi Admin/Direzione/Staff; qualifiche interne configurabili | TNT Owner | APPROVED |
 | Q-TNT-004 | Turni e presenza | M6 | Supportarli, ma non imporre regole fino a conferma post-wipe | TNT/HR Owner | RECOMMENDED |
 | Q-TNT-005 | Convenzioni ed eventi | M6/M7 | Configurabili e disattivabili; non bloccano il vertical slice | TNT/Commercial Owner | RECOMMENDED |
 | Q-TNT-006 | Integrazione con script server | M8+ | Adapter futuro; MVP manuale/app-first | Technical/TNT Owner | DEFERRED |
@@ -78,11 +78,11 @@ Priorità:
 
 | ID | Decisione | Blocca | Default raccomandato | Owner | Stato |
 |---|---|---|---|---|---|
-| Q-PERM-001 | Ruoli canonici | M2 | owner, director, manager, finance, HR, employee/member, apprentice/probation, auditor | Product/Security Owner | RECOMMENDED |
-| Q-PERM-002 | Visibilità dipendente | M4/M5 | Propri turni, lavori, obiettivi e prospetti; niente finanza generale | HR/Security Owner | RECOMMENDED |
+| Q-PERM-001 | Ruoli canonici iniziali | M2 | `ADMIN`, `DIREZIONE`, `STAFF`; ruoli specializzati dopo il pilot | Product/Security Owner | APPROVED |
+| Q-PERM-002 | Visibilità Staff | M4/M5 | Propri turni, lavori, obiettivi, fatturato e prospetti; nessuna finanza generale o stipendio altrui | HR/Security Owner | APPROVED |
 | Q-PERM-003 | Accesso staff server | M6 | Read-only opzionale e limitato a record concordati | Product/Security Owner | RECOMMENDED |
 | Q-PERM-004 | Separazione sedi | M4 | Scope per sede/reparto oltre al ruolo | Security/Business Owner | RECOMMENDED |
-| Q-PERM-005 | Export completi | M2 | Solo ruoli autorizzati, audit e minimizzazione dati | Security Owner | RECOMMENDED |
+| Q-PERM-005 | Export completi | M2 | Admin tecnico con approvazione o Direzione autorizzata; audit e minimizzazione dati | Security Owner | RECOMMENDED |
 
 ## Decisioni P2/P3 — dopo il pilota
 
@@ -101,12 +101,13 @@ Priorità:
 2. Recupero e baseline del codice live.
 3. Funzioni Button obbligatorie e dati da migrare.
 4. Strategia repository e ambienti.
-5. RACI e approvazioni sensibili.
-6. MVP cut line.
-7. Ruoli e visibilità.
-8. Regole payroll iniziali.
-9. Vertical slice business.
-10. Processi TNT post-wipe.
+5. Completare RACI e soglie di doppia approvazione.
+6. Approvare MVP cut line.
+7. Regole payroll iniziali.
+8. Vertical slice business.
+9. Processi TNT post-wipe.
+
+La decisione iniziale su ruoli e visibilità è chiusa: `ADMIN`, `DIREZIONE`, `STAFF`.
 
 ## Processo di approvazione
 
