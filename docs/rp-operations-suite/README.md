@@ -13,19 +13,26 @@ Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite
 - Nessun requisito approvato può rimanere soltanto in chat: deve essere collegato a roadmap, task e test.
 - L'MVP parte con tre profili: `ADMIN`, `DIREZIONE`, `STAFF`.
 - I manuali in stato bozza vengono integrati come fonti e requisiti, non attivati automaticamente come regolamenti.
+- Gli export live e i backup sensibili restano fuori da Git; nel repository entrano hash, manifest sanitizzati, mapping e runbook.
+
+## Stato operativo
+
+La Slice 0 ha recuperato l'app live in modalità read-only e ha prodotto la prima baseline applicativa. M0 resta aperto perché schema, RLS, Auth, Storage, backup, restore e staging dipendono ancora dalla chiusura del blocker B-01.
 
 ## Percorso di lettura operativo
 
 Per decidere cosa fare adesso:
 
 1. `30_EXECUTION_BOARD.md` — attività realmente eseguibili e blocker.
-2. `19_MASTER_ROADMAP.md` — cammino critico, gate e MVP cut line.
-3. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
-4. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — Admin, Direzione, Staff e matrice accessi.
-5. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — integrazione della nuova bozza operativa, mapping, requisiti e configurazioni.
-6. `34_MANUAL_INTEGRATION_TODO.md` — backlog dedicato al manuale, test e gate.
-7. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
-8. `20_MASTER_TODO.md` — catalogo generale del backlog.
+2. `35_SLICE_0_RECONCILIATION.md` — risultati reali della baseline e stato M0.
+3. `36_SOURCE_REGISTER.md` — fonti, versioni, hash e stato di approvazione.
+4. `19_MASTER_ROADMAP.md` — cammino critico, gate e MVP cut line.
+5. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
+6. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — Admin, Direzione, Staff e matrice accessi.
+7. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — integrazione della bozza operativa, mapping, requisiti e configurazioni.
+8. `34_MANUAL_INTEGRATION_TODO.md` — backlog dedicato al manuale, test e gate.
+9. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
+10. `20_MASTER_TODO.md` — catalogo generale del backlog.
 
 ## Mappa documenti
 
@@ -64,7 +71,9 @@ Per decidere cosa fare adesso:
 33. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — profili iniziali, permessi, account demo e test.
 34. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — fonte PDF, mapping completo, moduli, requisiti, task e decisioni aperte.
 35. `34_MANUAL_INTEGRATION_TODO.md` — backlog operativo e test derivati dalla fonte.
+36. `35_SLICE_0_RECONCILIATION.md` — sincronizzazione blueprint/audit e stato reale M0.
+37. `36_SOURCE_REGISTER.md` — registro canonico delle fonti e degli hash.
 
 ## Regola di aggiornamento
 
-Ogni modifica funzionale deve aggiornare almeno requisito, task, modello dati se coinvolto, test e decision log quando cambia una scelta. La documentazione è un blueprint: non autorizza automaticamente migrazioni, deploy, modifiche a Supabase o merge.
+Ogni modifica funzionale deve aggiornare almeno requisito, task, modello dati se coinvolto, test e decision log quando cambia una scelta. Ogni nuova fonte deve entrare nel registro. La documentazione è un blueprint: non autorizza automaticamente migrazioni, deploy, modifiche a Supabase o merge.
