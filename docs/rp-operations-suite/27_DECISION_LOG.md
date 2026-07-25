@@ -51,3 +51,15 @@ Ogni requisito deve collegarsi a task, modello dati, test, milestone ed evidenza
 ## DEC-013 — Record economici versionati
 **Stato:** APPROVED  
 Periodi approvati e movimenti economici non vengono sovrascritti silenziosamente; correzioni tramite rettifica, storno o nuova versione.
+
+## DEC-014 — Tre profili iniziali
+**Stato:** APPROVED  
+L'MVP parte con tre profili applicativi: `ADMIN`, `DIREZIONE` e `STAFF`. I ruoli specializzati vengono aggiunti dopo la validazione del pilot.
+
+## DEC-015 — Separazione Admin e Direzione
+**Stato:** APPROVED  
+Admin governa configurazione tecnica, utenti, ruoli e integrazioni; Direzione governa operazioni, personale ed economia. Admin non approva automaticamente payroll o movimenti sensibili; Direzione non modifica segreti, RLS o audit.
+
+## DEC-016 — Account demo solo in staging
+**Stato:** APPROVED  
+La foundation deve prevedere `demo-admin`, `demo-direzione` e `demo-staff` in staging. Credenziali e link di accesso non vengono mai salvati nel repository.
