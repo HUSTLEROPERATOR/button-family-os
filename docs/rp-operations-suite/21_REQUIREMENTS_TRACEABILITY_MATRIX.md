@@ -10,6 +10,16 @@ Garantire che ogni requisito abbia origine, decisione, task, dati, UI/API, test,
 |---|---|---|---|---|---|
 | FR-CORE-001 multi-organizzazione | Core | ARCH-002, DATA-001, AUTH-002 | organizations, memberships | TEST-002/003 | M2 |
 | FR-CORE-004 wipe/stagioni | Core | DATA-004, ORG-008 | seasons, catalog_versions | TEST-002/006 | M3 |
+| FR-AUTH-001 tre profili iniziali | Auth | AUTH-000, AUTH-001/002/003 | roles, permissions, membership_roles | TEST-003/006 | M2 |
+| FR-AUTH-002 Admin | Auth | AUTH-001/003/007/009 | roles, permission grants, audit_events | TEST-003/006 | M2 |
+| FR-AUTH-003 Direzione | Auth | AUTH-003/007/010 | permissions, approvals, audit_events | TEST-003/006 | M2/M5 |
+| FR-AUTH-004 Staff | Auth | AUTH-003/004/005 | assignments, ownership, policies | TEST-003/006 | M2/M4 |
+| FR-AUTH-005 separazione Admin/Payroll | Auth/Payroll | AUTH-010, PAY-013/015 | approvals, payroll_runs | TEST-003/004 | M5 |
+| FR-AUTH-006 Direzione senza accesso tecnico | Auth | AUTH-003/004, SEC-001 | policies, secret scopes | TEST-003 | M2 |
+| FR-AUTH-007 doppia approvazione | Auth/Finance | GOV-005, AUTH-010, PAY-013 | approval_rules, approvals | TEST-003/006 | M2/M5 |
+| FR-AUTH-008 accessi negati verificabili | Security | AUTH-004/005/007 | audit_events, denied_events | TEST-003 | M2 |
+| FR-AUTH-009 account demo staging | Foundation | AUTH-001, DATA-008, DEP-002 | auth users, seed memberships | TEST-002/006 | M2 |
+| FR-AUTH-010 ruoli multipli auditati | Auth | AUTH-003/007 | membership_roles, active_role_context | TEST-003/006 | M2 |
 | FR-BUS-001 personale | HR | HR-001..010 | employees, memberships | TEST-001/006 | M4 |
 | FR-BUS-002 turni | HR | HR-004/005 | shifts, attendance | TEST-001/006 | M4 |
 | FR-BUS-006 ordini di lavoro | Sales | SALE-003/004/005 | quotes, work_orders | TEST-001/006 | M4 |
