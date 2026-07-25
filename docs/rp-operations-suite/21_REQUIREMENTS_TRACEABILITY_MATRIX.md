@@ -32,11 +32,11 @@ Garantire che ogni requisito abbia origine, decisione, task, dati, UI/API, test,
 | FR-ORG-010 eventi e relazioni | Organization/Events | ORG-038/039 | events, event_attendance, relationship_contacts | TEST-001/006 | M7 |
 | FR-ORG-011 quote e vantaggi | Organization/Finance | ORG-040/041/042 | contributions, benefits, discount_rules | TEST-ORG-006/007 | M7 |
 | FR-ORG-012 problemi e decisioni | Organization/Governance | ORG-017/035/036 | procedure_issues, temporary_decisions, decision_reviews | TEST-ORG-004/010 | M3 |
-| FR-ORG-013 valutazioni/provvedimenti | Organization | ORG-018/028 | member_reviews, corrective_actions, disciplinary_actions | TEST-ORG-001/007/010 | M3 |
+| FR-ORG-013 valutazioni/provvedimenti | Organization | ORG-018/028 | member_reviews, organization_corrective_actions, disciplinary_actions | TEST-ORG-001/007/010 | M3 |
 | FR-ORG-014 checklist ricorrenti | Organization | ORG-019/031 | checklist_templates, runs, items | TEST-001/006 | M3 |
 | FR-ORG-015 approvazione formale | Governance | ORG-020/037 | configuration_approvals, decision_records | TEST-ORG-006/010 | M3 |
 | FR-ORG-016 quick log Discord | Organization/Discord | ORG-032, DIS-001..010 | integration_deliveries, activity_logs | TEST-ORG-008 | M8 |
-| FR-ORG-017 errore buona fede | Organization | ORG-018/028 | evaluations, corrective_actions | TEST-ORG-001/010 | M3 |
+| FR-ORG-017 errore buona fede | Organization | ORG-018/028 | evaluations, organization_corrective_actions | TEST-ORG-001/010 | M3 |
 | FR-ORG-018 no auto-approvazione Staff | Auth/Organization | ORG-027/042, AUTH-010 | approvals, member_outcomes, benefits | TEST-ORG-007 | M3 |
 | FR-BUS-001 personale | HR | HR-001..010 | employees, memberships | TEST-001/006 | M4 |
 | FR-BUS-002 turni | HR | HR-004/005 | shifts, attendance | TEST-001/006 | M4 |
@@ -53,7 +53,7 @@ Garantire che ogni requisito abbia origine, decisione, task, dati, UI/API, test,
 | FR-PAY-010 approvazione | Payroll | PAY-013/015 | approvals, audit_events | TEST-003/006 | M5 |
 | FR-BUS-013 eventi | Events | EVT-001..005 | events, event_budgets | TEST-001/006 | M7 |
 | FR-BUS-014 sponsor/campagne | Marketing | MKT-001..005 | sponsorships, campaigns | TEST-001 | M7 |
-| FR-BUS-015 prestiti/imprevisti | Finance | LOAN-001..005, RISK-001..005 | loans, incidents | TEST-001/006 | M7 |
+| FR-BUS-015 prestiti/imprevisti | Finance | LOAN-001..005, RISK-001..005 | loans, incidents, incident_corrective_actions | TEST-001/006 | M7 |
 | FR-TNT-001 cliente/veicolo | TNT | TNT-002/003 | vehicles, customers | TEST-006 | M6 |
 | FR-TNT-006 consegna/incasso | TNT | TNT-007/008 | quality_checks, payments | TEST-006 | M6 |
 | NFR-002 RLS | Security | AUTH-004/005, SEC-001 | policies | TEST-003 | M2 |
@@ -64,9 +64,12 @@ Garantire che ogni requisito abbia origine, decisione, task, dati, UI/API, test,
 
 ## Fonti tracciate
 
-| Source ID | Fonte | Stato | Documento integrazione |
+| Source ID | Fonte | Stato | Documento integrazione/evidenza |
 |---|---|---|---|
-| SRC-GTA-RP-OPS-001 | GTA RP Manuale Operativo Bozza v1.0 | SOURCE_DRAFT | `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` |
+| `SRC-BUTTON-LIVE-001` | Button live app export 2026-07-25 | `OBSERVED_BASELINE` | audit Slice 0 + `35_SLICE_0_RECONCILIATION.md` |
+| `SRC-GTA-RP-OPS-001` | GTA RP Manuale Operativo Bozza v1.0 | `SOURCE_DRAFT` | `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` |
+
+Il registro canonico completo è `36_SOURCE_REGISTER.md`.
 
 ## Procedura aggiornamento
 
@@ -89,4 +92,6 @@ Quando nasce un requisito:
 - test senza owner;
 - requisito pianificato in release ma non `APPROVED`;
 - configurazione attiva collegata soltanto a una fonte `SOURCE_DRAFT`;
-- regola numerica senza organizzazione, stagione, unità o versione.
+- regola numerica senza organizzazione, stagione, unità o versione;
+- entità dati con nome ambiguo tra domini;
+- fonte senza Source ID, stato o posizione di conservazione.
