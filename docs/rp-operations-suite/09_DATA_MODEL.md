@@ -20,7 +20,7 @@ Le configurazioni derivate da fonti in bozza devono includere anche `source_docu
 
 ## Organization OS — intelligence, problemi e valutazioni
 
-`intelligence_reports`, `intelligence_sources`, `intelligence_links`, `relationship_contacts`, `procedure_issues`, `temporary_decisions`, `decision_reviews`, `corrective_actions`, `disciplinary_actions`, `recurring_checklist_templates`, `recurring_checklist_runs`, `recurring_checklist_items`.
+`intelligence_reports`, `intelligence_sources`, `intelligence_links`, `relationship_contacts`, `procedure_issues`, `temporary_decisions`, `decision_reviews`, `organization_corrective_actions`, `disciplinary_actions`, `recurring_checklist_templates`, `recurring_checklist_runs`, `recurring_checklist_items`.
 
 ## Persone e HR Business
 
@@ -48,11 +48,20 @@ Le configurazioni derivate da fonti in bozza devono includere anche `source_docu
 
 ## Ecosistema
 
-`events`, `event_staff`, `event_budgets`, `event_attendance`, `sponsors`, `sponsorships`, `campaigns`, `campaign_results`, `investments`, `loans`, `loan_installments`, `incidents`, `corrective_actions`.
+`events`, `event_staff`, `event_budgets`, `event_attendance`, `sponsors`, `sponsorships`, `campaigns`, `campaign_results`, `investments`, `loans`, `loan_installments`, `incidents`, `incident_corrective_actions`.
 
 ## Knowledge, fonti e audit
 
 `source_documents`, `source_document_versions`, `source_requirement_links`, `procedures`, `procedure_versions`, `documents`, `notifications`, `integration_deliveries`, `audit_events`, `decision_records`.
+
+## Convenzione azioni correttive
+
+Per evitare collisioni semantiche, le azioni correttive restano separate per dominio:
+
+- `organization_corrective_actions`: formazione, correzioni operative, limitazioni e follow-up collegati a membri, procedure o missioni;
+- `incident_corrective_actions`: mitigazioni, costi, responsabilità e prevenzione collegati a incidenti business.
+
+Una futura astrazione comune potrà essere introdotta solo con un ADR e senza perdere il legame di dominio. Non si usa una tabella generica `corrective_actions` finché ownership, permessi e retention non sono equivalenti.
 
 ## Stati principali
 
@@ -103,7 +112,8 @@ RUMOR | UNVERIFIED | PARTIALLY_VERIFIED | VERIFIED | DISPROVED
 - Staff non approva il proprio esito, bonus, limitazione o provvedimento;
 - ogni inventario/revisione accessi conserva responsabili, differenze e follow-up;
 - il grado di verifica di un'intelligence non può essere elevato senza autore ed evidenza;
-- le valutazioni non producono automaticamente promozioni o sanzioni.
+- le valutazioni non producono automaticamente promozioni o sanzioni;
+- un'azione correttiva appartiene a un solo dominio e conserva il record sorgente.
 
 ## Relazioni chiave
 
@@ -144,7 +154,14 @@ procedure_issue
   ├── policy_version
   ├── temporary_decision
   ├── review
+  ├── organization_corrective_actions
   └── final decision
+
+incident
+  ├── evidence
+  ├── financial impact
+  ├── incident_corrective_actions
+  └── final review
 
 work_order
   ├── customer
