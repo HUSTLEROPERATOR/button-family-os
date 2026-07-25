@@ -4,7 +4,7 @@
 
 Le questioni aperte non sono una lista generica: ogni voce deve avere priorità, milestone bloccata, owner di ruolo, default raccomandato e stato.
 
-Stati: `OPEN`, `RECOMMENDED`, `APPROVED`, `DEFERRED`, `REJECTED`.
+Stati: `OPEN`, `PARTIALLY_RESOLVED`, `IN_REVIEW`, `BLOCKED`, `RECOMMENDED`, `APPROVED`, `DEFERRED`, `REJECTED`.
 
 Priorità:
 - `P0`: blocca baseline, sicurezza o architettura;
@@ -16,12 +16,12 @@ Priorità:
 
 | ID | Decisione | Blocca | Default raccomandato | Owner | Stato |
 |---|---|---|---|---|---|
-| Q-TECH-001 | Dove si trova il codice completo servito da Supabase? | M0 | Esportare il record/app live e versionarlo senza modificarlo | Technical Owner | OPEN |
+| Q-TECH-001 | Dove si trova il codice completo servito da Supabase? | M0 | HTML live recuperato e inventariato; restano da localizzare sorgente strutturato, schema, migrazioni, Storage e backend | Technical Owner | PARTIALLY_RESOLVED |
 | Q-TECH-002 | Chi possiede accesso al progetto Supabase Button? | M0 | Verificare account/progetto effettivo e nominare un owner tecnico | Product + Technical Owner | OPEN |
 | Q-TECH-003 | Qual è la strategia repository? | M1 | Tenere `button-family-os` come legacy/docs durante l'audit; creare il repo suite solo dopo M0 | Product/Technical Owner | RECOMMENDED |
 | Q-TECH-004 | Progetto Supabase esistente o nuovo? | M1/M2 | Non riusare produzione per sviluppo; nuovo progetto/branch isolato per staging | Technical Owner | RECOMMENDED |
-| Q-BTN-001 | Quali funzioni Button sono baseline obbligatoria? | M0/M3 | Inventario schermata-per-schermata e parity al 100% per funzioni approvate | Button Owner | OPEN |
-| Q-BTN-002 | Quali dati Button devono migrare? | M3 | Dati attivi + storico necessario; demo separata; nessuna cancellazione implicita | Button Owner | OPEN |
+| Q-BTN-001 | Quali funzioni Button sono baseline obbligatoria? | M0/M3 | Usare la parity checklist osservata come proposta; Button Owner approva l'elenco definitivo | Button Owner | IN_REVIEW |
+| Q-BTN-002 | Quali dati Button devono migrare? | M3 | Dati attivi + storico necessario; demo separata; nessuna cancellazione implicita | Button Owner | BLOCKED |
 | Q-SEC-001 | Chi approva ruoli, export e operazioni economiche? | M1/M2 | Admin gestisce utenti/configurazione; Direzione approva operazioni; doppia approvazione per azioni sensibili | Product/Security Owner | APPROVED |
 | Q-PROD-001 | Qual è il perimetro MVP definitivo? | M1 | Button parity + Business vertical slice + Payroll + TNT pilot; advanced modules dopo UAT | Product Owner | RECOMMENDED |
 
@@ -55,7 +55,8 @@ Tutte le proposte restano inattive fino alla decisione. Il default raccomandato 
 | Q-MAN-010 | Firma e approvazione digitale del manuale | M3 | Approvazione applicativa con versione/timestamp; firma grafica opzionale futura | Product/Technical | RECOMMENDED |
 | Q-MAN-011 | Target missioni, intelligence ed eventi | M3/M7 | Catalogo stagionale inattivo finché approvato | Button/Direzione | OPEN |
 | Q-MAN-012 | Categorie reali di depositi, materiali, outfit e veicoli | M3 | Cataloghi configurabili derivati dal wipe corrente | Button/Operations | OPEN |
-| Q-MAN-013 | Quale parte del manuale è già presente in Button OS | M0/M3 | Decidere solo dopo recupero del codice live e parity audit | Button/Technical | BLOCKED |
+| Q-MAN-013 | Quale parte del manuale è già presente in Button OS | M0/M3 | Confrontare documento 33 con la parity checklist della baseline live | Button/Technical | IN_REVIEW |
+| Q-MAN-014 | Dove conservare il PDF originale e quale hash registrare | M3 | Source register con SHA-256 e posizione controllata; nessun binario sensibile senza review | Product/Content | OPEN |
 
 ### TNT e prossimo wipe
 
@@ -117,19 +118,21 @@ Tutte le proposte restano inattive fino alla decisione. Il default raccomandato 
 
 ## Ordine di decisione immediato
 
-1. Accesso e ownership del progetto Supabase Button.
-2. Recupero e baseline del codice live.
-3. Funzioni Button obbligatorie e dati da migrare.
-4. Parity tra app Button e Manuale Operativo GTA RP.
-5. Strategia repository e ambienti.
-6. Completare RACI e soglie di doppia approvazione.
-7. Approvare MVP cut line.
-8. Approvare o rinviare le proposte del manuale per il prossimo wipe.
-9. Regole payroll iniziali.
-10. Vertical slice business.
-11. Processi TNT post-wipe.
+1. Technical Owner e accesso nominativo al progetto Supabase Button.
+2. Inventario autorizzato di schema, RLS, Auth, Storage e funzioni.
+3. Backup completo e prova restore isolata.
+4. Approvazione della lista delle funzioni Button da proteggere.
+5. Definizione dei dati Button da migrare.
+6. Parity formale tra app Button e Manuale Operativo GTA RP.
+7. Strategia repository e ambienti.
+8. Completamento RACI e soglie di doppia approvazione.
+9. Approvazione MVP cut line.
+10. Approvazione o rinvio delle proposte del manuale per il prossimo wipe.
+11. Regole payroll iniziali.
+12. Vertical slice business.
+13. Processi TNT post-wipe.
 
-La decisione iniziale su ruoli e visibilità è chiusa: `ADMIN`, `DIREZIONE`, `STAFF`.
+La decisione iniziale su ruoli e visibilità è chiusa: `ADMIN`, `DIREZIONE`, `STAFF`. Il recupero dell'HTML live è completato; il gate M0 resta aperto sul backend e sulla resilienza.
 
 ## Processo di approvazione
 
