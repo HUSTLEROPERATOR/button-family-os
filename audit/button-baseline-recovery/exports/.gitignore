@@ -1,0 +1,4 @@
+# Gli export reali (HTML live, backup, manifest con dati) non vengono mai committati.
+# Questa cartella resta nel repo solo come struttura.
+*
+!.gitignore
