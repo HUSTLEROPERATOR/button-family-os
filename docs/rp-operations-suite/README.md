@@ -1,0 +1,79 @@
+# RP Operations Suite — Blueprint documentale
+
+Questa cartella definisce l'evoluzione di **Button's Family OS** verso una suite RP modulare senza alterare l'applicazione esistente.
+
+## Principi vincolanti
+
+- Button's Family OS resta l'implementazione criminale già valida.
+- Business Operations OS è un dominio distinto, con TNT Automotive come primo pilota.
+- Il sistema deve essere configurabile per officine, locali, casinò e altri business RP.
+- Le variazioni di wipe, servizi, prezzi e procedure non devono richiedere modifiche al codice.
+- Discord è un canale operativo e di notifica, non il database principale.
+- Ogni calcolo economico deve essere spiegabile, versionato e sottoposto ad approvazione.
+- Nessun requisito approvato può rimanere soltanto in chat: deve essere collegato a roadmap, task e test.
+- L'MVP parte con tre profili: `ADMIN`, `DIREZIONE`, `STAFF`.
+- I manuali in stato bozza vengono integrati come fonti e requisiti, non attivati automaticamente come regolamenti.
+- Gli export live e i backup sensibili restano fuori da Git; nel repository entrano hash, manifest sanitizzati, mapping e runbook.
+
+## Stato operativo
+
+La Slice 0 ha recuperato l'app live in modalità read-only e ha prodotto la prima baseline applicativa. M0 resta aperto perché schema, RLS, Auth, Storage, backup, restore e staging dipendono ancora dalla chiusura del blocker B-01.
+
+## Percorso di lettura operativo
+
+Per decidere cosa fare adesso:
+
+1. `30_EXECUTION_BOARD.md` — attività realmente eseguibili e blocker.
+2. `35_SLICE_0_RECONCILIATION.md` — risultati reali della baseline e stato M0.
+3. `36_SOURCE_REGISTER.md` — fonti, versioni, hash e stato di approvazione.
+4. `19_MASTER_ROADMAP.md` — cammino critico, gate e MVP cut line.
+5. `31_MVP_RELEASE_SLICES.md` — rilasci verticali dimostrabili.
+6. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — Admin, Direzione, Staff e matrice accessi.
+7. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — integrazione della bozza operativa, mapping, requisiti e configurazioni.
+8. `34_MANUAL_INTEGRATION_TODO.md` — backlog dedicato al manuale, test e gate.
+9. `28_OPEN_QUESTIONS.md` — decision queue prioritaria con default raccomandati.
+10. `20_MASTER_TODO.md` — catalogo generale del backlog.
+
+## Mappa documenti
+
+1. `00_EXECUTIVE_OVERVIEW.md` — sintesi e decisioni approvate.
+2. `01_PRODUCT_VISION.md` — prodotto, utenti e valore.
+3. `02_SCOPE_AND_BOUNDARIES.md` — perimetro e limiti.
+4. `03_CURRENT_STATE_AUDIT.md` — stato attuale e audit.
+5. `04_SYSTEM_ARCHITECTURE.md` — architettura funzionale e tecnica.
+6. `05_ORGANIZATION_OS.md` — dominio Button/criminale.
+7. `06_BUSINESS_OPERATIONS_OS.md` — dominio business universale.
+8. `07_TNT_AUTOMOTIVE_PILOT.md` — verticale officina.
+9. `08_FUNCTIONAL_REQUIREMENTS.md` — requisiti funzionali e non funzionali.
+10. `09_DATA_MODEL.md` — entità, relazioni e invarianti.
+11. `10_PAYROLL_AND_REWARDS_ENGINE.md` — stipendi, bonus e premi.
+12. `11_FINANCE_AND_CASHFLOW.md` — cassa, budget e rendicontazione.
+13. `12_INVENTORY_PURCHASES_AND_SALES.md` — acquisti, vendite e magazzino.
+14. `13_CUSTOMERS_DISCOUNTS_AND_AGREEMENTS.md` — CRM, sconti e convenzioni.
+15. `14_EVENTS_SPONSORS_AND_MARKETING.md` — eventi, sponsor e pubblicità.
+16. `15_LOANS_INVESTMENTS_AND_UNEXPECTED_COSTS.md` — prestiti, investimenti e imprevisti.
+17. `16_DISCORD_INTEGRATION.md` — integrazione e confini.
+18. `17_ROLES_PERMISSIONS_AND_AUDIT.md` — accessi e tracciabilità.
+19. `18_WIPE_AND_SEASON_MANAGEMENT.md` — versionamento per wipe.
+20. `19_MASTER_ROADMAP.md` — fasi, workstream, MVP cut line, gate ed evidenze.
+21. `20_MASTER_TODO.md` — catalogo completo del backlog.
+22. `21_REQUIREMENTS_TRACEABILITY_MATRIX.md` — requisito → task → test → release.
+23. `22_TEST_AND_ACCEPTANCE_PLAN.md` — strategia QA.
+24. `23_MIGRATION_PLAN.md` — migrazione controllata Button.
+25. `24_RELEASE_AND_DEPLOYMENT_PLAN.md` — ambienti, release e rollback.
+26. `25_SECURITY_AND_BACKUP_PLAN.md` — sicurezza, backup e restore.
+27. `26_RISK_REGISTER.md` — rischi e contromisure.
+28. `27_DECISION_LOG.md` — decisioni approvate.
+29. `28_OPEN_QUESTIONS.md` — decision queue con priorità e raccomandazioni.
+30. `29_IMPLEMENTATION_CHECKLIST.md` — controlli prima di fase, merge, deploy e chiusura task.
+31. `30_EXECUTION_BOARD.md` — work in progress, blocker ed evidenze immediate.
+32. `31_MVP_RELEASE_SLICES.md` — demo verticali, acceptance e rollback per ogni slice.
+33. `32_INITIAL_USERS_AND_PERMISSION_MATRIX.md` — profili iniziali, permessi, account demo e test.
+34. `33_MANUALE_OPERATIVO_GTA_RP_INTEGRATION.md` — fonte PDF, mapping completo, moduli, requisiti, task e decisioni aperte.
+35. `34_MANUAL_INTEGRATION_TODO.md` — backlog operativo e test derivati dalla fonte.
+36. `35_SLICE_0_RECONCILIATION.md` — sincronizzazione blueprint/audit e stato reale M0.
+37. `36_SOURCE_REGISTER.md` — registro canonico delle fonti e degli hash.
+
+## Regola di aggiornamento
+
+Ogni modifica funzionale deve aggiornare almeno requisito, task, modello dati se coinvolto, test e decision log quando cambia una scelta. Ogni nuova fonte deve entrare nel registro. La documentazione è un blueprint: non autorizza automaticamente migrazioni, deploy, modifiche a Supabase o merge.
