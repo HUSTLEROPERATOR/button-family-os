@@ -3,7 +3,11 @@
 Procedura operativa per portare il frontend sicuro e il modello di
 autorizzazione su un progetto Supabase **di staging**.
 
-> **Nessun passaggio di questo runbook tocca la produzione.**
+> **NO PRODUCTION DATABASE ACCESS REQUIRED.**
+> Nessun passaggio di questo runbook legge, scrive o si collega al database di
+> produzione. Lo schema applicativo è creato dalla migrazione
+> `202607280000_application_schema.sql`, che è versionata in questo repository.
+>
 > Se un criterio di arresto scatta, ci si ferma: non si prosegue al passo
 > successivo e non si "aggiusta al volo".
 
@@ -64,34 +68,34 @@ correggere l'esclusione prima di proseguire.
 > Non incollare mai questi valori in un file versionato, in un commit, in una
 > issue o in una descrizione di PR.
 
-## 4. Portare lo schema applicativo nel progetto di staging
+## 4. Applicare la migrazione 0000 — schema applicativo
 
-**Azione** — Le migrazioni di questo pacchetto **non creano le tabelle**:
-mettono in sicurezza uno schema che deve già esistere. Portare nello staging la
-sola **struttura** delle 14 tabelle `public.bfos_*`, senza dati:
+**Azione**
 
 ```bash
-# Dal progetto di origine, SOLO struttura, SENZA dati e SENZA ruoli.
-pg_dump --schema-only --no-owner --no-privileges \
-        --schema=public "$SOURCE_DB_URL" > /tmp/schema-only.sql
-
-# Ispezionare il file PRIMA di applicarlo: non deve contenere alcun INSERT.
-grep -ci "^INSERT" /tmp/schema-only.sql    # atteso: 0
-
-psql "$STAGING_DB_URL" --single-transaction -v ON_ERROR_STOP=1 -f /tmp/schema-only.sql
+psql "$STAGING_DB_URL" --single-transaction -v ON_ERROR_STOP=1 \
+  -f supabase/migrations/202607280000_application_schema.sql
 ```
 
-**Risultato atteso** — 14 tabelle `public.bfos_*` presenti, tutte vuote.
+**Risultato atteso** — `NOTICE: 0000 applicata: 14 tabelle, 14 primary key,
+1 check, 0 foreign key, 0 righe.`
 
-**Criterio di arresto** — Il dump contiene `INSERT`, oppure una tabella risulta
-non vuota: **fermarsi ed eliminare il file**. Nessun dato di produzione deve
-entrare in staging.
+**Criterio di arresto** — *"Tabelle già presenti con struttura incompatibile"*
+significa che il database non è vuoto: **fermarsi**. La migrazione non altera e
+non elimina nulla di preesistente; usare un progetto pulito.
 
-**Rollback** — `DROP SCHEMA public CASCADE; CREATE SCHEMA public;` sul solo
-staging, oppure eliminare e ricreare il progetto.
+**Rollback** — `DROP TABLE` delle 14 tabelle sul solo staging, oppure eliminare
+e ricreare il progetto. Nessun dato è in gioco: le tabelle sono vuote.
 
-> Il dump viene letto dalla produzione in sola lettura. È l'unica interazione
-> con il progetto di origine in tutto il runbook, ed è una lettura di struttura.
+> Lo schema è **versionato in questo repository**, ricavato da uno snapshot
+> offline verificato e confrontato per hash strutturale. **Non serve alcun
+> accesso al database di produzione**, né ora né in seguito. Dettagli in
+> [SCHEMA_BOOTSTRAP_VERIFICATION.md](SCHEMA_BOOTSTRAP_VERIFICATION.md).
+>
+> Subito dopo questa migrazione le tabelle sono ancora prive di policy, e la
+> piattaforma concede automaticamente privilegi ad `anon` e `authenticated`
+> sui nuovi oggetti. È esattamente ciò che rimuove il passo 5: **non lasciare
+> il database in questo stato** e non esporlo prima di aver applicato 0001.
 
 ## 5. Applicare la migrazione 0001
 
@@ -376,9 +380,12 @@ Nessun merge, nessun force push, nessun merge automatico.
 
 ## 20. Nessuna produzione
 
-Fino a qui il progetto di produzione ha subito **una sola** interazione: la
-lettura in sola struttura del passo 4. Nessuna migrazione, nessun dato, nessun
-utente, nessuna configurazione sono stati modificati.
+Fino a qui il progetto di produzione **non è mai stato contattato**: nessuna
+connessione, nessuna lettura, nessuna migrazione, nessun dato, nessun utente,
+nessuna configurazione. Lo schema applicativo arriva dalla migrazione 0000
+versionata in questo repository.
+
+**NO PRODUCTION DATABASE ACCESS REQUIRED.**
 
 Il passaggio in produzione è **fuori dal perimetro di questo runbook** e
 richiede un piano separato e una approvazione esplicita.

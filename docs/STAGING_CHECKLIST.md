@@ -17,7 +17,9 @@ Riferimenti:
 | Elemento | Stato |
 |---|---|
 | Codice frontend | **READY** |
-| Migrazioni staging | **READY** — da validare alla prima applicazione |
+| Schema applicativo (0000) | **READY** — verificato su database vuoto, hash strutturale MATCH |
+| Migrazioni sicurezza (0001, 0002) | **READY** — catena 0000→0001→0002 applicata e verificata in locale |
+| Dipendenza dal database di produzione | ✅ **NESSUNA** |
 | Rollback | **READY** — non applicati |
 | Seed sintetico | **READY** — non applicato |
 | Test `auth.uid()` | **READY** — non eseguito |
@@ -74,18 +76,25 @@ statici e test con client mock, che non contattano la rete.
 
 ## 2. Migrazioni adattate
 
-Il pacchetto è pronto in `supabase/`. Restano da verificare all'applicazione:
+Il pacchetto è pronto in `supabase/` ed è **autosufficiente**: parte da un
+progetto vuoto e non richiede alcun accesso alla produzione.
 
+- [x] `202607280000_application_schema.sql` — schema applicativo canonico (14 tabelle)
 - [x] `202607280001_secure_access.sql` — accesso negato per impostazione predefinita
 - [x] `202607280002_server_side_roles.sql` — ruoli applicativi lato server
 - [x] Rollback presenti in `supabase/rollback/`, fuori dalla directory automatica
 - [x] Guardie di preflight adattate: fallimento esplicito su schema inatteso
 - [x] Nessun adattamento locale, nessun workaround, nessun dato, nessun segreto
-- [ ] **Schema applicativo portato nello staging** (le migrazioni non creano tabelle)
+- [x] **Catena 0000 → 0001 → 0002 applicata e verificata su database vuoto isolato**
+- [x] Confronto strutturale con la sorgente offline: **MATCH** (hash `b1c30c0a…f44b392`)
+- [x] `0000` idempotente: riapplicarla su una catena completa è un no-op
+- [x] Nessuna dipendenza da `pg_dump` della produzione
 - [ ] Le migrazioni sono applicate **allo staging** e a nient'altro
 - [ ] Ogni rollback è stato verificato sullo staging
 - [ ] `bfos_current_app_role()` esiste, con firma e permessi attesi
 - [ ] `EXECUTE` sugli helper **non** è concesso ad `anon`
+- [ ] Verificata la seconda regola di privilegi predefiniti della piattaforma
+      (vedi [SCHEMA_BOOTSTRAP_VERIFICATION.md](SCHEMA_BOOTSTRAP_VERIFICATION.md) §9.2)
 
 > Divergenza voluta rispetto al percorso locale: le migrazioni **non**
 > concedono ad `anon` alcuna lettura di bootstrap sulla tabella asset. Il
@@ -143,6 +152,13 @@ Verificare **nell'interfaccia** e **nel database** per ogni identità:
 - [ ] Nessun dato compare nella schermata di accesso non autorizzato
 
 ## 8. Rimozione dell'adattamento locale
+
+> **Gate non superabile in locale, per costruzione.** Nell'immagine usata per
+> la verifica offline `auth.uid()` ricava l'identità solo dal vecchio parametro
+> per-claim e non dal JSON che PostgREST v10+ imposta: il test lo rileva e si
+> ferma. Non è stato aggiunto alcun adattamento per aggirarlo. La verifica va
+> fatta qui, sul progetto reale. Vedi
+> [SCHEMA_BOOTSTRAP_VERIFICATION.md](SCHEMA_BOOTSTRAP_VERIFICATION.md) §9.1.
 
 - [ ] Il frontend usa i **JWT reali** emessi da Supabase Auth
 - [ ] `auth.uid()` funziona con token reali, senza adattamenti pre-richiesta

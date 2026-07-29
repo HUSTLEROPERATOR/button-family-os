@@ -11,6 +11,7 @@ Pacchetto di staging: migrazioni, rollback, seed e test SQL.
 
 | Percorso | Applicato dal runner | Descrizione |
 |---|---|---|
+| `migrations/202607280000_application_schema.sql` | ✅ sì | Schema applicativo canonico: le 14 tabelle |
 | `migrations/202607280001_secure_access.sql` | ✅ sì | Accesso negato per impostazione predefinita |
 | `migrations/202607280002_server_side_roles.sql` | ✅ sì | Ruoli applicativi lato server e policy RLS |
 | `rollback/202607280001_…rollback.sql` | ❌ no | Annulla 0001 — **ripristina uno stato insicuro** |
@@ -21,12 +22,25 @@ Pacchetto di staging: migrazioni, rollback, seed e test SQL.
 I rollback vivono **fuori** da `migrations/` di proposito: un runner che
 raccoglie automaticamente i file di quella cartella non deve poterli eseguire.
 
-## Prerequisito
+## Autosufficienza
 
-Le migrazioni **non creano le tabelle applicative**: mettono in sicurezza uno
-schema che deve già esistere. Un progetto Supabase nuovo è vuoto, quindi lo
-schema va portato prima (runbook, passo 4). Se manca, `0001` si ferma con un
-errore esplicito che elenca le tabelle assenti.
+Il pacchetto parte da un progetto Supabase **vuoto** e non richiede **alcun
+accesso al database di produzione**: la migrazione `0000` crea lo schema
+applicativo, `0001` lo mette in sicurezza, `0002` vi applica il modello di
+ruoli.
+
+`0000` è stata ricavata da uno snapshot offline verificato e confrontata per
+hash strutturale con la sorgente. Provenienza, metodo di sanitizzazione,
+oggetti inclusi ed esclusi, test su database vuoto e limitazioni sono in
+[../docs/SCHEMA_BOOTSTRAP_VERIFICATION.md](../docs/SCHEMA_BOOTSTRAP_VERIFICATION.md).
+
+Ordine obbligatorio: **0000 → 0001 → 0002**. Se lo schema manca, `0001` si
+ferma con un errore esplicito che elenca le tabelle assenti.
+
+> Fra `0000` e `0001` il database è in uno stato transitorio: le tabelle
+> esistono senza policy e la piattaforma concede automaticamente privilegi ai
+> ruoli client sui nuovi oggetti. Applicare `0001` subito dopo e non esporre il
+> progetto in quell'intervallo.
 
 ## Transazioni
 

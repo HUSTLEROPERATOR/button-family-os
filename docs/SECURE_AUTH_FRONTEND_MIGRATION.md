@@ -251,7 +251,7 @@ Da eseguire con **migrazioni separate**, non da questo branch:
 
 | # | Attività | Quando |
 |---|---|---|
-| 1 | Adattare M1/M2 a migrazioni deployabili sul progetto di destinazione | Prima dello staging |
+| 1 | ~~Adattare le migrazioni al progetto di destinazione~~ — **fatto**: catena `0000 → 0001 → 0002` in `supabase/migrations/`, autosufficiente e verificata da database vuoto | ✅ |
 | 2 | Creare le membership per gli utenti Auth reali | Prima del passaggio in produzione |
 | 3 | Rimuovere la policy di lettura anonima sulla tabella asset (`anon_read_assets`, oggi sostituita dalla policy limitata alla sola chiave di bootstrap) | **Dopo** il deploy verificato del frontend statico |
 | 4 | Revocare l'**ultimo `GRANT SELECT` a `anon`** sulla tabella asset | Insieme al punto 3 |
@@ -288,7 +288,19 @@ Nessuna delle due contatta la rete o Supabase Cloud.
 Le migrazioni deployabili, i rollback, il seed sintetico, il test di
 `auth.uid()` e lo script di validazione end-to-end vivono in
 [`supabase/`](../supabase/README.md) e `scripts/`. **Nulla è stato applicato ad
-alcun database.** La procedura è in
+alcun progetto Supabase.**
+
+Il pacchetto è **autosufficiente**: la catena `0000 → 0001 → 0002` parte da un
+progetto vuoto e **non richiede alcun accesso al database di produzione**. Lo
+schema applicativo è versionato, ricavato da uno snapshot offline verificato e
+confrontato per hash strutturale — vedi
+[SCHEMA_BOOTSTRAP_VERIFICATION.md](SCHEMA_BOOTSTRAP_VERIFICATION.md).
+
+La procedura è in
 [STAGING_DEPLOYMENT_RUNBOOK.md](STAGING_DEPLOYMENT_RUNBOOK.md); lo stato di
 avanzamento e il blocco infrastrutturale in
 [STAGING_CHECKLIST.md](STAGING_CHECKLIST.md).
+
+Resta aperto un solo gate sostanziale, e va superato sul cloud: la verifica che
+`auth.uid()` risolva l'identità dai JWT nativi senza alcun adattamento
+pre-richiesta. In locale il test si ferma di proposito.
