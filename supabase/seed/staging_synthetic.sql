@@ -31,7 +31,7 @@
 -- I quattro utenti sintetici vanno creati PRIMA di eseguire questo seed,
 -- tramite la dashboard di Supabase (Authentication → Users → Add user) oppure
 -- tramite l'API di amministrazione con la chiave di servizio, dal lato server.
--- Vedi docs/STAGING_DEPLOYMENT_RUNBOOK.md, passo 7.
+-- Vedi docs/STAGING_DEPLOYMENT_RUNBOOK.md, passo 8.
 --
 --   ETICHETTA            EMAIL SINTETICA                    RUOLO ATTESO
 --   ADMIN_STAGING        admin.staging@example.com          ADMIN
@@ -61,7 +61,7 @@ BEGIN
   IF mancanti IS NOT NULL THEN
     RAISE EXCEPTION
       'Utenti Auth sintetici mancanti: %. Crearli dalla dashboard prima di eseguire il seed '
-      '(vedi STAGING_DEPLOYMENT_RUNBOOK.md, passo 7).', array_to_string(mancanti, ', ');
+      '(vedi STAGING_DEPLOYMENT_RUNBOOK.md, passo 8).', array_to_string(mancanti, ', ');
   END IF;
 
   RAISE NOTICE 'Parte A: i 4 utenti Auth sintetici sono presenti.';
@@ -162,12 +162,14 @@ BEGIN
     RETURN;
   END IF;
 
+  -- `roles` è jsonb, non un array SQL: l'applicazione vi conserva un elenco
+  -- JSON di identificativi di ruolo.
   INSERT INTO public.bfos_members
     (id, "nickDiscord", "rpName", status, reliability, roles, "mainRoleId", notes)
   VALUES
-    ('stg-mem-001', 'TEST Membro Uno',  'TEST Personaggio Uno',  'Attivo',   'alta',  ARRAY['stg-role-001'], 'stg-role-001', 'Record TEST di staging.'),
-    ('stg-mem-002', 'TEST Membro Due',  'TEST Personaggio Due',  'Attivo',   'media', ARRAY['stg-role-002'], 'stg-role-002', 'Record TEST di staging.'),
-    ('stg-mem-003', 'TEST Membro Tre',  'TEST Personaggio Tre',  'In prova', 'media', ARRAY['stg-role-003'], 'stg-role-003', 'Record TEST di staging.')
+    ('stg-mem-001', 'TEST Membro Uno',  'TEST Personaggio Uno',  'Attivo',   'alta',  '["stg-role-001"]'::jsonb, 'stg-role-001', 'Record TEST di staging.'),
+    ('stg-mem-002', 'TEST Membro Due',  'TEST Personaggio Due',  'Attivo',   'media', '["stg-role-002"]'::jsonb, 'stg-role-002', 'Record TEST di staging.'),
+    ('stg-mem-003', 'TEST Membro Tre',  'TEST Personaggio Tre',  'In prova', 'media', '["stg-role-003"]'::jsonb, 'stg-role-003', 'Record TEST di staging.')
   ON CONFLICT (id) DO NOTHING;
 
   RAISE NOTICE 'Parte C: membri TEST inseriti.';

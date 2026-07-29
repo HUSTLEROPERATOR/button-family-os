@@ -32,6 +32,33 @@
 \timing off
 
 -- -----------------------------------------------------------------------------
+-- Se un parametro non è stato passato, gli si assegna una stringa vuota: senza
+-- questo, psql fallirebbe con un errore di sintassi poco leggibile invece di
+-- dire che cosa manca. Il controllo subito sotto trasforma il valore vuoto in
+-- un arresto esplicito.
+-- -----------------------------------------------------------------------------
+\if :{?admin_uid}
+\else
+\set admin_uid ''
+\endif
+\if :{?direzione_uid}
+\else
+\set direzione_uid ''
+\endif
+\if :{?staff_uid}
+\else
+\set staff_uid ''
+\endif
+\if :{?norole_uid}
+\else
+\set norole_uid ''
+\endif
+\if :{?disabled_uid}
+\else
+\set disabled_uid ''
+\endif
+
+-- -----------------------------------------------------------------------------
 -- I segnaposto vengono trasferiti in parametri di sessione PRIMA di entrare nei
 -- blocchi DO. psql non sostituisce le proprie variabili all'interno delle
 -- stringhe dollar-quoted: scrivere :'admin_uid' dentro un DO $$ ... $$ lo
@@ -59,7 +86,11 @@ DECLARE n text;
 BEGIN
   FOREACH n IN ARRAY ARRAY['admin_uid','direzione_uid','staff_uid','norole_uid','disabled_uid'] LOOP
     IF pg_temp.uid(n) IS NULL THEN
-      RAISE EXCEPTION 'Parametro % non fornito. Passare -v %="<uuid>" a psql.', n, n;
+      RAISE EXCEPTION
+        'Parametro % non fornito: questo test richiede gli identificativi degli '
+        'utenti Auth sintetici del progetto di staging, e resta bloccato finché '
+        'non vengono passati. Usare -v %="<uuid>" (vedi l''intestazione del file).',
+        n, n;
     END IF;
   END LOOP;
   RAISE NOTICE 'Parametri di test acquisiti (valori non stampati).';
@@ -106,6 +137,48 @@ BEGIN
   PERFORM set_config('role', 'none', true);
   RESET ROLE;
   PERFORM set_config('request.jwt.claims', '', true);
+END;
+$$;
+
+-- =============================================================================
+-- TEST 0 — da quale sorgente auth.uid() ricava l'identità
+-- =============================================================================
+-- Diagnostico, eseguito per primo perché rende leggibile qualunque fallimento
+-- successivo. PostgREST v10 e successivi impostano un unico parametro JSON,
+-- `request.jwt.claims`. Alcune immagini contengono ancora una definizione di
+-- auth.uid() che legge soltanto il vecchio parametro per-claim
+-- `request.jwt.claim.sub`: con quella definizione l'identità non si risolve, e
+-- l'unico modo per farla funzionare sarebbe un adattamento pre-richiesta, che
+-- questo progetto rifiuta.
+DO $$
+DECLARE
+  def text;
+  legge_json boolean;
+  legge_legacy boolean;
+BEGIN
+  SELECT pg_get_functiondef(p.oid) INTO def
+  FROM pg_proc p JOIN pg_namespace n ON n.oid = p.pronamespace
+  WHERE n.nspname = 'auth' AND p.proname = 'uid';
+
+  IF def IS NULL THEN
+    RAISE EXCEPTION 'FALLITO 0: auth.uid() non esiste in questo database.';
+  END IF;
+
+  legge_json   := position('request.jwt.claims' in def) > 0;
+  legge_legacy := position('request.jwt.claim.sub' in def) > 0;
+
+  RAISE NOTICE 'auth.uid() legge: claims JSON=%, claim.sub legacy=%', legge_json, legge_legacy;
+
+  IF NOT legge_json THEN
+    RAISE EXCEPTION
+      'FALLITO 0: auth.uid() non legge request.jwt.claims (JSON), che è ciò che '
+      'PostgREST v10+ imposta a partire da un JWT reale. Con questa definizione '
+      'l''identità si risolverebbe solo con un adattamento pre-richiesta, che non '
+      'deve esistere. Verificare la versione del progetto di destinazione prima '
+      'di procedere: NON aggiungere un adattamento per far passare questo test.';
+  END IF;
+
+  RAISE NOTICE 'OK 0: auth.uid() sa leggere i claim JSON nativi.';
 END;
 $$;
 

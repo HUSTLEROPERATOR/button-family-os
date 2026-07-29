@@ -283,10 +283,20 @@ if (STAGING.length === 0) {
   check('nessun UUID non sintetico', badUuids.length === 0,
     badUuids.length ? badUuids.join(' | ') : `${uuids.length} UUID, tutti sintetici`);
 
-  /* I rollback non devono essere raccolti dal runner delle migrazioni. */
+  /* La catena è esattamente tre migrazioni, in quest'ordine: schema, sicurezza,
+     ruoli. I rollback non devono essere raccolti dal runner. */
+  const EXPECTED_MIGRATIONS = [
+    '202607280000_application_schema.sql',
+    '202607280001_secure_access.sql',
+    '202607280002_server_side_roles.sql'
+  ];
   const inMigrations = STAGING.filter(p => p.includes(`supabase${sep}migrations${sep}`));
-  check('solo le due migrazioni previste in supabase/migrations/', inMigrations.length === 2,
-    inMigrations.map(p => p.split(sep).pop()).join(', '));
+  const names = inMigrations.map(p => p.split(sep).pop()).sort();
+  check('solo le tre migrazioni previste in supabase/migrations/',
+    names.length === 3 && names.every((n, i) => n === EXPECTED_MIGRATIONS[i]),
+    names.join(', '));
+  check('la migrazione dello schema precede quelle di sicurezza',
+    names[0] === EXPECTED_MIGRATIONS[0]);
   check('nessun rollback dentro supabase/migrations/',
     !inMigrations.some(p => /rollback/i.test(p)));
 
