@@ -17,9 +17,9 @@
 --   * non contiene URL, project ref, chiavi, password o dati.
 --
 -- PREREQUISITO: lo schema applicativo (le 14 tabelle public.bfos_*) deve essere
--- già presente nel progetto di staging. Un progetto Supabase nuovo è vuoto:
--- questa migrazione NON crea le tabelle e si ferma esplicitamente se mancano.
--- Vedi docs/STAGING_DEPLOYMENT_RUNBOOK.md, passo 4.
+-- già presente. Questa migrazione NON crea le tabelle e si ferma esplicitamente
+-- se mancano: le crea la migrazione 202607280000_application_schema.sql, che va
+-- applicata subito prima. Nessun accesso al database di produzione è necessario.
 --
 -- TRANSAZIONE: nessun BEGIN/COMMIT esplicito. Il runner delle migrazioni
 -- (Supabase CLI, oppure psql con --single-transaction) fornisce già la
@@ -50,8 +50,8 @@ BEGIN
   IF missing IS NOT NULL THEN
     RAISE EXCEPTION
       'Schema applicativo assente o incompleto. Tabelle mancanti: %. '
-      'Ripristinare lo schema nel progetto di staging prima di applicare 0001 '
-      '(vedi STAGING_DEPLOYMENT_RUNBOOK.md, passo 4).', array_to_string(missing, ', ');
+      'Applicare prima la migrazione 202607280000_application_schema.sql.',
+      array_to_string(missing, ', ');
   END IF;
 
   SELECT array_agg(c.relname ORDER BY c.relname) INTO extra
