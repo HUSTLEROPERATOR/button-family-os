@@ -278,7 +278,17 @@ Questo branch:
 
 | Suite | Comando | Esito |
 |---|---|---|
-| Controlli statici | `node tests/run-static-checks.mjs` | 46/46 |
+| Controlli statici | `node tests/run-static-checks.mjs` | 74/74 |
 | Test interfaccia con mock | `node tests/run-mock-tests.mjs` | 21/21 |
 
 Nessuna delle due contatta la rete o Supabase Cloud.
+
+### Pacchetto di staging
+
+Le migrazioni deployabili, i rollback, il seed sintetico, il test di
+`auth.uid()` e lo script di validazione end-to-end vivono in
+[`supabase/`](../supabase/README.md) e `scripts/`. **Nulla è stato applicato ad
+alcun database.** La procedura è in
+[STAGING_DEPLOYMENT_RUNBOOK.md](STAGING_DEPLOYMENT_RUNBOOK.md); lo stato di
+avanzamento e il blocco infrastrutturale in
+[STAGING_CHECKLIST.md](STAGING_CHECKLIST.md).

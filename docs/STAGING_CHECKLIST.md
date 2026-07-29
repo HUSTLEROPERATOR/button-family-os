@@ -6,7 +6,62 @@ staging del branch `feature/secure-auth-frontend`.
 > **Nessun gate di questa lista tocca la produzione.**
 > Se un gate fallisce, ci si ferma: non si prosegue con quello successivo.
 
-Riferimento: [SECURE_AUTH_FRONTEND_MIGRATION.md](SECURE_AUTH_FRONTEND_MIGRATION.md)
+Riferimenti:
+[SECURE_AUTH_FRONTEND_MIGRATION.md](SECURE_AUTH_FRONTEND_MIGRATION.md) ·
+[STAGING_DEPLOYMENT_RUNBOOK.md](STAGING_DEPLOYMENT_RUNBOOK.md)
+
+---
+
+## Stato attuale
+
+| Elemento | Stato |
+|---|---|
+| Codice frontend | **READY** |
+| Migrazioni staging | **READY** — da validare alla prima applicazione |
+| Rollback | **READY** — non applicati |
+| Seed sintetico | **READY** — non applicato |
+| Test `auth.uid()` | **READY** — non eseguito |
+| Script di validazione | **READY** — non eseguito |
+| Runbook | **READY** |
+| Progetto staging | 🔴 **BLOCKED** — nessuno slot Free disponibile |
+| Auth staging | **NOT STARTED** |
+| Utenti sintetici | **NOT STARTED** |
+| Runtime config reale | **NOT CREATED** |
+| Test end-to-end cloud | **NOT RUN** |
+| Deploy preview | **NOT RUN** |
+| Draft PR | **NOT OPENED** |
+| Produzione | ✅ **UNTOUCHED** |
+
+## Infrastructure blocker
+
+Lo staging cloud è **rinviato**. Il pacchetto è completo e revisionabile, ma
+non applicabile.
+
+| Fatto | Valore |
+|---|---|
+| Piano dell'organizzazione | Free |
+| Progetti attivi | 2 |
+| Limite del piano | 2 progetti attivi |
+| Slot disponibili | **0** |
+| Progetti in pausa | 2 (non occupano slot) |
+
+Vincoli applicati alla decisione:
+
+* il progetto di **produzione non è sospendibile** e occupa uno slot;
+* il secondo slot è occupato da un progetto non correlato, che **non è stato
+  sospeso**: la decisione spetta al proprietario e non è stata presa in
+  autonomia;
+* **nessuna creazione di progetto è stata tentata**;
+* **nessun costo è stato richiesto né approvato**; la verifica del prezzo non è
+  stata eseguita perché condizionata alla disponibilità di uno slot;
+* nessuna modifica è stata apportata ad alcun progetto Supabase.
+
+Sblocco possibile in tre modi, tutti da decidere dal proprietario: sospendere
+il progetto non correlato, passare a un piano che consenta più progetti attivi,
+oppure attendere. Fino ad allora restano validi i test locali: controlli
+statici e test con client mock, che non contattano la rete.
+
+> Project ref e organization ID non sono riportati in questo documento.
 
 ---
 
@@ -17,15 +72,25 @@ Riferimento: [SECURE_AUTH_FRONTEND_MIGRATION.md](SECURE_AUTH_FRONTEND_MIGRATION.
 - [ ] Le credenziali di staging sono distinte da quelle di produzione
 - [ ] È documentato chi ha accesso al progetto di staging
 
-## 2. Migrazioni M1/M2 adattate
+## 2. Migrazioni adattate
 
-- [ ] M1 (accesso negato per impostazione predefinita) è stata resa deployabile
-- [ ] M2 (ruoli applicativi lato server) è stata resa deployabile
-- [ ] Le guardie di preflight sono state adattate alla forma del progetto di staging
+Il pacchetto è pronto in `supabase/`. Restano da verificare all'applicazione:
+
+- [x] `202607280001_secure_access.sql` — accesso negato per impostazione predefinita
+- [x] `202607280002_server_side_roles.sql` — ruoli applicativi lato server
+- [x] Rollback presenti in `supabase/rollback/`, fuori dalla directory automatica
+- [x] Guardie di preflight adattate: fallimento esplicito su schema inatteso
+- [x] Nessun adattamento locale, nessun workaround, nessun dato, nessun segreto
+- [ ] **Schema applicativo portato nello staging** (le migrazioni non creano tabelle)
 - [ ] Le migrazioni sono applicate **allo staging** e a nient'altro
-- [ ] Ogni migrazione ha il suo rollback verificato
+- [ ] Ogni rollback è stato verificato sullo staging
 - [ ] `bfos_current_app_role()` esiste, con firma e permessi attesi
 - [ ] `EXECUTE` sugli helper **non** è concesso ad `anon`
+
+> Divergenza voluta rispetto al percorso locale: le migrazioni **non**
+> concedono ad `anon` alcuna lettura di bootstrap sulla tabella asset. Il
+> frontend statico non ne ha bisogno, quindi lo staging parte già nello stato
+> finale, senza alcun accesso anonimo da revocare dopo.
 
 ## 3. Supabase Auth configurato
 
@@ -91,12 +156,16 @@ Verificare **nell'interfaccia** e **nel database** per ogni identità:
 > staging: invertire l'ordine rende impossibile il rollback al loader.
 
 - [ ] Confermato che l'interfaccia si avvia **senza** alcuna lettura anonima
-- [ ] Rimossa la policy di lettura anonima sulla tabella asset (`anon_read_assets`
-      e la policy limitata alla sola chiave di bootstrap che l'ha sostituita)
-- [ ] Revocato l'**ultimo `GRANT SELECT` ad `anon`** sulla tabella asset
-- [ ] Verificato che `anon` non ha più alcun accesso ad alcuna tabella
-- [ ] Verificato che l'applicazione continua a funzionare dopo la revoca
-- [ ] Migrazione di revoca dotata di rollback
+- [ ] Verificato che `anon` ha **0** privilegi di tabella (runbook, passo 15)
+- [ ] Verificato che esistono **0** policy per `anon`
+- [ ] Verificato che l'applicazione continua a funzionare
+- [ ] `STAGING_EXPECT_ANON_REVOKED=true node scripts/validate-staging.mjs` supera tutto
+
+> Su uno staging costruito con questo pacchetto non c'è nulla da revocare:
+> `202607280001` rimuove anche `anon_read_assets` e `202607280002` non ricrea
+> alcuna policy anonima. Questo passo è quindi una **verifica**, non una
+> modifica. Su un progetto che parte da una copia dello stato di origine,
+> invece, la rimozione avviene durante `202607280001`.
 
 ## 10. Build
 
