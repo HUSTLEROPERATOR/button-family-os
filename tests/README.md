@@ -25,6 +25,18 @@ Nessuna dipendenza. Verifica:
 Gli host ammessi nel codice pubblico sono elencati esplicitamente nello script
 (`ALLOWED_HOSTS`) e sono tutti inerti a runtime.
 
+Una sezione dedicata copre il **pacchetto di staging** (`supabase/`, `scripts/`):
+struttura SQL bilanciata, assenza di project ref, chiavi, password e adattamenti
+locali, indirizzi solo su domini riservati, UUID solo sintetici, nessun `GRANT`
+ad `anon` nelle migrazioni e nel seed, nessuna scrittura diretta in `auth.users`,
+`storage` o `realtime`, e i rollback fuori dalla cartella raccolta dal runner.
+
+Il controllo di struttura SQL non è un parser Postgres completo — senza un
+server non è possibile — ma un tokenizzatore che riconosce stringhe,
+identificativi quotati, commenti e dollar-quoting e ne verifica il
+bilanciamento. La validazione semantica avviene alla prima applicazione sullo
+staging.
+
 ## Test dell'interfaccia con client mock
 
 ```bash

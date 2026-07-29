@@ -12,29 +12,50 @@
  *
  * Esce con codice 1 al primo controllo fallito.
  */
-import { readFileSync, readdirSync, statSync } from 'node:fs';
-import { join, resolve, extname } from 'node:path';
+import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+import { join, resolve, extname, sep } from 'node:path';
 import vm from 'node:vm';
 
 const ROOT = resolve(new URL('..', import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, '$1'));
 
 /* File versionati che compongono il build pubblico.
    Esclusi:
-   - tests/ e docs/          non serviti al browser, contengono per definizione esempi;
-   - runtime-config*.js      artefatti di deploy non versionati (vedi .gitignore),
-                             a parte il template runtime-config.example.js;
-   - *.local.js              file locali non versionati. */
+   - tests/, docs/, supabase/, scripts/   non serviti al browser;
+   - runtime-config*.js                   artefatti di deploy non versionati
+                                          (vedi .gitignore), a parte i template;
+   - *.local.js                           file locali non versionati.
+   Il pacchetto di staging in supabase/ e scripts/ ha una sezione dedicata più
+   in basso, con regole proprie. */
 const UNVERSIONED = /^runtime-config(\.local)?\.js$|\.local\.js$/;
+const NOT_SHIPPED_DIRS = ['.git', 'node_modules', 'tests', 'docs', 'audit', 'supabase', 'scripts'];
 const SHIPPED = [];
 (function walk(dir) {
   for (const name of readdirSync(dir)) {
-    if (['.git', 'node_modules', 'tests', 'docs', 'audit'].includes(name)) continue;
+    if (NOT_SHIPPED_DIRS.includes(name)) continue;
     const p = join(dir, name);
     if (statSync(p).isDirectory()) walk(p);
     else if (UNVERSIONED.test(name)) continue;
     else if (['.html', '.js', '.css', '.json'].includes(extname(name))) SHIPPED.push(p);
   }
 })(ROOT);
+
+/* Pacchetto di staging: SQL delle migrazioni, rollback, seed, test e script. */
+const STAGING = [];
+(function walkStaging(dir) {
+  if (!existsSync(dir)) return;
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    if (statSync(p).isDirectory()) walkStaging(p);
+    else if (['.sql', '.mjs', '.js'].includes(extname(name))) STAGING.push(p);
+  }
+})(join(ROOT, 'supabase'));
+(function walkScripts(dir) {
+  if (!existsSync(dir)) return;
+  for (const name of readdirSync(dir)) {
+    const p = join(dir, name);
+    if (statSync(p).isFile() && ['.mjs', '.js'].includes(extname(name))) STAGING.push(p);
+  }
+})(join(ROOT, 'scripts'));
 
 /* La libreria di terze parti è verificata per impronta (vedi vendor/README.md),
    non per contenuto: contiene naturalmente stringhe come "*.supabase.co". */
@@ -107,9 +128,11 @@ console.log('\n--- indirizzi e project ref ---');
    - YOUR-PROJECT...   segnaposto del template, esplicitamente rifiutato dall'app;
    - mock-project...   dominio .invalid del client mock (riservato da RFC 2606);
    - twitch.tv         suggerimento di formato in un campo del modulo membri. */
-const ALLOWED_HOSTS = ['www.w3.org', 'YOUR-PROJECT.supabase.co', 'mock-project.example.invalid', 'twitch.tv'];
+const ALLOWED_HOSTS = ['www.w3.org', 'YOUR-PROJECT.supabase.co', 'STAGING-PROJECT.supabase.co',
+                       'mock-project.example.invalid', 'twitch.tv'];
 expectNone('project ref Supabase assente', /[a-z]{20}\.supabase\.co/);
-expectNone('URL di progetto Supabase assente', /https:\/\/(?!YOUR-PROJECT\.)[a-z0-9-]+\.supabase\.(co|in)/i);
+expectNone('URL di progetto Supabase assente',
+  /https:\/\/(?!YOUR-PROJECT\.|STAGING-PROJECT\.)[a-z0-9-]+\.supabase\.(co|in)/i);
 const remoteUrls = scan(/https?:\/\/[A-Za-z0-9.-]+/).filter(
   h => !ALLOWED_HOSTS.some(a => h.includes(a)));
 check('nessun URL remoto non previsto', remoteUrls.length === 0,
@@ -150,6 +173,163 @@ check('nessun ruolo scritto in localStorage/sessionStorage',
 check('nessun selettore di ruolo lato client', !/setRole|chooseRole|roleSelect/i.test(html));
 check('canWrite copre ADMIN e DIREZIONE',
   /get canWrite\(\)\{ return this\.session\?\.appRole === 'ADMIN' \|\| this\.session\?\.appRole === 'DIREZIONE'; \}/.test(html));
+
+console.log('\n--- pacchetto staging (supabase/, scripts/) ---');
+if (STAGING.length === 0) {
+  check('pacchetto staging presente', false, 'nessun file trovato');
+} else {
+  check('pacchetto staging presente', true, `${STAGING.length} file`);
+
+  const stagingSources = STAGING.map(p => ({ path: p.slice(ROOT.length + 1), text: readFileSync(p, 'utf8') }));
+  const scanStaging = re => {
+    const hits = [];
+    for (const { path, text } of stagingSources) {
+      text.split('\n').forEach((line, i) => {
+        const m = line.match(re);
+        if (m) hits.push(`${path}:${i + 1} ${m[0].slice(0, 60)}`);
+      });
+    }
+    return hits;
+  };
+  const expectNoneStaging = (name, re) => {
+    const hits = scanStaging(re);
+    check(name, hits.length === 0, hits.length ? `${hits.length}: ${hits[0]}` : '0');
+  };
+
+  /* Struttura SQL. Non è un parser Postgres completo — senza un server non è
+     possibile — ma un tokenizzatore che riconosce stringhe, identificativi
+     quotati, commenti e dollar-quoting, e verifica che tutto sia bilanciato.
+     Intercetta gli errori di scrittura più probabili: un $tag$ non chiuso, una
+     stringa aperta, parentesi sbilanciate, un'istruzione senza punto e virgola. */
+  function sqlStructure(text) {
+    let i = 0, depth = 0, lastSignificant = '';
+    const openTags = [];
+    while (i < text.length) {
+      const c = text[i];
+      if (c === '-' && text[i + 1] === '-') { i = text.indexOf('\n', i); if (i < 0) break; continue; }
+      if (c === '/' && text[i + 1] === '*') {
+        const end = text.indexOf('*/', i + 2);
+        if (end < 0) return { ok: false, error: 'commento a blocco non chiuso' };
+        i = end + 2; continue;
+      }
+      if (c === "'" || c === '"') {
+        const quote = c; i++;
+        while (i < text.length) {
+          if (text[i] === quote) { if (text[i + 1] === quote) i += 2; else { i++; break; } }
+          else i++;
+        }
+        if (i > text.length) return { ok: false, error: `stringa ${quote} non chiusa` };
+        lastSignificant = quote; continue;
+      }
+      if (c === '$') {
+        const m = /^\$[A-Za-z_][A-Za-z0-9_]*\$|^\$\$/.exec(text.slice(i));
+        if (m) {
+          const tag = m[0];
+          if (openTags.length && openTags[openTags.length - 1] === tag) openTags.pop();
+          else openTags.push(tag);
+          i += tag.length; lastSignificant = '$'; continue;
+        }
+      }
+      if (openTags.length === 0) {
+        if (c === '(') depth++;
+        else if (c === ')') { depth--; if (depth < 0) return { ok: false, error: 'parentesi chiusa in eccesso' }; }
+      }
+      if (!/\s/.test(c)) lastSignificant = c;
+      i++;
+    }
+    if (openTags.length) return { ok: false, error: `dollar-quote non chiuso: ${openTags.join(', ')}` };
+    if (depth !== 0) return { ok: false, error: `${depth} parentesi non chiuse` };
+    if (lastSignificant && lastSignificant !== ';') {
+      return { ok: false, error: `il file non termina con ';' (ultimo carattere: '${lastSignificant}')` };
+    }
+    return { ok: true };
+  }
+
+  for (const { path, text } of STAGING.filter(p => p.endsWith('.sql'))
+      .map(p => ({ path: p.slice(ROOT.length + 1), text: readFileSync(p, 'utf8') }))) {
+    const r = sqlStructure(text);
+    check(`struttura SQL ${path.split(sep).pop()}`, r.ok, r.ok ? 'bilanciata' : r.error);
+  }
+
+  /* Solo i segnaposto documentati sono ammessi come host. */
+  expectNoneStaging('nessun project ref',
+    /[a-z]{20}\.supabase\.co/);
+  expectNoneStaging('nessun URL di progetto reale',
+    /https:\/\/(?!STAGING-PROJECT\.|<)[a-z0-9-]+\.supabase\.(co|in)/i);
+  expectNoneStaging('nessuna chiave service_role',
+    /service[_-]?role[^\n]{0,40}["'][A-Za-z0-9._-]{20,}["']/i);
+  expectNoneStaging('nessun JWT',
+    /eyJ[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\./);
+  expectNoneStaging('nessuna publishable key reale',
+    /sb_publishable_[A-Za-z0-9_-]{10,}/);
+  expectNoneStaging('nessuna password letterale',
+    /(password|passwd|pwd)\s*[:=]\s*["'][^"'$<{]{4,}["']/i);
+  expectNoneStaging('nessun endpoint di laboratorio',
+    /https?:\/\/(127\.0\.0\.1|localhost)|:3001\b|:4173\b|:8099\b/);
+  expectNoneStaging('nessun adattamento pre-richiesta introdotto',
+    /CREATE\s+(OR\s+REPLACE\s+)?FUNCTION[^\n]*pre_request|SET\s+pgrst\.db_pre_request/i);
+  expectNoneStaging('nessun percorso Windows o nome di container',
+    /[A-Za-z]:\\\\|[A-Za-z]:\/Users\/|docker\s+(run|exec)|container_name/i);
+
+  /* Le identità sintetiche devono usare domini riservati (RFC 2606), mai reali. */
+  const emails = scanStaging(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/);
+  const badEmails = emails.filter(e => !/@(example\.(com|org|net)|example\.invalid|.*\.invalid)/i.test(e));
+  check('solo indirizzi email su domini riservati', badEmails.length === 0,
+    badEmails.length ? badEmails.join(' | ') : `${emails.length} indirizzo/i, tutti riservati`);
+
+  /* Gli UUID ammessi sono solo quelli palesemente sintetici del pacchetto. */
+  const uuids = scanStaging(/[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}/);
+  const badUuids = uuids.filter(u => !/(5ada0000-0000-4000-8000-|00000000-0000-4000-8000-)/.test(u));
+  check('nessun UUID non sintetico', badUuids.length === 0,
+    badUuids.length ? badUuids.join(' | ') : `${uuids.length} UUID, tutti sintetici`);
+
+  /* I rollback non devono essere raccolti dal runner delle migrazioni. */
+  const inMigrations = STAGING.filter(p => p.includes(`supabase${sep}migrations${sep}`));
+  check('solo le due migrazioni previste in supabase/migrations/', inMigrations.length === 2,
+    inMigrations.map(p => p.split(sep).pop()).join(', '));
+  check('nessun rollback dentro supabase/migrations/',
+    !inMigrations.some(p => /rollback/i.test(p)));
+
+  /* Le migrazioni non devono aprire una transazione annidata. */
+  for (const f of inMigrations) {
+    const txt = readFileSync(f, 'utf8');
+    check(`${f.split(sep).pop()}: nessun BEGIN/COMMIT esplicito`,
+      !/^\s*(BEGIN|COMMIT)\s*;/im.test(txt));
+  }
+
+  /* Il rollback che ripristina uno stato insicuro deve avere un blocco. */
+  const m1rb = STAGING.find(p => /202607280001.*rollback/.test(p));
+  check('il rollback insicuro ha un blocco di sicurezza', !!m1rb
+    && /RAISE EXCEPTION/.test(readFileSync(m1rb, 'utf8')));
+
+  /* Nessuna scrittura diretta in auth.users. */
+  expectNoneStaging('nessun INSERT/UPDATE/DELETE su auth.users',
+    /(INSERT\s+INTO|UPDATE|DELETE\s+FROM)\s+auth\.users/i);
+  expectNoneStaging('nessuna modifica a storage o realtime',
+    /(INSERT|UPDATE|DELETE|ALTER|DROP)[^\n]{0,40}\b(storage|realtime)\./i);
+
+  /* Nessuna concessione ad anon nelle migrazioni e nel seed. I rollback sono
+     esclusi di proposito: il rollback di 0001 ripristina lo stato insicuro
+     precedente, e reintrodurre quei GRANT è esattamente il suo scopo. */
+  const grantRe = /GRANT[^\n;]{0,120}\bTO\b[^\n;]{0,60}\banon\b/i;
+  const forwardOnly = stagingSources.filter(
+    s => !s.path.includes(`supabase${sep}rollback${sep}`));
+  const anonGrants = [];
+  for (const { path, text } of forwardOnly) {
+    text.split('\n').forEach((line, i) => { if (grantRe.test(line)) anonGrants.push(`${path}:${i + 1}`); });
+  }
+  check('nessun GRANT ad anon in migrazioni e seed', anonGrants.length === 0,
+    anonGrants.length ? anonGrants.join(' | ') : `0 su ${forwardOnly.length} file`);
+
+  /* I GRANT ad anon possono comparire solo nel rollback che dichiara di
+     ripristinare una configurazione insicura, e solo se lo dichiara. */
+  const rollbackFiles = stagingSources.filter(s => s.path.includes(`supabase${sep}rollback${sep}`));
+  for (const { path, text } of rollbackFiles) {
+    if (!grantRe.test(text)) continue;
+    check(`${path.split(sep).pop()}: i GRANT ad anon sono dichiarati come insicuri`,
+      /RIPRISTINA UNA CONFIGURAZIONE INSICURA/i.test(text) && /RAISE EXCEPTION/.test(text));
+  }
+}
 
 console.log('\n--- .gitignore ---');
 const ignore = readFileSync(join(ROOT, '.gitignore'), 'utf8');
