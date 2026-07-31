@@ -1,8 +1,0 @@
-# Fine riga normalizzate a LF per tutto ciò che è testo, così il frontend
-# statico è identico su qualunque sistema e su qualunque hosting.
-* text=auto eol=lf
-
-# Dipendenze di terze parti: conservate byte per byte. Nessuna conversione di
-# fine riga, altrimenti l'impronta SHA-256 dichiarata in vendor/README.md non
-# corrisponderebbe più al file effettivamente servito.
-vendor/** -text -diff linguist-vendored
