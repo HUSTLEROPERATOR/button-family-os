@@ -216,6 +216,23 @@ tbody tr{cursor:pointer}
 .grow-bar i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold))}
 .lvl-badge{font-size:11px;font-weight:800;letter-spacing:1px;padding:2px 9px;border-radius:5px;text-transform:uppercase;white-space:nowrap}
 
+/* ---------- DASHBOARD E OBIETTIVI ---------- */
+.page-head{display:flex;align-items:flex-start;gap:14px;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap}
+.page-head h1{font-family:Georgia,'Times New Roman',serif;font-size:24px;color:var(--gold2);letter-spacing:.5px}
+.page-head p{color:var(--text2);font-size:13px;margin-top:3px}
+.dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700}
+.panel-head .count{margin-left:auto;color:var(--text3);font-size:12px;font-weight:600}
+.panel-list{padding:4px 14px}
+.dash-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer}
+.dash-row:last-child{border-bottom:0}.dash-row:hover{color:var(--gold2)}
+.dash-row .copy{min-width:0;flex:1}.dash-row .copy b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dash-row .copy span{display:block;color:var(--text3);font-size:12px;margin-top:2px}
+.progress{height:7px;background:var(--bg4);border-radius:4px;overflow:hidden;min-width:76px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold))}
+.priority{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:4px;white-space:nowrap}.priority.alta{background:var(--red-soft);color:var(--red2)}.priority.media{background:var(--gold-soft);color:var(--gold2)}.priority.bassa{background:rgba(78,140,212,.14);color:#79a9e4}
+.objective-title{font-weight:800}.objective-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;color:var(--text3);font-size:12px;margin-top:4px}.objective-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
+@media(max-width:860px){.dashboard-grid{grid-template-columns:1fr}.dash-row{align-items:flex-start}.dash-row .progress{margin-top:4px}.page-head h1{font-size:21px}}
+
 /* ---------- TOAST ---------- */
 #toasts{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:500}
 .toast{background:var(--bg3);border:1px solid var(--border2);border-left:3px solid var(--gold);border-radius:8px;padding:11px 16px;font-size:13px;box-shadow:0 10px 30px rgba(0,0,0,.5);animation:toastin .2s ease}
@@ -337,7 +354,9 @@ tbody tr{cursor:pointer}
       </svg>
       BUTTON'S <em>FAMILY</em>&nbsp;OS</div>
     <nav class="tabs" id="mainTabs">
-      <button data-tab="members" class="active" onclick="App.setTab('members')">👥 Membri</button>
+      <button data-tab="dashboard" class="active" onclick="App.setTab('dashboard')">⌘ Dashboard</button>
+      <button data-tab="objectives" onclick="App.setTab('objectives')">◎ Obiettivi</button>
+      <button data-tab="members" onclick="App.setTab('members')">👥 Membri</button>
       <button data-tab="activity" onclick="App.setTab('activity')">📅 Attività</button>
       <button data-tab="inventory" onclick="App.setTab('inventory')">📦 Magazzino</button>
       <button data-tab="cash" onclick="App.setTab('cash')">💰 Casse</button>
@@ -793,6 +812,20 @@ const Seed = {
   }
 };
 
+/* Primo vertical slice M7: dati sintetici in memoria. Non sono sincronizzati
+   con Supabase e non introducono tabelle o migrazioni in questa sessione. */
+const Operations = {
+  objectives:[
+    {id:'obj-1',title:'Inserimento nuove reclute',description:'Completare il percorso di affiancamento per i membri in prova.',category:'Persone',period:'Settimana 31',responsible:'m1',participants:['m1','m2'],target:3,unit:'affiancamenti',progress:67,priority:'Alta',status:'In corso',dueDate:'2026-08-03',notes:'Verifica finale con Direzione.',evidence:['Briefing iniziale','Schede affiancamento'],missionIds:['mis-1'],checklistIds:['chk-1'],createdAt:'2026-07-27 09:00',updatedAt:'2026-07-31 10:30'},
+    {id:'obj-2',title:'Prontezza operativa',description:'Allineare squadra e procedure prima del prossimo briefing.',category:'Operativo',period:'Settimana 31',responsible:'m2',participants:['m1','m2'],target:2,unit:'briefing',progress:40,priority:'Media',status:'In corso',dueDate:'2026-08-05',notes:'Aggiornare le evidenze al termine.',evidence:['Agenda briefing'],missionIds:['mis-2'],checklistIds:['chk-2'],createdAt:'2026-07-27 09:10',updatedAt:'2026-07-30 18:40'},
+    {id:'obj-3',title:'Riordino magazzino',description:'Allineare le giacenze registrate con quelle reali del deposito.',category:'Logistica',period:'Settimana 30',responsible:'m2',participants:['m2'],target:1,unit:'inventario',progress:100,priority:'Bassa',status:'Completato',dueDate:'2026-07-27',notes:'Chiuso e verificato.',evidence:['Conteggio finale'],missionIds:[],checklistIds:['chk-3'],createdAt:'2026-07-20 08:00',updatedAt:'2026-07-27 17:05'}
+  ],
+  missions:[{id:'mis-1',title:'Affiancamento reclute',dueDate:'2026-08-02',status:'In corso'},{id:'mis-2',title:'Briefing squadra',dueDate:'2026-08-05',status:'Pianificata'}],
+  checklists:[{id:'chk-1',title:'Schede prova da validare',done:false},{id:'chk-2',title:'Presenze briefing',done:false},{id:'chk-3',title:'Materiale briefing',done:true}],
+  communications:[{id:'com-1',title:'Briefing Direzione',body:'Riunione operativa programmata per questa settimana.',important:true,date:'2026-07-31'},{id:'com-2',title:'Aggiornamento percorso reclute',body:'Le evidenze di affiancamento vanno registrate entro la scadenza.',important:true,date:'2026-07-30'}],
+  activity:[{id:'act-1',title:'Obiettivo aggiornato',detail:'Inserimento nuove reclute al 67%',date:'Oggi, 10:30'},{id:'act-2',title:'Checklist completata',detail:'Materiale briefing',date:'Ieri, 19:10'}]
+};
+
 /* ============================ UTIL ============================ */
 const $ = s => document.querySelector(s);
 const esc = s => String(s??'').replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -812,6 +845,9 @@ function rolePill(r, small=false){
 }
 function stars(n){ n=Math.max(0,Math.min(5,Math.round(n||0))); return `<span class="stars">${'★'.repeat(n)}<span class="off">${'★'.repeat(5-n)}</span></span>`; }
 function memberName(id){ return Store.data.members.find(m=>m.id===id)?.nickDiscord || '—'; }
+/* Il target di un obiettivo è un numero con la sua unità di misura: le due
+   informazioni sono separate nel dato e vengono ricomposte solo per la lettura. */
+function objectiveTarget(o){ return [o.target, o.unit].filter(x=>x!==''&&x!=null).join(' ') || '—'; }
 /* Statistiche di crescita per membro, calcolate dal registro attività */
 function growthStats(mid){
   const acts = (Store.data.activities||[]).filter(a=>(a.participants||[]).includes(mid));
@@ -878,7 +914,7 @@ function download(filename, content, mime='application/json'){
 
 /* ============================ APP CORE ============================ */
 const App = {
-  tab:'members', session:null, actSub:'log', invSub:'stock',
+  tab:'dashboard', session:null, actSub:'log', invSub:'stock',
   filters:{ q:'', role:'', status:'', spec:'', rel:'', activity:'', live:'' },
   actFilters:{ q:'', type:'', outcome:'', member:'' },
   invFilters:{ q:'', kind:'', cat:'', deposit:'' },
@@ -1018,6 +1054,16 @@ const App = {
      reale vive per intero nelle policy RLS. */
   get isAdmin(){ return this.session?.appRole === 'ADMIN'; },        // sola amministrazione di sistema
   get canWrite(){ return this.session?.appRole === 'ADMIN' || this.session?.appRole === 'DIREZIONE'; },
+  /* Creare, modificare, assegnare, completare e archiviare un obiettivo resta
+     ad ADMIN e DIREZIONE. */
+  get canManageObjectives(){ return this.canWrite; },
+  /* Lo STAFF non crea e non archivia: può solo far avanzare il progresso, e
+     solo sugli obiettivi ancora in corso. Un obiettivo completato o archiviato
+     è chiuso anche per lui. */
+  canUpdateObjectiveProgress(objective){ return this.canManageObjectives || (this.session?.appRole === 'STAFF' && objective?.status === 'In corso'); },
+  /* Dichiarare concluso un obiettivo è una decisione di direzione, non un
+     effetto collaterale del raggiungimento del 100%. */
+  canCompleteObjective(){ return this.canManageObjectives; },
 
   /* ---------- SCHERMATE ---------- */
   showLogin(msg){
@@ -1075,7 +1121,14 @@ const App = {
   setIntelSub(s){ this.intelSub = s; this.render(); },
   render(){
     const v = $('#view');
-    if(this.tab==='members') v.innerHTML = Views.members();
+    /* Senza un ruolo riconosciuto e senza dati caricati non c'è nulla da
+       disegnare: le viste leggono Store.data, che resta nullo finché
+       l'autorizzazione non è confermata. Chi non ha accesso resta sulla sua
+       schermata anche se la scheda viene forzata. */
+    if(!this.session?.appRole || !Store.data) return;
+    if(this.tab==='dashboard') v.innerHTML = Views.dashboard();
+    else if(this.tab==='objectives') v.innerHTML = Views.objectives();
+    else if(this.tab==='members') v.innerHTML = Views.members();
     else if(this.tab==='activity') v.innerHTML = Views.activity();
     else if(this.tab==='inventory') v.innerHTML = Views.inventory();
     else if(this.tab==='cash') v.innerHTML = Views.cash();
@@ -1088,6 +1141,36 @@ const App = {
 
 /* ============================ VIEWS ============================ */
 const Views = {
+
+  dashboard(){
+    const objectives = Operations.objectives.filter(x=>x.status==='In corso');
+    const completed = Operations.objectives.filter(x=>x.status==='Completato');
+    const missions = Operations.missions.filter(x=>x.status!=='Completata');
+    const pending = Operations.checklists.filter(x=>!x.done);
+    const trial = Store.data.members.filter(m=>m.status==='In prova');
+    const weekProgress = objectives.length ? Math.round(objectives.reduce((sum,x)=>sum+x.progress,0)/objectives.length) : 0;
+    const quick = App.canManageObjectives ? `<button class="btn primary" onclick="Modals.editObjective(null)">＋ Nuovo obiettivo</button><button class="btn gold" onclick="App.setTab('objectives')">Gestisci obiettivi</button>` : `<button class="btn gold" onclick="App.setTab('objectives')">Apri obiettivi</button>`;
+    const rows = (items, renderer, empty) => items.length ? items.map(renderer).join('') : `<div class="empty-state" style="padding:24px">${empty}</div>`;
+    return `<div class="page-head"><div><h1>Dashboard operativa</h1><p>Quadro sintetico della settimana e delle priorità in corso.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">${quick}</div></div>
+    <div class="stats"><div class="stat gold"><div class="num">${objectives.length}</div><div class="lbl">Obiettivi attivi</div></div><div class="stat green"><div class="num">${completed.length}</div><div class="lbl">Obiettivi completati</div></div><div class="stat"><div class="num">${weekProgress}%</div><div class="lbl">Progresso settimana</div></div><div class="stat red"><div class="num">${missions.length}</div><div class="lbl">Missioni in scadenza</div></div><div class="stat"><div class="num">${pending.length}</div><div class="lbl">Checklist aperte</div></div></div>
+    <div class="dashboard-grid"><div style="display:flex;flex-direction:column;gap:14px">
+      <section class="panel"><div class="panel-head">◎ Obiettivi attivi <span class="count">${objectives.length}</span></div><div class="panel-list">${rows(objectives,o=>`<div class="dash-row" onclick="Modals.objectiveDetail('${o.id}')"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><div class="copy"><b>${esc(o.title)}</b><span>${esc(objectiveTarget(o))} · scade ${fmtDate(o.dueDate)}</span></div><div class="progress"><i style="width:${o.progress}%"></i></div><b style="font-size:12px">${o.progress}%</b></div>`,'Nessun obiettivo attivo.')}</div></section>
+      <section class="panel"><div class="panel-head">✔ Obiettivi completati <span class="count">${completed.length}</span></div><div class="panel-list">${rows(completed,o=>`<div class="dash-row" onclick="Modals.objectiveDetail('${o.id}')"><div class="copy"><b>${esc(o.title)}</b><span>${esc(o.period)} · chiuso il ${fmtDate(o.dueDate)}</span></div><b style="font-size:12px;color:var(--green)">100%</b></div>`,'Nessun obiettivo completato.')}</div></section>
+      <section class="panel"><div class="panel-head">◷ Attività recenti</div><div class="panel-list">${rows(Operations.activity,a=>`<div class="dash-row"><div class="copy"><b>${esc(a.title)}</b><span>${esc(a.detail)}</span></div><span style="color:var(--text3);font-size:12px">${esc(a.date)}</span></div>`,'Nessuna attività recente.')}</div></section>
+    </div><div style="display:flex;flex-direction:column;gap:14px">
+      <section class="panel"><div class="panel-head">⚑ Missioni in scadenza</div><div class="panel-list">${rows(missions,m=>`<div class="dash-row"><div class="copy"><b>${esc(m.title)}</b><span>${esc(m.status)} · ${fmtDate(m.dueDate)}</span></div></div>`,'Nessuna missione in scadenza.')}</div></section>
+      <section class="panel"><div class="panel-head">☐ Checklist da completare <span class="count">${pending.length}</span></div><div class="panel-list">${rows(pending,c=>`<div class="dash-row"><span style="color:var(--gold2)">☐</span><div class="copy"><b>${esc(c.title)}</b></div></div>`,'Tutte le checklist sono complete.')}</div></section>
+      <section class="panel"><div class="panel-head">✦ Comunicazioni importanti</div><div class="panel-list">${rows(Operations.communications.filter(c=>c.important),c=>`<div class="dash-row"><div class="copy"><b>${esc(c.title)}</b><span>${esc(c.body)}</span></div></div>`,'Nessuna comunicazione importante.')}</div></section>
+      <section class="panel"><div class="panel-head">◌ Membri in prova <span class="count">${trial.length}</span></div><div class="panel-list">${rows(trial,m=>`<div class="dash-row"><div class="avatar">${initials(m)}</div><div class="copy"><b>${esc(m.nickDiscord)}</b><span>${esc(m.rpName)}</span></div></div>`,'Nessun membro in prova.')}</div></section>
+    </div></div>`;
+  },
+
+  objectives(){
+    const sorted = [...Operations.objectives].sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
+    return `<div class="page-head"><div><h1>Obiettivi</h1><p>Direzione, responsabilità, progresso ed evidenze operative.</p></div>${App.canManageObjectives?`<button class="btn primary" onclick="Modals.editObjective(null)">＋ Nuovo obiettivo</button>`:''}</div>
+    <div class="stats"><div class="stat gold"><div class="num">${sorted.filter(x=>x.status==='In corso').length}</div><div class="lbl">In corso</div></div><div class="stat green"><div class="num">${sorted.filter(x=>x.status==='Completato').length}</div><div class="lbl">Completati</div></div><div class="stat red"><div class="num">${sorted.filter(x=>x.priority==='Alta'&&x.status==='In corso').length}</div><div class="lbl">Priorità alte</div></div></div>
+    <div class="cards" style="display:flex">${sorted.map(o=>`<article class="mcard"><div class="top"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span class="lvl-badge" style="border:1px solid var(--border2);color:var(--text2)">${esc(o.status)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">${fmtDate(o.dueDate)}</span></div><div class="objective-title">${esc(o.title)}</div><div style="color:var(--text2);font-size:12.5px;margin-top:4px">${esc(o.description)}</div><div class="objective-meta"><span>${esc(o.category)}</span><span>${esc(o.period)}</span><span>Resp. ${esc(memberName(o.responsible))}</span><span>Target ${esc(objectiveTarget(o))}</span></div><div style="display:flex;align-items:center;gap:9px;margin-top:12px"><div class="progress" style="flex:1"><i style="width:${o.progress}%"></i></div><b>${o.progress}%</b></div><div class="objective-actions"><button class="btn sm" onclick="Modals.objectiveDetail('${o.id}')">Dettaglio</button>${App.canUpdateObjectiveProgress(o)?`<button class="btn sm gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Progresso</button>`:''}${App.canManageObjectives?`<button class="icon-btn" title="Modifica obiettivo" onclick="Modals.editObjective('${o.id}')">✏️</button>`:''}</div></article>`).join('')}</div>`;
+  },
 
   /* ---------- MEMBRI ---------- */
   members(){
@@ -2572,11 +2655,77 @@ const Modals = {
         <button class="btn primary" onclick="Actions.saveRole('${id||''}')">💾 Salva</button>
       </div>
     </div>`);
+  },
+
+  objectiveDetail(id){
+    const o = Operations.objectives.find(x=>x.id===id); if(!o) return;
+    const linkedMissions = Operations.missions.filter(x=>o.missionIds.includes(x.id));
+    const linkedChecks = Operations.checklists.filter(x=>o.checklistIds.includes(x.id));
+    this.open(`<div class="modal"><div class="modal-head"><h2>◎ ${esc(o.title)}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="objective-meta" style="margin:0 0 14px"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span>${esc(o.status)}</span><span>Scadenza ${fmtDate(o.dueDate)}</span></div><div class="kv"><dt>Descrizione</dt><dd>${esc(o.description)}</dd><dt>Categoria e periodo</dt><dd>${esc(o.category)} · ${esc(o.period)}</dd><dt>Responsabile</dt><dd>${esc(memberName(o.responsible))}</dd><dt>Partecipanti</dt><dd>${o.participants.map(memberName).map(esc).join(', ') || '—'}</dd><dt>Target</dt><dd>${esc(objectiveTarget(o))}</dd><dt>Progresso</dt><dd><div class="progress" style="display:inline-block;width:180px;vertical-align:middle"><i style="width:${o.progress}%"></i></div> ${o.progress}%</dd><dt>Note</dt><dd>${esc(o.notes||'—')}</dd><dt>Evidenze</dt><dd>${o.evidence.map(esc).join(' · ') || '—'}</dd><dt>Missioni collegate</dt><dd>${linkedMissions.map(x=>esc(x.title)).join(' · ') || '—'}</dd><dt>Checklist collegate</dt><dd>${linkedChecks.map(x=>esc(x.title)).join(' · ') || '—'}</dd><dt>Creato il</dt><dd>${esc(o.createdAt||'—')}</dd><dt>Aggiornato il</dt><dd>${esc(o.updatedAt||'—')}</dd></div></div><div class="modal-foot">${App.canUpdateObjectiveProgress(o)?`<div class="left"><button class="btn gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Aggiorna progresso</button></div>`:''}${App.canManageObjectives?`<button class="btn" onclick="Modals.editObjective('${o.id}')">✏️ Modifica</button>${o.status==='In corso'?`<button class="btn gold" onclick="Actions.completeObjective('${o.id}')">Completa</button>`:''}${o.status!=='Archiviato'?`<button class="btn danger" onclick="Actions.archiveObjective('${o.id}')">Archivia</button>`:''}`:''}<button class="btn" onclick="Modals.close()">Chiudi</button></div></div>`);
+  },
+  updateObjectiveProgress(id){
+    const o = Operations.objectives.find(x=>x.id===id); if(!o || !App.canUpdateObjectiveProgress(o)) return;
+    this.open(`<div class="modal narrow"><div class="modal-head"><h2>Aggiorna progresso</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="field"><label>${esc(o.title)} — target ${esc(objectiveTarget(o))}</label><input id="o_progress" type="number" min="0" max="100" value="${o.progress}"></div></div><div class="modal-foot"><button class="btn" onclick="Modals.close()">Annulla</button><button class="btn primary" onclick="Actions.saveObjectiveProgress('${o.id}')">Salva progresso</button></div></div>`);
+  },
+  editObjective(id){
+    if(!App.canManageObjectives) return;
+    const o = id?Operations.objectives.find(x=>x.id===id):null;
+    const memberOptions = Store.data.members.map(m=>`<option value="${m.id}" ${o?.responsible===m.id?'selected':''}>${esc(m.nickDiscord)}</option>`).join('');
+    this.open(`<div class="modal"><div class="modal-head"><h2>${o?'Modifica obiettivo':'Nuovo obiettivo'}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="grid2"><div class="field"><label>Titolo *</label><input id="o_title" value="${esc(o?.title||'')}"></div><div class="field"><label>Categoria</label><input id="o_category" value="${esc(o?.category||'Operativo')}"></div><div class="field"><label>Periodo</label><input id="o_period" value="${esc(o?.period||'Settimana 31')}"></div><div class="field"><label>Responsabile</label><select id="o_responsible"><option value="">—</option>${memberOptions}</select></div><div class="field"><label>Target</label><input id="o_target" type="number" min="0" value="${esc(o?.target??'')}"></div><div class="field"><label>Unità di misura</label><input id="o_unit" value="${esc(o?.unit||'')}" placeholder="es. missioni, ore, pezzi"></div><div class="field"><label>Progresso %</label><input id="o_progress" type="number" min="0" max="100" value="${o?.progress??0}"></div><div class="field"><label>Priorità</label><select id="o_priority">${['Alta','Media','Bassa'].map(x=>`<option ${o?.priority===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Stato</label><select id="o_status">${['In corso','Completato','Archiviato'].map(x=>`<option ${o?.status===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Scadenza</label><input id="o_due" type="date" value="${o?.dueDate||''}"></div><div class="field"><label>Partecipanti</label><select id="o_participants" multiple size="3">${Store.data.members.map(m=>`<option value="${m.id}" ${o?.participants?.includes(m.id)?'selected':''}>${esc(m.nickDiscord)}</option>`).join('')}</select></div><div class="field full"><label>Descrizione</label><textarea id="o_description" rows="2">${esc(o?.description||'')}</textarea></div><div class="field full"><label>Note</label><textarea id="o_notes" rows="2">${esc(o?.notes||'')}</textarea></div><div class="field full"><label>Evidenze (una per riga)</label><textarea id="o_evidence" rows="2">${esc((o?.evidence||[]).join('\n'))}</textarea></div></div></div><div class="modal-foot"><button class="btn" onclick="Modals.close()">Annulla</button><button class="btn primary" onclick="Actions.saveObjective('${id||''}')">💾 Salva</button></div></div>`);
   }
 };
 
 /* ============================ ACTIONS ============================ */
 const Actions = {
+  /* Traccia sintetica: sostituisce il timestamp del database finché gli
+     obiettivi vivono solo in memoria. */
+  objectiveNow(){ const d=new Date(); const p=n=>String(n).padStart(2,'0');
+    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; },
+  logObjective(title, detail){ Operations.activity.unshift({id:Store.uid(), title, detail, date:this.objectiveNow()}); },
+
+  saveObjective(id){
+    if(!App.canManageObjectives) return;
+    const title=$('#o_title').value.trim(); if(!title){toast('Il titolo è obbligatorio','err');return;}
+    const prev = id ? Operations.objectives.find(x=>x.id===id) : null;
+    if(id && !prev) return;
+    const data={title,description:$('#o_description').value.trim(),category:$('#o_category').value.trim(),period:$('#o_period').value.trim(),
+      responsible:$('#o_responsible').value,participants:[...$('#o_participants').selectedOptions].map(x=>x.value),
+      target:Math.max(0,Number($('#o_target').value)||0),unit:$('#o_unit').value.trim(),
+      progress:Math.max(0,Math.min(100,Number($('#o_progress').value)||0)),
+      priority:$('#o_priority').value,status:$('#o_status').value,dueDate:$('#o_due').value,notes:$('#o_notes').value.trim(),
+      evidence:$('#o_evidence').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      /* I collegamenti a missioni e checklist non si modificano da questo
+         modulo: vanno conservati, non azzerati a ogni salvataggio. */
+      missionIds:prev?.missionIds||[], checklistIds:prev?.checklistIds||[],
+      updatedAt:this.objectiveNow()};
+    if(prev){ Object.assign(prev,data); toast('Obiettivo aggiornato','ok'); this.logObjective('Obiettivo aggiornato',title); }
+    else{ Operations.objectives.push({id:Store.uid(),...data,createdAt:data.updatedAt}); toast('Obiettivo creato','ok'); this.logObjective('Obiettivo creato',title); }
+    Modals.close(); App.render();
+  },
+  saveObjectiveProgress(id){
+    const o=Operations.objectives.find(x=>x.id===id); if(!o||!App.canUpdateObjectiveProgress(o)) return;
+    o.progress=Math.max(0,Math.min(100,Number($('#o_progress').value)||0));
+    /* Il 100% non chiude l'obiettivo da solo: la chiusura resta un atto
+       esplicito di chi ha il permesso di completare. */
+    if(o.progress===100 && App.canCompleteObjective()) o.status='Completato';
+    o.updatedAt=this.objectiveNow();
+    this.logObjective('Progresso aggiornato',`${o.title}: ${o.progress}%`);
+    Modals.close(); App.render(); toast('Progresso aggiornato','ok');
+  },
+  completeObjective(id){
+    if(!App.canCompleteObjective()) return;
+    const o=Operations.objectives.find(x=>x.id===id); if(!o) return;
+    o.status='Completato'; o.progress=100; o.updatedAt=this.objectiveNow();
+    this.logObjective('Obiettivo completato',o.title);
+    Modals.close(); App.render(); toast('Obiettivo completato','ok');
+  },
+  archiveObjective(id){
+    if(!App.canManageObjectives) return;
+    const o=Operations.objectives.find(x=>x.id===id); if(!o) return;
+    o.status='Archiviato'; o.updatedAt=this.objectiveNow();
+    this.logObjective('Obiettivo archiviato',o.title);
+    Modals.close(); App.render(); toast('Obiettivo archiviato');
+  },
   saveMember(id){
     const nick = $('#f_nick').value.trim();
     if(!nick){ toast('Il Nick Discord è obbligatorio','err'); return; }

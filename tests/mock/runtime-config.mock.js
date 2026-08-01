@@ -71,7 +71,12 @@
         notes: '', joinDate: '2026-01-02', lastActivity: '2026-01-20', twitchLink: '', isLive: false, channel: '', avatar: '' },
       { id: 'm2', nickDiscord: 'Membro Mock 2', rpName: 'Personaggio Mock 2', username: '', discordId: '', phone: '',
         status: 'Attivo', reliability: 'media', specialization: 'guida', roles: ['r2'], mainRoleId: 'r2',
-        notes: '', joinDate: '2026-01-03', lastActivity: '2026-01-19', twitchLink: '', isLive: false, channel: '', avatar: '' }
+        notes: '', joinDate: '2026-01-03', lastActivity: '2026-01-19', twitchLink: '', isLive: false, channel: '', avatar: '' },
+      /* Serve alla dashboard: il riquadro "Membri in prova" deve avere almeno
+         una riga da mostrare, altrimenti si verifica solo lo stato vuoto. */
+      { id: 'm3', nickDiscord: 'Recluta Mock', rpName: 'Personaggio Mock 3', username: '', discordId: '', phone: '',
+        status: 'In prova', reliability: 'media', specialization: 'guida', roles: ['r2'], mainRoleId: 'r2',
+        notes: '', joinDate: '2026-01-15', lastActivity: '2026-01-20', twitchLink: '', isLive: false, channel: '', avatar: '' }
     ],
     bfos_activities:      [{ id: 'a1', date: '2026-01-18', type: 'Lavoro', title: 'Attività mock', outcome: 'Successo', participants: ['m1'], engaged: false, loot: '' }],
     bfos_weapon_tests:    [],
