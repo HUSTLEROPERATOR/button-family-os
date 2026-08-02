@@ -221,17 +221,104 @@ tbody tr{cursor:pointer}
 .page-head h1{font-family:Georgia,'Times New Roman',serif;font-size:24px;color:var(--gold2);letter-spacing:.5px}
 .page-head p{color:var(--text2);font-size:13px;margin-top:3px}
 .dashboard-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:14px}
+.dashboard-grid>div{min-width:0}
 .panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
 .panel-head{display:flex;align-items:center;gap:8px;padding:12px 14px;border-bottom:1px solid var(--border);font-weight:700}
 .panel-head .count{margin-left:auto;color:var(--text3);font-size:12px;font-weight:600}
 .panel-list{padding:4px 14px}
 .dash-row{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--border);cursor:pointer}
 .dash-row:last-child{border-bottom:0}.dash-row:hover{color:var(--gold2)}
-.dash-row .copy{min-width:0;flex:1}.dash-row .copy b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dash-row .copy span{display:block;color:var(--text3);font-size:12px;margin-top:2px}
+/* width:0 oltre a min-width:0: senza una base esplicita la colonna di testo
+   contribuisce con la sua larghezza intrinseca e allarga l'intera griglia
+   invece di lasciar troncare il titolo. */
+.dash-row .copy{min-width:0;width:0;flex:1}.dash-row .copy b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.dash-row .copy span{display:block;color:var(--text3);font-size:12px;margin-top:2px}
 .progress{height:7px;background:var(--bg4);border-radius:4px;overflow:hidden;min-width:76px}.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--red),var(--gold))}
 .priority{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;padding:3px 7px;border-radius:4px;white-space:nowrap}.priority.alta{background:var(--red-soft);color:var(--red2)}.priority.media{background:var(--gold-soft);color:var(--gold2)}.priority.bassa{background:rgba(78,140,212,.14);color:#79a9e4}
 .objective-title{font-weight:800}.objective-meta{display:flex;gap:7px;align-items:center;flex-wrap:wrap;color:var(--text3);font-size:12px;margin-top:4px}.objective-actions{display:flex;gap:6px;justify-content:flex-end;margin-top:10px}
 @media(max-width:860px){.dashboard-grid{grid-template-columns:1fr}.dash-row{align-items:flex-start}.dash-row .progress{margin-top:4px}.page-head h1{font-size:21px}}
+
+/* ---------- REGOLAMENTI E CHECKLIST ---------- */
+.op-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px;align-items:start}
+.op-tag{font-size:10.5px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--bg4);color:var(--text2);white-space:nowrap}
+.op-tag.pubblicato,.op-tag.completata,.op-tag.letto{background:rgba(59,165,93,.15);color:var(--green)}
+.op-tag.bozza,.op-tag.incorso{background:var(--gold-soft);color:var(--gold2)}
+.op-tag.aperta{background:rgba(78,140,212,.14);color:#79a9e4}
+.op-tag.archiviato,.op-tag.archiviata{background:var(--bg4);color:var(--text3)}
+.op-tag.mandatory{background:var(--red-soft);color:var(--red2)}
+.op-title{font-weight:800;margin-top:2px;overflow-wrap:anywhere}
+.op-desc{color:var(--text2);font-size:12.5px;margin-top:4px;overflow-wrap:anywhere}
+.op-meta{display:flex;gap:6px 12px;align-items:center;flex-wrap:wrap;color:var(--text3);font-size:12px;margin-top:8px}
+.op-actions{display:flex;gap:6px;align-items:center;justify-content:flex-end;flex-wrap:wrap;margin-top:10px}
+.chk-list{display:flex;flex-direction:column;margin-top:4px}
+.chk-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--border)}
+.chk-item:last-child{border-bottom:0}
+.chk-item .box{flex-shrink:0;width:22px;height:22px;border-radius:6px;border:1px solid var(--border2);background:var(--bg);color:var(--gold2);font-size:13px;line-height:1;display:flex;align-items:center;justify-content:center}
+.chk-item .box:hover:not(:disabled){border-color:var(--gold)}
+.chk-item .box:disabled{opacity:.4;cursor:not-allowed}
+.chk-item .txt{flex:1;min-width:0;font-size:13.5px;overflow-wrap:anywhere}
+.chk-item .txt small{display:block;color:var(--text3);font-size:11.5px;margin-top:2px}
+/* La barratura riguarda la voce, non la riga di dettaglio sotto: il
+   text-decoration si propaga ai discendenti, quindi va applicato solo al testo. */
+.chk-item.done .txt{color:var(--text3)}
+.chk-item.done .txt>span{text-decoration:line-through}
+.chk-edit-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.chk-edit-row input[type=text]{flex:1;min-width:160px}
+.chk-flag{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--text2);white-space:nowrap}
+.ack-row{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.ack-row:last-child{border-bottom:0}
+.ack-row .when{margin-left:auto;color:var(--text3);font-size:12px;white-space:nowrap}
+.link-row{display:flex;flex-wrap:wrap;gap:6px}
+
+/* ---------- MANUALI ---------- */
+.manual-layout{display:grid;grid-template-columns:290px 1fr;gap:14px;align-items:start}
+.manual-layout>*{min-width:0}
+.manual-index{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;position:sticky;top:70px;max-height:calc(100vh - 90px);display:flex;flex-direction:column}
+.manual-index .panel-head{flex-shrink:0}
+.manual-index .list{overflow-y:auto;padding:6px}
+.manual-index button{display:flex;gap:9px;width:100%;text-align:left;padding:7px 9px;border-radius:var(--radius-sm);color:var(--text2);font-size:13px;line-height:1.3}
+.manual-index button:hover{background:var(--bg3);color:var(--text)}
+.manual-index button.on{background:var(--red-soft);color:var(--red2);font-weight:700}
+.manual-index button .n{flex-shrink:0;width:34px;color:var(--text3);font-variant-numeric:tabular-nums}
+.manual-index button.on .n{color:var(--red2)}
+.manual-body{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px}
+.manual-body>h2{font-family:Georgia,'Times New Roman',serif;font-size:20px;color:var(--gold2);display:flex;flex-wrap:wrap;align-items:baseline;gap:10px}
+.manual-body>h2 .n{font-size:13px;color:var(--text3);font-family:var(--font);letter-spacing:2px}
+.manual-body>p.sub{color:var(--text2);font-size:13px;margin-top:5px}
+.mb-h{font-size:14px;margin:20px 0 7px;display:flex;gap:9px;align-items:baseline}
+.mb-h .n{color:var(--gold);font-size:12px;font-variant-numeric:tabular-nums;flex-shrink:0}
+.mb-p{font-size:13.5px;color:var(--text2);margin:7px 0;line-height:1.6}
+.mb-list{margin:7px 0 7px 20px;font-size:13.5px;color:var(--text2);line-height:1.6}
+.mb-list li{margin:3px 0}
+.mb-note{background:var(--bg);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:var(--radius-sm);padding:11px 13px;margin:12px 0}
+/* Solo l'etichetta del riquadro va a capo: un <b> dentro al testo resta inline. */
+.mb-note>b{display:block;font-size:10.5px;letter-spacing:1.4px;color:var(--gold2);text-transform:uppercase;margin-bottom:4px}
+.mb-note span b{color:var(--red2)}
+.mb-note span{font-size:13px;color:var(--text2);line-height:1.55}
+.mb-cols{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:12px;margin:12px 0}
+.mb-cols>div{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-sm);padding:11px 13px}
+.mb-cols b{font-size:12.5px;color:var(--gold2)}
+.mb-cols .mb-list{margin:6px 0 0 18px}
+/* Le tabelle del manuale scorrono nel proprio contenitore: la pagina no. */
+.mb-table{overflow-x:auto;margin:12px 0;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.mb-table table{min-width:440px;font-size:13px}
+.mb-table th{position:static;cursor:default;background:var(--bg3);letter-spacing:1px}
+.mb-table th:hover{color:var(--text3)}
+.mb-table td{vertical-align:top;color:var(--text2)}
+.mb-table tbody tr{cursor:default}
+.op-tag.st-approvato{background:rgba(59,165,93,.15);color:var(--green)}
+.op-tag.st-daratificare{background:var(--red-soft);color:var(--red2)}
+.op-tag.st-configurabile{background:rgba(78,140,212,.14);color:#79a9e4}
+.op-tag.st-sperimentale{background:rgba(155,89,182,.16);color:#c08ad6}
+.op-tag.st-verificastaff,.op-tag.st-temporaneo{background:var(--gold-soft);color:var(--gold2)}
+.op-tag.st-riservato{background:var(--red-soft);color:var(--red2)}
+.src-line{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12px;color:var(--text3);margin-top:6px}
+.src-line b{color:var(--text2);font-weight:600}
+@media(max-width:860px){
+  .manual-layout{grid-template-columns:1fr}
+  .manual-index{position:static;max-height:none}
+  .manual-index .list{max-height:210px}
+  .manual-body{padding:14px}
+}
 
 /* ---------- TOAST ---------- */
 #toasts{position:fixed;bottom:18px;right:18px;display:flex;flex-direction:column;gap:8px;z-index:500}
@@ -356,6 +443,9 @@ tbody tr{cursor:pointer}
     <nav class="tabs" id="mainTabs">
       <button data-tab="dashboard" class="active" onclick="App.setTab('dashboard')">⌘ Dashboard</button>
       <button data-tab="objectives" onclick="App.setTab('objectives')">◎ Obiettivi</button>
+      <button data-tab="manuals" onclick="App.setTab('manuals')">📘 Manuali</button>
+      <button data-tab="checklists" onclick="App.setTab('checklists')">☑ Checklist</button>
+      <button data-tab="regulations" onclick="App.setTab('regulations')">📕 Regolamenti</button>
       <button data-tab="members" onclick="App.setTab('members')">👥 Membri</button>
       <button data-tab="activity" onclick="App.setTab('activity')">📅 Attività</button>
       <button data-tab="inventory" onclick="App.setTab('inventory')">📦 Magazzino</button>
@@ -389,6 +479,12 @@ tbody tr{cursor:pointer}
      segnaposto, l'applicazione si ferma su una schermata di errore esplicita
      invece di avviarsi in uno stato indefinito. -->
 <script src="runtime-config.js" onerror="window.__BFOS_CFG_ABSENT__=true"></script>
+<!-- Contenuto dei manuali operativi: dati, non codice. È la trascrizione
+     strutturata dei DOCX ufficiali (Manuale I e II), generata da
+     tests/build-manuals.mjs. Da qui derivano regolamenti e checklist reali.
+     Se il file non viene servito l'applicazione parte comunque, con le
+     sezioni documentali vuote e dichiarate tali. -->
+<script src="content/manuali.js" onerror="window.__BFOS_CONTENT_ABSENT__=true"></script>
 <script>
 /* =====================================================================
    BUTTON FAMILY OS — gestionale single-file
@@ -812,7 +908,22 @@ const Seed = {
   }
 };
 
-/* Primo vertical slice M7: dati sintetici in memoria. Non sono sincronizzati
+/* ---------- REGOLAMENTI E CHECKLIST: vocabolario ---------- */
+const REG_CATEGORIES = ['Operativo','Disciplinare','Sicurezza','Amministrativo'];
+/* Unica categoria che la Direzione può creare, modificare e pubblicare da sé:
+   le altre restano all'amministrazione. */
+const REG_DIREZIONE_CATEGORY = 'Operativo';
+const REG_STATUSES = ['Bozza','Pubblicato','Archiviato'];
+/* Stati documentali dei manuali. L'applicazione li mostra come sono scritti
+   nella legenda del Manuale I e non li reinterpreta. */
+const DOC_STATES = ['APPROVATO','CONFIGURABILE','DA RATIFICARE','SPERIMENTALE',
+  'VERIFICA STAFF','TEMPORANEO','RISERVATO','OPERATIVO'];
+const CHK_STATUSES = ['Aperta','In corso','Completata','Archiviata'];
+const CHK_RECURRENCES = ['Nessuna','Giornaliera','Settimanale','Mensile'];
+const PRIORITIES = ['Alta','Media','Bassa'];
+const ROLE_LABEL = {ADMIN:'Admin', DIREZIONE:'Direzione', STAFF:'Staff'};
+
+/* Vertical slice M7: dati sintetici in memoria. Non sono sincronizzati
    con Supabase e non introducono tabelle o migrazioni in questa sessione. */
 const Operations = {
   objectives:[
@@ -821,10 +932,34 @@ const Operations = {
     {id:'obj-3',title:'Riordino magazzino',description:'Allineare le giacenze registrate con quelle reali del deposito.',category:'Logistica',period:'Settimana 30',responsible:'m2',participants:['m2'],target:1,unit:'inventario',progress:100,priority:'Bassa',status:'Completato',dueDate:'2026-07-27',notes:'Chiuso e verificato.',evidence:['Conteggio finale'],missionIds:[],checklistIds:['chk-3'],createdAt:'2026-07-20 08:00',updatedAt:'2026-07-27 17:05'}
   ],
   missions:[{id:'mis-1',title:'Affiancamento reclute',dueDate:'2026-08-02',status:'In corso'},{id:'mis-2',title:'Briefing squadra',dueDate:'2026-08-05',status:'Pianificata'}],
-  checklists:[{id:'chk-1',title:'Schede prova da validare',done:false},{id:'chk-2',title:'Presenze briefing',done:false},{id:'chk-3',title:'Materiale briefing',done:true}],
+  /* Regolamenti e checklist NON sono più dati sintetici: arrivano dalla
+     trascrizione dei manuali ufficiali (content/manuali.js). Se il file non
+     viene servito, le due sezioni restano vuote e lo dichiarano, invece di
+     mostrare contenuti inventati. */
+  regulations: window.BFOS_REGULATIONS || [],
+  checklists: window.BFOS_CHECKLISTS || [],
   communications:[{id:'com-1',title:'Briefing Direzione',body:'Riunione operativa programmata per questa settimana.',important:true,date:'2026-07-31'},{id:'com-2',title:'Aggiornamento percorso reclute',body:'Le evidenze di affiancamento vanno registrate entro la scadenza.',important:true,date:'2026-07-30'}],
-  activity:[{id:'act-1',title:'Obiettivo aggiornato',detail:'Inserimento nuove reclute al 67%',date:'Oggi, 10:30'},{id:'act-2',title:'Checklist completata',detail:'Materiale briefing',date:'Ieri, 19:10'}]
+  activity:[{id:'act-1',title:'Obiettivo aggiornato',detail:'Inserimento nuove reclute al 67%',date:'Oggi, 10:30'},{id:'act-2',title:'Manuali importati',detail:'Manuale I e Manuale II — versione 1.0',date:'Oggi, 09:00'}]
 };
+
+/* Manuali operativi trascritti dai DOCX ufficiali. Sono la fonte del testo di
+   regolamenti e checklist: l'applicazione non ne conserva una seconda copia. */
+const Manuals = window.BFOS_MANUALS || [];
+const manualById = id => Manuals.find(m => m.id === id) || null;
+const manualSection = (id, num) => manualById(id)?.sections.find(s => s.num === num) || null;
+
+/* Gli obiettivi restano dati sintetici: il Manuale III, che definisce missioni
+   e progressione, non è ancora importato. I loro collegamenti puntano però a
+   checklist reali, così l'integrazione con gli obiettivi resta verificabile e
+   nessun `checklistIds` rimane appeso a un record rimosso. */
+for(const [objectiveId, checklistId] of Object.entries(
+    {'obj-1':'chk-i-08', 'obj-2':'chk-ii-02', 'obj-3':'chk-ii-18'})){
+  const o = Operations.objectives.find(x=>x.id===objectiveId);
+  const c = Operations.checklists.find(x=>x.id===checklistId);
+  if(!o || !c) continue;
+  o.checklistIds = [checklistId];
+  c.objectiveId = objectiveId;
+}
 
 /* ============================ UTIL ============================ */
 const $ = s => document.querySelector(s);
@@ -848,6 +983,61 @@ function memberName(id){ return Store.data.members.find(m=>m.id===id)?.nickDisco
 /* Il target di un obiettivo è un numero con la sua unità di misura: le due
    informazioni sono separate nel dato e vengono ricomposte solo per la lettura. */
 function objectiveTarget(o){ return [o.target, o.unit].filter(x=>x!==''&&x!=null).join(' ') || '—'; }
+
+/* ---------- REGOLAMENTI E CHECKLIST ---------- */
+/* Chi ha compiuto un'azione: i dati sintetici citano l'id di un membro, le
+   azioni svolte durante la sessione citano l'identità applicativa dell'utente.
+   Il nome viene risolto se l'id corrisponde a un membro, altrimenti si mostra
+   il riferimento così com'è. */
+function actorName(key){ return Store.data.members.find(m=>m.id===key)?.nickDiscord || key || '—'; }
+/* Data e ora locali: sostituiscono il timestamp del database finché obiettivi,
+   regolamenti e checklist vivono solo in memoria. */
+const pad2 = n => String(n).padStart(2,'0');
+function todayISO(){ const d=new Date(); return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}`; }
+function stampNow(){ const d=new Date(); return `${todayISO()} ${pad2(d.getHours())}:${pad2(d.getMinutes())}`; }
+function audienceLabel(list){ return (list||[]).map(r=>ROLE_LABEL[r]||r).join(', ') || '—'; }
+function regulationAckedBy(r, key){ return !!key && (r?.acknowledgements||[]).some(a=>a.by===key); }
+/* Classe CSS derivata da uno stato leggibile: "In corso" -> "incorso". */
+const tagClass = s => String(s??'').toLowerCase().replace(/\s+/g,'');
+/* Il progresso di una checklist non è un campo da tenere allineato a mano:
+   discende dagli elementi completati. */
+function checklistProgress(c){ const it=c?.items||[]; return it.length? Math.round(it.filter(x=>x.done).length/it.length*100) : 0; }
+function checklistOpen(c){ return c?.status==='Aperta' || c?.status==='In corso'; }
+/* Collegamento obiettivo → checklist. Il legame è scritto in due posti:
+   `checklistIds` sull'obiettivo, che esisteva già, e `objectiveId` sulla
+   checklist. La lettura considera entrambi, così nessun collegamento
+   preesistente va perso anche se una sola delle due direzioni è valorizzata. */
+function objectiveChecklists(o){
+  if(!o) return [];
+  const ids = new Set(o.checklistIds||[]);
+  return Operations.checklists.filter(c=>ids.has(c.id) || c.objectiveId===o.id);
+}
+/* ---------- RESA DEL TESTO DEI MANUALI ---------- */
+/* Una cella che contiene esattamente uno stato documentale viene evidenziata:
+   lo stato resta la stringa del manuale, cambia solo il modo di mostrarla. */
+function stateCell(v){
+  return DOC_STATES.includes(v) ? `<span class="op-tag st-${tagClass(v)}">${esc(v)}</span>` : esc(v);
+}
+/* Un blocco per volta, nella forma in cui è stato trascritto dal documento. */
+function manualBlock(b){
+  if(b.t==='h')  return `<h4 class="mb-h"><span class="n">${esc(b.n)}</span> ${esc(b.v)}</h4>`;
+  if(b.t==='p')  return `<p class="mb-p">${esc(b.v)}</p>`;
+  if(b.t==='ul') return `<ul class="mb-list">${b.v.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
+  if(b.t==='ol') return `<ol class="mb-list">${b.v.map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`;
+  if(b.t==='note') return `<div class="mb-note"><b>${esc(b.label)}</b><span>${esc(b.v)}</span></div>`;
+  if(b.t==='cols') return `<div class="mb-cols">${b.cols.map(c=>`<div><b>${esc(c.title)}</b><ul class="mb-list">${c.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul></div>`).join('')}</div>`;
+  if(b.t==='table') return `<div class="mb-table"><table>${b.head?`<thead><tr>${b.head.map(h=>`<th>${esc(h)}</th>`).join('')}</tr></thead>`:''}<tbody>${b.rows.map(r=>`<tr>${r.map(c=>`<td>${stateCell(c)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+  return '';
+}
+const manualBlocks = blocks => (blocks||[]).map(manualBlock).join('');
+/* Riga di provenienza comune a regolamenti e checklist. */
+function sourceLine(rec){
+  if(!rec?.sourceManual) return '<span class="src-line">Origine: record locale, non tratto da un manuale.</span>';
+  const sec = manualSection(rec.sourceManualId, rec.sourceSection);
+  return `<span class="src-line"><b>${esc(rec.sourceManual)}</b>· sezione ${esc(rec.sourceSection)}${sec?` — ${esc(sec.title)}`:''}</span>`;
+}
+function checklistObjective(c){ return Operations.objectives.find(o=>o.id===c?.objectiveId) || null; }
+function checklistMission(c){ return Operations.missions.find(m=>m.id===c?.missionId) || null; }
 /* Statistiche di crescita per membro, calcolate dal registro attività */
 function growthStats(mid){
   const acts = (Store.data.activities||[]).filter(a=>(a.participants||[]).includes(mid));
@@ -915,6 +1105,8 @@ function download(filename, content, mime='application/json'){
 /* ============================ APP CORE ============================ */
 const App = {
   tab:'dashboard', session:null, actSub:'log', invSub:'stock',
+  /* Manuale e sezione aperti nel lettore documentale. */
+  manualId:null, manualSection:null,
   filters:{ q:'', role:'', status:'', spec:'', rel:'', activity:'', live:'' },
   actFilters:{ q:'', type:'', outcome:'', member:'' },
   invFilters:{ q:'', kind:'', cat:'', deposit:'' },
@@ -1065,6 +1257,53 @@ const App = {
      effetto collaterale del raggiungimento del 100%. */
   canCompleteObjective(){ return this.canManageObjectives; },
 
+  /* ---------- PERMESSI: REGOLAMENTI ---------- */
+  /* Identità applicativa di chi sta operando: è l'unico riferimento stabile
+     disponibile lato client per attribuire una conferma di lettura. */
+  get actorKey(){ return this.session?.email || ''; },
+  /* La Direzione redige i regolamenti operativi; le altre categorie e i
+     regolamenti archiviati restano all'amministrazione. */
+  canEditRegulation(r){
+    if(!this.canWrite) return false;
+    if(this.isAdmin) return true;
+    if(!r) return true;                       // il nuovo regolamento nasce operativo
+    return r.category === REG_DIREZIONE_CATEGORY && r.status !== 'Archiviato';
+  },
+  /* "Pubblica dove consentito": la Direzione pubblica ciò che può redigere. */
+  canPublishRegulation(r){ return this.canEditRegulation(r); },
+  /* Archiviare e rendere obbligatorio un regolamento sono atti amministrativi. */
+  canArchiveRegulation(){ return this.isAdmin; },
+  canSetRegulationMandatory(){ return this.isAdmin; },
+  /* Verificare chi ha confermato serve a chi coordina, non a chi legge. */
+  get canReviewAcknowledgements(){ return this.canWrite; },
+  /* Lo STAFF legge solo ciò che è pubblicato e lo riguarda: bozze e archivi
+     non escono dall'area di direzione. */
+  canReadRegulation(r){
+    if(!this.session?.appRole || !r) return false;
+    if(this.canWrite) return true;
+    return r.status === 'Pubblicato' && (r.audience||[]).includes(this.session.appRole);
+  },
+  /* La conferma di lettura si dà una sola volta, e solo se il regolamento è
+     pubblicato e ci riguarda. */
+  canAcknowledgeRegulation(r){
+    if(!r || !this.session?.appRole) return false;
+    return r.status === 'Pubblicato' && (r.audience||[]).includes(this.session.appRole)
+      && !regulationAckedBy(r, this.actorKey);
+  },
+
+  /* ---------- PERMESSI: CHECKLIST ---------- */
+  /* Creare, modificare, assegnare e archiviare restano a chi coordina. */
+  get canManageChecklists(){ return this.canWrite; },
+  canCompleteChecklist(c){ return this.canManageChecklists && !!c && c.status !== 'Archiviata'; },
+  /* Lo STAFF spunta gli elementi che gli sono consentiti: non tocca quelli
+     riservati alla Direzione, e non entra nella struttura, nei responsabili o
+     nelle scadenze. Una checklist chiusa o archiviata è ferma per tutti. */
+  canCompleteChecklistItem(c, item){
+    if(!c || !item || !checklistOpen(c)) return false;
+    if(this.canManageChecklists) return true;
+    return this.session?.appRole === 'STAFF' && !item.restricted;
+  },
+
   /* ---------- SCHERMATE ---------- */
   showLogin(msg){
     $('#app').classList.remove('ready');
@@ -1105,7 +1344,7 @@ const App = {
     $('#app').classList.add('ready');
     $('#curUserName').textContent = this.session.email;
     const badge = $('#curUserRole');
-    badge.textContent = {ADMIN:'Admin', DIREZIONE:'Direzione', STAFF:'Staff'}[this.session.appRole] || 'Nessun ruolo';
+    badge.textContent = ROLE_LABEL[this.session.appRole] || 'Nessun ruolo';
     /* Il badge distingue chi può scrivere da chi è in sola lettura: STAFF è
        sola lettura tanto quanto un ruolo assente, ADMIN e DIREZIONE no. */
     badge.className = 'badge-role' + (this.canWrite ? '' : ' viewer');
@@ -1116,6 +1355,16 @@ const App = {
     document.querySelectorAll('#mainTabs button').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
     this.render();
   },
+  /* Apertura di un manuale su una sezione precisa: è il gancio usato anche dai
+     regolamenti per rimandare al testo di origine. */
+  openManual(id, num){
+    this.manualId = id;
+    this.manualSection = num || manualById(id)?.sections[0]?.num || null;
+    Modals.close();
+    this.setTab('manuals');
+  },
+  closeManual(){ this.manualId = null; this.manualSection = null; this.render(); },
+  setManualSection(num){ this.manualSection = num; this.render(); window.scrollTo({top:0}); },
   setActSub(s){ this.actSub = s; this.render(); },
   setInvSub(s){ this.invSub = s; this.render(); },
   setIntelSub(s){ this.intelSub = s; this.render(); },
@@ -1128,6 +1377,9 @@ const App = {
     if(!this.session?.appRole || !Store.data) return;
     if(this.tab==='dashboard') v.innerHTML = Views.dashboard();
     else if(this.tab==='objectives') v.innerHTML = Views.objectives();
+    else if(this.tab==='manuals') v.innerHTML = Views.manuals();
+    else if(this.tab==='checklists') v.innerHTML = Views.checklists();
+    else if(this.tab==='regulations') v.innerHTML = Views.regulations();
     else if(this.tab==='members') v.innerHTML = Views.members();
     else if(this.tab==='activity') v.innerHTML = Views.activity();
     else if(this.tab==='inventory') v.innerHTML = Views.inventory();
@@ -1146,20 +1398,31 @@ const Views = {
     const objectives = Operations.objectives.filter(x=>x.status==='In corso');
     const completed = Operations.objectives.filter(x=>x.status==='Completato');
     const missions = Operations.missions.filter(x=>x.status!=='Completata');
-    const pending = Operations.checklists.filter(x=>!x.done);
+    const pending = Operations.checklists.filter(checklistOpen)
+      .sort((a,b)=>(a.dueDate||'').localeCompare(b.dueDate||''));
+    /* Non "i regolamenti obbligatori", ma quelli obbligatori che riguardano chi
+       sta guardando e di cui non ha ancora confermato la lettura. */
+    const unread = Operations.regulations.filter(r=>r.mandatory && App.canAcknowledgeRegulation(r));
     const trial = Store.data.members.filter(m=>m.status==='In prova');
     const weekProgress = objectives.length ? Math.round(objectives.reduce((sum,x)=>sum+x.progress,0)/objectives.length) : 0;
     const quick = App.canManageObjectives ? `<button class="btn primary" onclick="Modals.editObjective(null)">＋ Nuovo obiettivo</button><button class="btn gold" onclick="App.setTab('objectives')">Gestisci obiettivi</button>` : `<button class="btn gold" onclick="App.setTab('objectives')">Apri obiettivi</button>`;
-    const rows = (items, renderer, empty) => items.length ? items.map(renderer).join('') : `<div class="empty-state" style="padding:24px">${empty}</div>`;
+    /* Con i manuali importati i riquadri possono contenere decine di voci:
+       se ne mostrano le prime e si dichiara quante restano fuori. */
+    const MAX = 6;
+    const rows = (items, renderer, empty) => items.length
+      ? items.slice(0, MAX).map(renderer).join('')
+        + (items.length > MAX ? `<div class="dash-row" style="color:var(--text3);font-size:12px;cursor:default">+${items.length - MAX} non mostrate in questo riquadro</div>` : '')
+      : `<div class="empty-state" style="padding:24px">${empty}</div>`;
     return `<div class="page-head"><div><h1>Dashboard operativa</h1><p>Quadro sintetico della settimana e delle priorità in corso.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap">${quick}</div></div>
-    <div class="stats"><div class="stat gold"><div class="num">${objectives.length}</div><div class="lbl">Obiettivi attivi</div></div><div class="stat green"><div class="num">${completed.length}</div><div class="lbl">Obiettivi completati</div></div><div class="stat"><div class="num">${weekProgress}%</div><div class="lbl">Progresso settimana</div></div><div class="stat red"><div class="num">${missions.length}</div><div class="lbl">Missioni in scadenza</div></div><div class="stat"><div class="num">${pending.length}</div><div class="lbl">Checklist aperte</div></div></div>
+    <div class="stats"><div class="stat gold"><div class="num">${objectives.length}</div><div class="lbl">Obiettivi attivi</div></div><div class="stat green"><div class="num">${completed.length}</div><div class="lbl">Obiettivi completati</div></div><div class="stat"><div class="num">${weekProgress}%</div><div class="lbl">Progresso settimana</div></div><div class="stat red"><div class="num">${missions.length}</div><div class="lbl">Missioni in scadenza</div></div><div class="stat"><div class="num">${pending.length}</div><div class="lbl">Checklist aperte</div></div><div class="stat red"><div class="num">${unread.length}</div><div class="lbl">Regolamenti da leggere</div></div></div>
     <div class="dashboard-grid"><div style="display:flex;flex-direction:column;gap:14px">
-      <section class="panel"><div class="panel-head">◎ Obiettivi attivi <span class="count">${objectives.length}</span></div><div class="panel-list">${rows(objectives,o=>`<div class="dash-row" onclick="Modals.objectiveDetail('${o.id}')"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><div class="copy"><b>${esc(o.title)}</b><span>${esc(objectiveTarget(o))} · scade ${fmtDate(o.dueDate)}</span></div><div class="progress"><i style="width:${o.progress}%"></i></div><b style="font-size:12px">${o.progress}%</b></div>`,'Nessun obiettivo attivo.')}</div></section>
+      <section class="panel"><div class="panel-head">◎ Obiettivi attivi <span class="count">${objectives.length}</span></div><div class="panel-list">${rows(objectives,o=>`<div class="dash-row" onclick="Modals.objectiveDetail('${o.id}')"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><div class="copy"><b>${esc(o.title)}</b><span>${esc(objectiveTarget(o))} · ${objectiveChecklists(o).length} checklist · scade ${fmtDate(o.dueDate)}</span></div><div class="progress"><i style="width:${o.progress}%"></i></div><b style="font-size:12px">${o.progress}%</b></div>`,'Nessun obiettivo attivo.')}</div></section>
+      <section class="panel"><div class="panel-head">☑ Checklist aperte <span class="count">${pending.length}</span></div><div class="panel-list">${rows(pending,c=>`<div class="dash-row" onclick="Modals.checklistDetail('${c.id}')"><span class="priority ${c.priority.toLowerCase()}">${esc(c.priority)}</span><div class="copy"><b>${esc(c.title)}</b><span>${(c.items||[]).filter(i=>i.done).length}/${(c.items||[]).length} elementi · scade ${fmtDate(c.dueDate)}</span></div><div class="progress"><i style="width:${checklistProgress(c)}%"></i></div><b style="font-size:12px">${checklistProgress(c)}%</b></div>`,'Nessuna checklist aperta.')}</div></section>
       <section class="panel"><div class="panel-head">✔ Obiettivi completati <span class="count">${completed.length}</span></div><div class="panel-list">${rows(completed,o=>`<div class="dash-row" onclick="Modals.objectiveDetail('${o.id}')"><div class="copy"><b>${esc(o.title)}</b><span>${esc(o.period)} · chiuso il ${fmtDate(o.dueDate)}</span></div><b style="font-size:12px;color:var(--green)">100%</b></div>`,'Nessun obiettivo completato.')}</div></section>
       <section class="panel"><div class="panel-head">◷ Attività recenti</div><div class="panel-list">${rows(Operations.activity,a=>`<div class="dash-row"><div class="copy"><b>${esc(a.title)}</b><span>${esc(a.detail)}</span></div><span style="color:var(--text3);font-size:12px">${esc(a.date)}</span></div>`,'Nessuna attività recente.')}</div></section>
     </div><div style="display:flex;flex-direction:column;gap:14px">
+      <section class="panel"><div class="panel-head">📕 Regolamenti obbligatori da leggere <span class="count">${unread.length}</span></div><div class="panel-list">${rows(unread,r=>`<div class="dash-row" onclick="Modals.regulationDetail('${r.id}')"><span class="op-tag mandatory">Obbligatorio</span><div class="copy"><b>${esc(r.title)}</b><span>${esc(r.category)} · versione ${esc(r.version)} · lettura da confermare</span></div></div>`,'Nessun regolamento obbligatorio da leggere.')}</div></section>
       <section class="panel"><div class="panel-head">⚑ Missioni in scadenza</div><div class="panel-list">${rows(missions,m=>`<div class="dash-row"><div class="copy"><b>${esc(m.title)}</b><span>${esc(m.status)} · ${fmtDate(m.dueDate)}</span></div></div>`,'Nessuna missione in scadenza.')}</div></section>
-      <section class="panel"><div class="panel-head">☐ Checklist da completare <span class="count">${pending.length}</span></div><div class="panel-list">${rows(pending,c=>`<div class="dash-row"><span style="color:var(--gold2)">☐</span><div class="copy"><b>${esc(c.title)}</b></div></div>`,'Tutte le checklist sono complete.')}</div></section>
       <section class="panel"><div class="panel-head">✦ Comunicazioni importanti</div><div class="panel-list">${rows(Operations.communications.filter(c=>c.important),c=>`<div class="dash-row"><div class="copy"><b>${esc(c.title)}</b><span>${esc(c.body)}</span></div></div>`,'Nessuna comunicazione importante.')}</div></section>
       <section class="panel"><div class="panel-head">◌ Membri in prova <span class="count">${trial.length}</span></div><div class="panel-list">${rows(trial,m=>`<div class="dash-row"><div class="avatar">${initials(m)}</div><div class="copy"><b>${esc(m.nickDiscord)}</b><span>${esc(m.rpName)}</span></div></div>`,'Nessun membro in prova.')}</div></section>
     </div></div>`;
@@ -1169,7 +1432,135 @@ const Views = {
     const sorted = [...Operations.objectives].sort((a,b)=>a.dueDate.localeCompare(b.dueDate));
     return `<div class="page-head"><div><h1>Obiettivi</h1><p>Direzione, responsabilità, progresso ed evidenze operative.</p></div>${App.canManageObjectives?`<button class="btn primary" onclick="Modals.editObjective(null)">＋ Nuovo obiettivo</button>`:''}</div>
     <div class="stats"><div class="stat gold"><div class="num">${sorted.filter(x=>x.status==='In corso').length}</div><div class="lbl">In corso</div></div><div class="stat green"><div class="num">${sorted.filter(x=>x.status==='Completato').length}</div><div class="lbl">Completati</div></div><div class="stat red"><div class="num">${sorted.filter(x=>x.priority==='Alta'&&x.status==='In corso').length}</div><div class="lbl">Priorità alte</div></div></div>
-    <div class="cards" style="display:flex">${sorted.map(o=>`<article class="mcard"><div class="top"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span class="lvl-badge" style="border:1px solid var(--border2);color:var(--text2)">${esc(o.status)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">${fmtDate(o.dueDate)}</span></div><div class="objective-title">${esc(o.title)}</div><div style="color:var(--text2);font-size:12.5px;margin-top:4px">${esc(o.description)}</div><div class="objective-meta"><span>${esc(o.category)}</span><span>${esc(o.period)}</span><span>Resp. ${esc(memberName(o.responsible))}</span><span>Target ${esc(objectiveTarget(o))}</span></div><div style="display:flex;align-items:center;gap:9px;margin-top:12px"><div class="progress" style="flex:1"><i style="width:${o.progress}%"></i></div><b>${o.progress}%</b></div><div class="objective-actions"><button class="btn sm" onclick="Modals.objectiveDetail('${o.id}')">Dettaglio</button>${App.canUpdateObjectiveProgress(o)?`<button class="btn sm gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Progresso</button>`:''}${App.canManageObjectives?`<button class="icon-btn" title="Modifica obiettivo" onclick="Modals.editObjective('${o.id}')">✏️</button>`:''}</div></article>`).join('')}</div>`;
+    <div class="cards" style="display:flex">${sorted.map(o=>`<article class="mcard"><div class="top"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span class="lvl-badge" style="border:1px solid var(--border2);color:var(--text2)">${esc(o.status)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">${fmtDate(o.dueDate)}</span></div><div class="objective-title">${esc(o.title)}</div><div style="color:var(--text2);font-size:12.5px;margin-top:4px">${esc(o.description)}</div><div class="objective-meta"><span>${esc(o.category)}</span><span>${esc(o.period)}</span><span>Resp. ${esc(memberName(o.responsible))}</span><span>Target ${esc(objectiveTarget(o))}</span><span>Checklist ${objectiveChecklists(o).filter(c=>c.status==='Completata').length}/${objectiveChecklists(o).length}</span></div><div style="display:flex;align-items:center;gap:9px;margin-top:12px"><div class="progress" style="flex:1"><i style="width:${o.progress}%"></i></div><b>${o.progress}%</b></div><div class="objective-actions"><button class="btn sm" onclick="Modals.objectiveDetail('${o.id}')">Dettaglio</button>${App.canUpdateObjectiveProgress(o)?`<button class="btn sm gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Progresso</button>`:''}${App.canManageObjectives?`<button class="icon-btn" title="Modifica obiettivo" onclick="Modals.editObjective('${o.id}')">✏️</button>`:''}</div></article>`).join('')}</div>`;
+  },
+
+  /* ---------- MANUALI ---------- */
+  manuals(){
+    if(!Manuals.length){
+      return `<div class="page-head"><div><h1>Manuali</h1><p>Documentazione operativa della Famiglia.</p></div></div>
+      <div class="empty-state"><div class="big">📘</div>Contenuto dei manuali non disponibile.<br>
+      <span style="font-size:12.5px">Il file <code>content/manuali.js</code> non è stato caricato: nessun testo viene mostrato al posto di quello originale.</span></div>`;
+    }
+    return App.manualId ? this.manualReader() : this.manualList();
+  },
+
+  manualList(){
+    const card = m=>{
+      const regs = Operations.regulations.filter(r=>r.sourceManualId===m.id).length;
+      const chks = Operations.checklists.filter(c=>c.sourceManualId===m.id).length;
+      return `<article class="mcard">
+        <div class="top"><span class="op-tag st-${tagClass(m.documentStatus)}">${esc(m.documentStatus)}</span><span class="op-tag">${esc(m.nature)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">v${esc(m.version)}</span></div>
+        <div class="op-title">Manuale ${esc(m.code)} — ${esc(m.title)}</div>
+        <div class="op-desc">${esc(m.org)} · ${esc(m.server)} · ${m.pages} pagine</div>
+        <div class="op-meta"><span>${m.sections.length} sezioni</span><span>${regs} regolamenti</span><span>${chks} checklist</span></div>
+        <div class="op-meta"><span>Entrata in vigore: ${esc(m.effective)}</span></div>
+        <div class="op-actions"><button class="btn sm gold" onclick="App.openManual('${m.id}')">Apri manuale</button></div>
+      </article>`;
+    };
+    return `<div class="page-head"><div><h1>Manuali</h1><p>Documentazione ufficiale della Famiglia Button per Gamma RP.</p></div></div>
+    <div class="stats"><div class="stat gold"><div class="num">${Manuals.length}</div><div class="lbl">Manuali importati</div></div><div class="stat"><div class="num">${Manuals.reduce((a,m)=>a+m.sections.length,0)}</div><div class="lbl">Sezioni</div></div><div class="stat"><div class="num">${Operations.regulations.length}</div><div class="lbl">Regolamenti estratti</div></div><div class="stat"><div class="num">${Operations.checklists.filter(c=>c.sourceManualId).length}</div><div class="lbl">Checklist derivate</div></div></div>
+    <div class="op-cards">${Manuals.map(card).join('')}</div>
+    <div class="mb-note" style="margin-top:16px"><b>Collana incompleta</b><span>Sono importati i Manuali I e II. Il Manuale III (progressione, competenze e missioni) e il Manuale IV (streamer, ecosistema e contenuti) non sono ancora stati caricati.</span></div>`;
+  },
+
+  manualReader(){
+    const m = manualById(App.manualId);
+    if(!m){ App.manualId = null; return this.manualList(); }
+    const s = m.sections.find(x=>x.num===App.manualSection) || m.sections[0];
+    const regs = Operations.regulations.filter(r=>r.sourceManualId===m.id && r.sourceSection===s.num);
+    const chks = Operations.checklists.filter(c=>c.sourceManualId===m.id && c.sourceSection===s.num);
+    const item = x=>`<button class="${x.num===s.num?'on':''}" onclick="App.setManualSection('${x.num}')"><span class="n">${esc(x.num)}</span><span>${esc(x.title)}</span></button>`;
+    return `<div class="page-head"><div><h1>Manuale ${esc(m.code)} — ${esc(m.title)}</h1>
+      <p>${esc(m.org)} · ${esc(m.server)} · versione ${esc(m.version)} · ${m.sections.length} sezioni</p>
+      <div class="src-line"><span class="op-tag st-${tagClass(m.documentStatus)}">${esc(m.documentStatus)}</span><b>Revisione:</b>${esc(m.revision)}</div></div>
+      <button class="btn" onclick="App.closeManual()">← Tutti i manuali</button></div>
+    <div class="manual-layout">
+      <nav class="manual-index"><div class="panel-head">Indice <span class="count">${m.sections.length}</span></div><div class="list">${m.sections.map(item).join('')}</div></nav>
+      <article class="manual-body">
+        <h2><span class="n">${esc(s.num)}</span> ${esc(s.title)}</h2>
+        ${s.subtitle?`<p class="sub">${esc(s.subtitle)}</p>`:''}
+        ${s.states.length?`<div class="src-line" style="margin-top:9px"><b>Stati citati:</b>${s.states.map(x=>`<span class="op-tag st-${tagClass(x)}">${esc(x)}</span>`).join('')}</div>`:''}
+        ${manualBlocks(s.blocks) || '<p class="mb-p">Sezione senza contenuto nel documento di origine.</p>'}
+        ${regs.length||chks.length?`<div class="section-title">Collegamenti</div><div class="link-row">
+          ${regs.map(r=>`<button class="btn sm" onclick="Modals.regulationDetail('${r.id}')">📕 ${esc(r.title)}</button>`).join('')}
+          ${chks.map(c=>`<button class="btn sm" onclick="Modals.checklistDetail('${c.id}')">☑ ${esc(c.title)}</button>`).join('')}
+        </div>`:''}
+      </article>
+    </div>`;
+  },
+
+  /* ---------- CHECKLIST OPERATIVE ---------- */
+  checklists(){
+    /* Chi non coordina non ha motivo di vedere l'archivio. */
+    const visible = Operations.checklists.filter(c=>App.canManageChecklists || c.status!=='Archiviata');
+    /* Prima ciò su cui si lavora, in ordine di scadenza; poi il chiuso. */
+    const rank = c => checklistOpen(c) ? 0 : (c.status==='Completata' ? 1 : 2);
+    const sorted = [...visible].sort((a,b)=>
+      rank(a)-rank(b)
+      || (a.dueDate||'').localeCompare(b.dueDate||'')
+      || a.title.localeCompare(b.title));
+    const open = visible.filter(checklistOpen);
+    const done = visible.filter(c=>c.status==='Completata');
+    const late = open.filter(c=>c.dueDate && c.dueDate < todayISO()).length;
+    const head = App.canManageChecklists
+      ? `<button class="btn primary" onclick="Modals.editChecklist(null)">＋ Nuova checklist</button>` : '';
+    const card = c=>{
+      const p = checklistProgress(c);
+      const o = checklistObjective(c);
+      const items = c.items||[];
+      const mine = items.filter(it=>App.canCompleteChecklistItem(c,it) && !it.done).length;
+      return `<article class="mcard">
+        <div class="top"><span class="op-tag ${tagClass(c.status)}">${esc(c.status)}</span><span class="priority ${c.priority.toLowerCase()}">${esc(c.priority)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">${fmtDate(c.dueDate)}</span></div>
+        <div class="op-title">${esc(c.title)}</div>
+        <div class="op-desc">${esc(c.description)}</div>
+        <div class="op-meta"><span>${esc(c.category||'—')}</span><span>Resp. ${esc(c.responsibleRole || memberName(c.responsible))}</span><span>Ricorrenza: ${esc(c.recurrence||'Nessuna')}</span><span>Obiettivo: ${o?esc(o.title):'—'}</span></div>
+        ${sourceLine(c)}
+        <div style="display:flex;align-items:center;gap:9px;margin-top:12px"><div class="progress" style="flex:1"><i style="width:${p}%"></i></div><b>${p}%</b></div>
+        <div class="op-meta"><span>${items.filter(x=>x.done).length}/${items.length} elementi completati</span>${mine?`<span style="color:var(--gold2)">${mine} da spuntare</span>`:''}</div>
+        <div class="op-actions">
+          <button class="btn sm" onclick="Modals.checklistDetail('${c.id}')">Apri</button>
+          ${App.canManageChecklists?`<button class="icon-btn" title="Modifica checklist" onclick="Modals.editChecklist('${c.id}')">✏️</button>`:''}
+        </div></article>`;
+    };
+    return `<div class="page-head"><div><h1>Checklist operative</h1><p>Elementi da spuntare, responsabilità e collegamento agli obiettivi.</p></div>${head}</div>
+    <div class="stats"><div class="stat gold"><div class="num">${open.length}</div><div class="lbl">Aperte</div></div><div class="stat green"><div class="num">${done.length}</div><div class="lbl">Completate</div></div><div class="stat red"><div class="num">${late}</div><div class="lbl">Oltre la scadenza</div></div></div>
+    ${sorted.length? `<div class="op-cards">${sorted.map(card).join('')}</div>`
+      : `<div class="empty-state"><div class="big">☑</div>Nessuna checklist disponibile.</div>`}`;
+  },
+
+  /* ---------- REGOLAMENTI ---------- */
+  regulations(){
+    const visible = Operations.regulations.filter(r=>App.canReadRegulation(r));
+    /* Prima le regole in vigore, e fra queste le obbligatorie: le bozze e
+       l'archivio interessano solo dopo. */
+    const rank = r => r.status==='Pubblicato' ? (r.mandatory?0:1) : (r.status==='Bozza'?2:3);
+    const sorted = [...visible].sort((a,b)=>
+      rank(a)-rank(b)
+      || PRIORITIES.indexOf(a.priority)-PRIORITIES.indexOf(b.priority)
+      || a.title.localeCompare(b.title));
+    const published = visible.filter(r=>r.status==='Pubblicato');
+    const mandatory = published.filter(r=>r.mandatory);
+    const toRead = visible.filter(r=>r.mandatory && App.canAcknowledgeRegulation(r));
+    const head = App.canEditRegulation(null)
+      ? `<button class="btn primary" onclick="Modals.editRegulation(null)">＋ Nuovo regolamento</button>` : '';
+    const card = r=>`<article class="mcard">
+      <div class="top"><span class="op-tag ${tagClass(r.status)}">${esc(r.status)}</span>${r.mandatory?'<span class="op-tag mandatory">Obbligatorio</span>':''}<span class="priority ${r.priority.toLowerCase()}">${esc(r.priority)}</span><span style="margin-left:auto;color:var(--text3);font-size:12px">v${esc(r.version)}</span></div>
+      <div class="op-title">${esc(r.title)}</div>
+      <div class="op-desc">${esc(r.description)}</div>
+      <div class="op-meta"><span class="op-tag st-${tagClass(r.documentStatus||'')}">${esc(r.documentStatus||'—')}</span><span>${esc(r.category)}</span><span>Destinatari: ${esc(audienceLabel(r.audience))}</span><span>Conferme: ${(r.acknowledgements||[]).length}</span></div>
+      ${sourceLine(r)}
+      <div class="op-actions">
+        ${regulationAckedBy(r,App.actorKey)?'<span class="op-tag letto">Lettura confermata</span>':''}
+        <button class="btn sm" onclick="Modals.regulationDetail('${r.id}')">Leggi</button>
+        ${App.canAcknowledgeRegulation(r)?`<button class="btn sm gold" onclick="Actions.acknowledgeRegulation('${r.id}')">Conferma lettura</button>`:''}
+        ${App.canReviewAcknowledgements?`<button class="btn sm" onclick="Modals.regulationAcks('${r.id}')">Conferme</button>`:''}
+        ${App.canEditRegulation(r)?`<button class="icon-btn" title="Modifica regolamento" onclick="Modals.editRegulation('${r.id}')">✏️</button>`:''}
+      </div></article>`;
+    return `<div class="page-head"><div><h1>Regolamenti</h1><p>Regole pubblicate, destinatari e conferme di lettura.</p></div>${head}</div>
+    <div class="stats"><div class="stat gold"><div class="num">${published.length}</div><div class="lbl">Pubblicati</div></div><div class="stat"><div class="num">${mandatory.length}</div><div class="lbl">Obbligatori</div></div><div class="stat red"><div class="num">${toRead.length}</div><div class="lbl">Da leggere</div></div></div>
+    ${sorted.length? `<div class="op-cards">${sorted.map(card).join('')}</div>`
+      : `<div class="empty-state"><div class="big">📕</div>Nessun regolamento disponibile per il tuo ruolo.</div>`}`;
   },
 
   /* ---------- MEMBRI ---------- */
@@ -1955,8 +2346,13 @@ const Views = {
 
 /* ============================ MODALS ============================ */
 const Modals = {
-  close(){ $('#modalRoot').innerHTML=''; },
-  open(html){ $('#modalRoot').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)Modals.close()">${html}</div>`; },
+  /* Checklist attualmente aperta in dettaglio: spuntare un elemento deve
+     aggiornare la scheda senza chiuderla, perché di norma se ne spunta più di uno. */
+  _detailChecklist:null,
+  /* Elementi in corso di modifica nell'editor di una checklist. */
+  _editItems:[],
+  close(){ this._detailChecklist=null; $('#modalRoot').innerHTML=''; },
+  open(html){ this._detailChecklist=null; $('#modalRoot').innerHTML = `<div class="modal-overlay" onclick="if(event.target===this)Modals.close()">${html}</div>`; },
 
   /* ---- Scheda membro (dettaglio) ---- */
   detail(id){
@@ -2660,8 +3056,9 @@ const Modals = {
   objectiveDetail(id){
     const o = Operations.objectives.find(x=>x.id===id); if(!o) return;
     const linkedMissions = Operations.missions.filter(x=>o.missionIds.includes(x.id));
-    const linkedChecks = Operations.checklists.filter(x=>o.checklistIds.includes(x.id));
-    this.open(`<div class="modal"><div class="modal-head"><h2>◎ ${esc(o.title)}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="objective-meta" style="margin:0 0 14px"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span>${esc(o.status)}</span><span>Scadenza ${fmtDate(o.dueDate)}</span></div><div class="kv"><dt>Descrizione</dt><dd>${esc(o.description)}</dd><dt>Categoria e periodo</dt><dd>${esc(o.category)} · ${esc(o.period)}</dd><dt>Responsabile</dt><dd>${esc(memberName(o.responsible))}</dd><dt>Partecipanti</dt><dd>${o.participants.map(memberName).map(esc).join(', ') || '—'}</dd><dt>Target</dt><dd>${esc(objectiveTarget(o))}</dd><dt>Progresso</dt><dd><div class="progress" style="display:inline-block;width:180px;vertical-align:middle"><i style="width:${o.progress}%"></i></div> ${o.progress}%</dd><dt>Note</dt><dd>${esc(o.notes||'—')}</dd><dt>Evidenze</dt><dd>${o.evidence.map(esc).join(' · ') || '—'}</dd><dt>Missioni collegate</dt><dd>${linkedMissions.map(x=>esc(x.title)).join(' · ') || '—'}</dd><dt>Checklist collegate</dt><dd>${linkedChecks.map(x=>esc(x.title)).join(' · ') || '—'}</dd><dt>Creato il</dt><dd>${esc(o.createdAt||'—')}</dd><dt>Aggiornato il</dt><dd>${esc(o.updatedAt||'—')}</dd></div></div><div class="modal-foot">${App.canUpdateObjectiveProgress(o)?`<div class="left"><button class="btn gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Aggiorna progresso</button></div>`:''}${App.canManageObjectives?`<button class="btn" onclick="Modals.editObjective('${o.id}')">✏️ Modifica</button>${o.status==='In corso'?`<button class="btn gold" onclick="Actions.completeObjective('${o.id}')">Completa</button>`:''}${o.status!=='Archiviato'?`<button class="btn danger" onclick="Actions.archiveObjective('${o.id}')">Archivia</button>`:''}`:''}<button class="btn" onclick="Modals.close()">Chiudi</button></div></div>`);
+    const linkedChecks = objectiveChecklists(o);
+    const doneChecks = linkedChecks.filter(x=>x.status==='Completata').length;
+    this.open(`<div class="modal"><div class="modal-head"><h2>◎ ${esc(o.title)}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="objective-meta" style="margin:0 0 14px"><span class="priority ${o.priority.toLowerCase()}">${esc(o.priority)}</span><span>${esc(o.status)}</span><span>Scadenza ${fmtDate(o.dueDate)}</span></div><div class="kv"><dt>Descrizione</dt><dd>${esc(o.description)}</dd><dt>Categoria e periodo</dt><dd>${esc(o.category)} · ${esc(o.period)}</dd><dt>Responsabile</dt><dd>${esc(memberName(o.responsible))}</dd><dt>Partecipanti</dt><dd>${o.participants.map(memberName).map(esc).join(', ') || '—'}</dd><dt>Target</dt><dd>${esc(objectiveTarget(o))}</dd><dt>Progresso</dt><dd><div class="progress" style="display:inline-block;width:180px;vertical-align:middle"><i style="width:${o.progress}%"></i></div> ${o.progress}%</dd><dt>Note</dt><dd>${esc(o.notes||'—')}</dd><dt>Evidenze</dt><dd>${o.evidence.map(esc).join(' · ') || '—'}</dd><dt>Missioni collegate</dt><dd>${linkedMissions.map(x=>esc(x.title)).join(' · ') || '—'}</dd><dt>Checklist collegate</dt><dd>${linkedChecks.length? `${linkedChecks.length} collegate · ${doneChecks} completate<div class="link-row" style="margin-top:6px">${linkedChecks.map(x=>`<button class="btn sm" onclick="Modals.checklistDetail('${x.id}')">☑ ${esc(x.title)} · ${checklistProgress(x)}%</button>`).join('')}</div>` : '—'}</dd><dt>Creato il</dt><dd>${esc(o.createdAt||'—')}</dd><dt>Aggiornato il</dt><dd>${esc(o.updatedAt||'—')}</dd></div></div><div class="modal-foot">${App.canUpdateObjectiveProgress(o)?`<div class="left"><button class="btn gold" onclick="Modals.updateObjectiveProgress('${o.id}')">Aggiorna progresso</button></div>`:''}${App.canManageObjectives?`<button class="btn" onclick="Modals.editObjective('${o.id}')">✏️ Modifica</button>${o.status==='In corso'?`<button class="btn gold" onclick="Actions.completeObjective('${o.id}')">Completa</button>`:''}${o.status!=='Archiviato'?`<button class="btn danger" onclick="Actions.archiveObjective('${o.id}')">Archivia</button>`:''}`:''}<button class="btn" onclick="Modals.close()">Chiudi</button></div></div>`);
   },
   updateObjectiveProgress(id){
     const o = Operations.objectives.find(x=>x.id===id); if(!o || !App.canUpdateObjectiveProgress(o)) return;
@@ -2672,16 +3069,190 @@ const Modals = {
     const o = id?Operations.objectives.find(x=>x.id===id):null;
     const memberOptions = Store.data.members.map(m=>`<option value="${m.id}" ${o?.responsible===m.id?'selected':''}>${esc(m.nickDiscord)}</option>`).join('');
     this.open(`<div class="modal"><div class="modal-head"><h2>${o?'Modifica obiettivo':'Nuovo obiettivo'}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div><div class="modal-body"><div class="grid2"><div class="field"><label>Titolo *</label><input id="o_title" value="${esc(o?.title||'')}"></div><div class="field"><label>Categoria</label><input id="o_category" value="${esc(o?.category||'Operativo')}"></div><div class="field"><label>Periodo</label><input id="o_period" value="${esc(o?.period||'Settimana 31')}"></div><div class="field"><label>Responsabile</label><select id="o_responsible"><option value="">—</option>${memberOptions}</select></div><div class="field"><label>Target</label><input id="o_target" type="number" min="0" value="${esc(o?.target??'')}"></div><div class="field"><label>Unità di misura</label><input id="o_unit" value="${esc(o?.unit||'')}" placeholder="es. missioni, ore, pezzi"></div><div class="field"><label>Progresso %</label><input id="o_progress" type="number" min="0" max="100" value="${o?.progress??0}"></div><div class="field"><label>Priorità</label><select id="o_priority">${['Alta','Media','Bassa'].map(x=>`<option ${o?.priority===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Stato</label><select id="o_status">${['In corso','Completato','Archiviato'].map(x=>`<option ${o?.status===x?'selected':''}>${x}</option>`).join('')}</select></div><div class="field"><label>Scadenza</label><input id="o_due" type="date" value="${o?.dueDate||''}"></div><div class="field"><label>Partecipanti</label><select id="o_participants" multiple size="3">${Store.data.members.map(m=>`<option value="${m.id}" ${o?.participants?.includes(m.id)?'selected':''}>${esc(m.nickDiscord)}</option>`).join('')}</select></div><div class="field full"><label>Descrizione</label><textarea id="o_description" rows="2">${esc(o?.description||'')}</textarea></div><div class="field full"><label>Note</label><textarea id="o_notes" rows="2">${esc(o?.notes||'')}</textarea></div><div class="field full"><label>Evidenze (una per riga)</label><textarea id="o_evidence" rows="2">${esc((o?.evidence||[]).join('\n'))}</textarea></div></div></div><div class="modal-foot"><button class="btn" onclick="Modals.close()">Annulla</button><button class="btn primary" onclick="Actions.saveObjective('${id||''}')">💾 Salva</button></div></div>`);
+  },
+
+  /* ---------- REGOLAMENTI ---------- */
+  regulationDetail(id){
+    const r = Operations.regulations.find(x=>x.id===id);
+    if(!r || !App.canReadRegulation(r)) return;
+    const acks = r.acknowledgements||[];
+    const mine = regulationAckedBy(r, App.actorKey);
+    /* Il testo applicabile non è conservato nel regolamento: si legge dalla
+       sezione di origine, così ciò che viene mostrato è sempre l'originale. */
+    const source = manualSection(r.sourceManualId, r.sourceSection);
+    this.open(`<div class="modal">
+      <div class="modal-head"><h2>📕 ${esc(r.title)}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div>
+      <div class="modal-body">
+        <div class="op-meta" style="margin:0 0 14px"><span class="op-tag ${tagClass(r.status)}">${esc(r.status)}</span>${r.mandatory?'<span class="op-tag mandatory">Obbligatorio</span>':''}<span class="priority ${r.priority.toLowerCase()}">${esc(r.priority)}</span><span>Versione ${esc(r.version)}</span></div>
+        <dl class="kv">
+          <dt>Descrizione</dt><dd>${esc(r.description||'—')}</dd>
+          <dt>Categoria</dt><dd>${esc(r.category)}</dd>
+          <dt>Manuale sorgente</dt><dd>${r.sourceManual?esc(r.sourceManual):'—'}</dd>
+          <dt>Sezione</dt><dd>${r.sourceSection?`${esc(r.sourceSection)} — ${esc(r.sourceSectionTitle||'')}`:'—'}</dd>
+          <dt>Stato documentale</dt><dd><span class="op-tag st-${tagClass(r.documentStatus||'')}">${esc(r.documentStatus||'—')}</span>${r.documentStatusInherited?` <span style="color:var(--text3);font-size:12px">ereditato dal controllo documento del ${esc(r.sourceManual||'manuale')}</span>`:''}</dd>
+          ${(r.documentStates||[]).length?`<dt>Stati citati nella sezione</dt><dd>${r.documentStates.map(x=>`<span class="op-tag st-${tagClass(x)}">${esc(x)}</span>`).join(' ')}</dd>`:''}
+          <dt>Destinatari</dt><dd>${esc(audienceLabel(r.audience))}</dd>
+          <dt>Obbligatorio</dt><dd>${r.mandatory?'Sì':'No'}</dd>
+          <dt>Autore</dt><dd>${r.author?esc(actorName(r.author)):'—'}</dd>
+          <dt>Data pubblicazione</dt><dd>${r.publishedAt?fmtDate(r.publishedAt):'Non pubblicato'}</dd>
+          <dt>Data aggiornamento</dt><dd>${esc(r.updatedAt||'—')}</dd>
+          <dt>Conferme di lettura</dt><dd>${acks.length}${mine?' · la tua è registrata':(App.canAcknowledgeRegulation(r)?' · la tua manca':'')}</dd>
+          <dt>Allegati e riferimenti</dt><dd>${(r.attachments||[]).map(esc).join(' · ')||'—'}</dd>
+          <dt>Note</dt><dd>${esc(r.notes||'—')}</dd>
+        </dl>
+        ${source?`<div class="section-title">Testo originale applicabile</div>
+        <div class="mb-note"><b>Trascrizione dal manuale</b><span>Il testo che segue è la sezione ${esc(r.sourceSection)} del ${esc(r.sourceManual)}, riportata senza modifiche. Il manuale è ancora <b>${esc(r.documentStatus)}</b>: nessuna parte va presentata come regola definitiva prima della ratifica.</span></div>
+        ${manualBlocks(source.blocks)}`:''}
+      </div>
+      <div class="modal-foot">
+        <div class="left">${App.canReviewAcknowledgements?`<button class="btn" onclick="Modals.regulationAcks('${r.id}')">Verifica conferme (${acks.length})</button>`:''}${source?`<button class="btn" onclick="App.openManual('${r.sourceManualId}','${r.sourceSection}')">📘 Apri nel manuale</button>`:''}</div>
+        ${App.canAcknowledgeRegulation(r)?`<button class="btn gold" onclick="Actions.acknowledgeRegulation('${r.id}')">Conferma lettura</button>`:''}
+        ${App.canEditRegulation(r)?`<button class="btn" onclick="Modals.editRegulation('${r.id}')">✏️ Modifica</button>`:''}
+        ${App.canPublishRegulation(r)&&r.status!=='Pubblicato'?`<button class="btn gold" onclick="Actions.publishRegulation('${r.id}')">Pubblica</button>`:''}
+        ${App.canSetRegulationMandatory()?`<button class="btn" onclick="Actions.toggleRegulationMandatory('${r.id}')">${r.mandatory?'Rendi facoltativo':'Rendi obbligatorio'}</button>`:''}
+        ${App.canArchiveRegulation()&&r.status!=='Archiviato'?`<button class="btn danger" onclick="Actions.archiveRegulation('${r.id}')">Archivia</button>`:''}
+        <button class="btn" onclick="Modals.close()">Chiudi</button>
+      </div></div>`);
+  },
+  /* Verifica delle conferme di lettura: registro di chi ha confermato e quando. */
+  regulationAcks(id){
+    const r = Operations.regulations.find(x=>x.id===id);
+    if(!r || !App.canReviewAcknowledgements) return;
+    const acks = r.acknowledgements||[];
+    this.open(`<div class="modal narrow">
+      <div class="modal-head"><h2>Conferme di lettura</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div>
+      <div class="modal-body">
+        <p style="color:var(--text2);font-size:13px">${esc(r.title)} — versione ${esc(r.version)}<br>Destinatari: ${esc(audienceLabel(r.audience))} · ${r.mandatory?'lettura obbligatoria':'lettura facoltativa'}</p>
+        <div class="section-title">Registrate (${acks.length})</div>
+        ${acks.length? acks.map(a=>`<div class="ack-row"><b>${esc(actorName(a.by))}</b><span class="when">${esc(a.at)}</span></div>`).join('')
+          : '<div class="empty-state" style="padding:18px">Nessuna conferma registrata.</div>'}
+      </div>
+      <div class="modal-foot"><button class="btn" onclick="Modals.regulationDetail('${r.id}')">Torna al regolamento</button><button class="btn" onclick="Modals.close()">Chiudi</button></div></div>`);
+  },
+  editRegulation(id){
+    const r = id?Operations.regulations.find(x=>x.id===id):null;
+    if(id && !r) return;
+    if(!App.canEditRegulation(r)) return;
+    /* La Direzione lavora su una sola categoria e non archivia: il modulo
+       espone solo ciò che il ruolo può effettivamente decidere. */
+    const cats = App.isAdmin ? REG_CATEGORIES : [REG_DIREZIONE_CATEGORY];
+    const states = App.canArchiveRegulation() ? REG_STATUSES : REG_STATUSES.filter(s=>s!=='Archiviato');
+    const authorOptions = Store.data.members.map(m=>`<option value="${m.id}" ${r?.author===m.id?'selected':''}>${esc(m.nickDiscord)}</option>`).join('');
+    const audience = r?.audience || [...APP_ROLES];
+    this.open(`<div class="modal">
+      <div class="modal-head"><h2>${r?'Modifica regolamento':'Nuovo regolamento'}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div>
+      <div class="modal-body"><div class="grid2">
+        <div class="field full"><label>Titolo *</label><input id="g_title" value="${esc(r?.title||'')}"></div>
+        <div class="field"><label>Categoria</label><select id="g_category">${cats.map(c=>`<option ${r?.category===c?'selected':''}>${c}</option>`).join('')}</select></div>
+        <div class="field"><label>Versione</label><input id="g_version" value="${esc(r?.version||'1.0')}" placeholder="es. 1.0"></div>
+        <div class="field"><label>Stato</label><select id="g_status">${states.map(s=>`<option ${r?.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+        <div class="field"><label>Priorità</label><select id="g_priority">${PRIORITIES.map(p=>`<option ${r?.priority===p?'selected':''}>${p}</option>`).join('')}</select></div>
+        <div class="field"><label>Autore</label><select id="g_author"><option value="">—</option>${authorOptions}</select></div>
+        <div class="field"><label>Obbligatorio</label><select id="g_mandatory" ${App.canSetRegulationMandatory()?'':'disabled'}><option value="si" ${r?.mandatory?'selected':''}>Sì</option><option value="no" ${r?.mandatory?'':'selected'}>No</option></select>${App.canSetRegulationMandatory()?'':'<small style="color:var(--text3);font-size:11.5px">Impostazione riservata al ruolo Admin.</small>'}</div>
+        <div class="field full"><label>Destinatari</label><div class="roles-picker">${APP_ROLES.map(role=>`<label class="chk-flag"><input type="checkbox" class="reg-aud" value="${role}" ${audience.includes(role)?'checked':''}> ${ROLE_LABEL[role]}</label>`).join('')}</div></div>
+        <div class="field full"><label>Descrizione</label><textarea id="g_description" rows="3">${esc(r?.description||'')}</textarea></div>
+        <div class="field full"><label>Allegati o riferimenti (uno per riga)</label><textarea id="g_attachments" rows="2">${esc((r?.attachments||[]).join('\n'))}</textarea></div>
+        <div class="field full"><label>Note</label><textarea id="g_notes" rows="2">${esc(r?.notes||'')}</textarea></div>
+      </div></div>
+      <div class="modal-foot"><button class="btn" onclick="Modals.close()">Annulla</button><button class="btn primary" onclick="Actions.saveRegulation('${id||''}')">💾 Salva</button></div></div>`);
+  },
+
+  /* ---------- CHECKLIST ---------- */
+  checklistDetail(id){
+    const c = Operations.checklists.find(x=>x.id===id); if(!c) return;
+    if(!App.canManageChecklists && c.status==='Archiviata') return;
+    const o = checklistObjective(c), mi = checklistMission(c);
+    const items = c.items||[], p = checklistProgress(c);
+    this.open(`<div class="modal">
+      <div class="modal-head"><h2>☑ ${esc(c.title)}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div>
+      <div class="modal-body">
+        <div class="op-meta" style="margin:0 0 12px"><span class="op-tag ${tagClass(c.status)}">${esc(c.status)}</span><span class="priority ${c.priority.toLowerCase()}">${esc(c.priority)}</span><span>Scadenza ${fmtDate(c.dueDate)}</span><span>Ricorrenza: ${esc(c.recurrence||'Nessuna')}</span></div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:14px"><div class="progress" style="flex:1"><i style="width:${p}%"></i></div><b>${p}%</b></div>
+        <dl class="kv">
+          <dt>Descrizione</dt><dd>${esc(c.description||'—')}</dd>
+          <dt>Categoria</dt><dd>${esc(c.category||'—')}</dd>
+          <dt>Manuale sorgente</dt><dd>${c.sourceManual?`${esc(c.sourceManual)} — sezione ${esc(c.sourceSection)}`:'—'}</dd>
+          <dt>Procedura sorgente</dt><dd>${esc(c.sourceProcedure||'—')}</dd>
+          <dt>Ruolo responsabile</dt><dd>${esc(c.responsibleRole||'—')}</dd>
+          <dt>Responsabile assegnato</dt><dd>${c.responsible?esc(memberName(c.responsible)):'Non ancora assegnato'}</dd>
+          <dt>Partecipanti</dt><dd>${(c.participants||[]).map(memberName).map(esc).join(', ')||'—'}</dd>
+          <dt>Obiettivo collegato</dt><dd>${o?`<button class="btn sm" onclick="Modals.objectiveDetail('${o.id}')">◎ ${esc(o.title)}</button>`:'—'}</dd>
+          <dt>Missione collegata</dt><dd>${mi?esc(mi.title):'—'}</dd>
+          <dt>Evidenze</dt><dd>${(c.evidence||[]).map(esc).join(' · ')||'—'}</dd>
+          <dt>Note</dt><dd>${esc(c.notes||'—')}</dd>
+          <dt>Creata il</dt><dd>${esc(c.createdAt||'—')}</dd>
+          <dt>Aggiornata il</dt><dd>${esc(c.updatedAt||'—')}</dd>
+        </dl>
+        <div class="section-title">Elementi (${items.filter(x=>x.done).length}/${items.length})</div>
+        <div class="chk-list">${items.length? items.map(it=>{
+          const can = App.canCompleteChecklistItem(c,it);
+          const why = it.done? `completato da ${esc(actorName(it.doneBy))} il ${esc(it.doneAt||'—')}` : 'da completare';
+          return `<div class="chk-item${it.done?' done':''}">
+            <button class="box" ${can?'':'disabled'} title="${can?'Segna elemento':'Non modificabile con il tuo ruolo'}" onclick="Actions.toggleChecklistItem('${c.id}','${it.id}')">${it.done?'✔':''}</button>
+            <div class="txt"><span>${esc(it.text)}</span><small>${it.restricted?'Riservato alla Direzione · ':''}${why}</small></div>
+          </div>`;
+        }).join('') : '<div class="empty-state" style="padding:18px">Nessun elemento.</div>'}</div>
+      </div>
+      <div class="modal-foot">
+        <div class="left">${o?`<button class="btn" onclick="Modals.objectiveDetail('${o.id}')">◎ Apri obiettivo</button>`:''}${c.sourceManualId?`<button class="btn" onclick="App.openManual('${c.sourceManualId}','${c.sourceSection}')">📘 Apri nel manuale</button>`:''}</div>
+        ${App.canManageChecklists?`<button class="btn" onclick="Modals.editChecklist('${c.id}')">✏️ Modifica</button>`:''}
+        ${App.canCompleteChecklist(c)&&c.status!=='Completata'?`<button class="btn gold" onclick="Actions.completeChecklist('${c.id}')">Completa checklist</button>`:''}
+        ${App.canManageChecklists&&c.status!=='Archiviata'?`<button class="btn danger" onclick="Actions.archiveChecklist('${c.id}')">Archivia</button>`:''}
+        <button class="btn" onclick="Modals.close()">Chiudi</button>
+      </div></div>`);
+    this._detailChecklist = id;
+  },
+  /* Righe modificabili degli elementi: il testo viene scritto direttamente nel
+     modello, così l'aggiunta o la rimozione di una riga non perde le altre. */
+  checklistItemsHtml(){
+    return this._editItems.map((it,i)=>`<div class="chk-edit-row">
+      <input type="text" value="${esc(it.text)}" placeholder="Descrizione elemento" oninput="Modals._editItems[${i}].text=this.value">
+      <label class="chk-flag"><input type="checkbox" ${it.restricted?'checked':''} onchange="Modals._editItems[${i}].restricted=this.checked"> Riservato alla Direzione</label>
+      <button class="icon-btn" title="Rimuovi elemento" onclick="Modals.removeChecklistItem(${i})">✕</button>
+    </div>`).join('') || '<div class="empty-state" style="padding:14px">Nessun elemento: aggiungine almeno uno.</div>';
+  },
+  refreshChecklistItems(){ const el = $('#c_items'); if(el) el.innerHTML = this.checklistItemsHtml(); },
+  addChecklistItem(){
+    if(!App.canManageChecklists) return;
+    this._editItems.push({id:Store.uid(), text:'', done:false, restricted:false, doneBy:'', doneAt:''});
+    this.refreshChecklistItems();
+  },
+  removeChecklistItem(i){ if(!App.canManageChecklists) return; this._editItems.splice(i,1); this.refreshChecklistItems(); },
+  editChecklist(id){
+    if(!App.canManageChecklists) return;
+    const c = id?Operations.checklists.find(x=>x.id===id):null;
+    if(id && !c) return;
+    this._editItems = (c?.items||[]).map(it=>({...it}));
+    const memberOptions = sel => Store.data.members.map(m=>`<option value="${m.id}" ${sel===m.id?'selected':''}>${esc(m.nickDiscord)}</option>`).join('');
+    this.open(`<div class="modal">
+      <div class="modal-head"><h2>${c?'Modifica checklist':'Nuova checklist'}</h2><button class="icon-btn" onclick="Modals.close()">✕</button></div>
+      <div class="modal-body"><div class="grid2">
+        <div class="field full"><label>Titolo *</label><input id="c_title" value="${esc(c?.title||'')}"></div>
+        <div class="field"><label>Categoria</label><input id="c_category" value="${esc(c?.category||'Operativo')}"></div>
+        <div class="field"><label>Ruolo responsabile</label><input id="c_role" value="${esc(c?.responsibleRole||'')}" placeholder="es. Coordinatore"></div>
+        <div class="field"><label>Responsabile assegnato</label><select id="c_responsible"><option value="">—</option>${memberOptions(c?.responsible)}</select></div>
+        <div class="field"><label>Stato</label><select id="c_status">${CHK_STATUSES.map(s=>`<option ${c?.status===s?'selected':''}>${s}</option>`).join('')}</select></div>
+        <div class="field"><label>Priorità</label><select id="c_priority">${PRIORITIES.map(p=>`<option ${c?.priority===p?'selected':''}>${p}</option>`).join('')}</select></div>
+        <div class="field"><label>Scadenza</label><input id="c_due" type="date" value="${c?.dueDate||''}"></div>
+        <div class="field"><label>Ricorrenza</label><select id="c_recurrence">${CHK_RECURRENCES.map(x=>`<option ${c?.recurrence===x?'selected':''}>${x}</option>`).join('')}</select></div>
+        <div class="field"><label>Obiettivo collegato</label><select id="c_objective"><option value="">—</option>${Operations.objectives.map(o=>`<option value="${o.id}" ${c?.objectiveId===o.id?'selected':''}>${esc(o.title)}</option>`).join('')}</select></div>
+        <div class="field"><label>Missione collegata</label><select id="c_mission"><option value="">—</option>${Operations.missions.map(m=>`<option value="${m.id}" ${c?.missionId===m.id?'selected':''}>${esc(m.title)}</option>`).join('')}</select></div>
+        <div class="field full"><label>Partecipanti</label><select id="c_participants" multiple size="3">${Store.data.members.map(m=>`<option value="${m.id}" ${c?.participants?.includes(m.id)?'selected':''}>${esc(m.nickDiscord)}</option>`).join('')}</select></div>
+        <div class="field full"><label>Descrizione</label><textarea id="c_description" rows="2">${esc(c?.description||'')}</textarea></div>
+        <div class="field full"><label>Elementi</label><div id="c_items">${this.checklistItemsHtml()}</div><button class="btn sm" onclick="Modals.addChecklistItem()">＋ Aggiungi elemento</button></div>
+        <div class="field full"><label>Evidenze (una per riga)</label><textarea id="c_evidence" rows="2">${esc((c?.evidence||[]).join('\n'))}</textarea></div>
+        <div class="field full"><label>Note</label><textarea id="c_notes" rows="2">${esc(c?.notes||'')}</textarea></div>
+      </div></div>
+      <div class="modal-foot"><button class="btn" onclick="Modals.close()">Annulla</button><button class="btn primary" onclick="Actions.saveChecklist('${id||''}')">💾 Salva</button></div></div>`);
   }
 };
 
 /* ============================ ACTIONS ============================ */
 const Actions = {
-  /* Traccia sintetica: sostituisce il timestamp del database finché gli
-     obiettivi vivono solo in memoria. */
-  objectiveNow(){ const d=new Date(); const p=n=>String(n).padStart(2,'0');
-    return `${d.getFullYear()}-${p(d.getMonth()+1)}-${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`; },
-  logObjective(title, detail){ Operations.activity.unshift({id:Store.uid(), title, detail, date:this.objectiveNow()}); },
+  /* Traccia sintetica: sostituisce il timestamp del database finché obiettivi,
+     regolamenti e checklist vivono solo in memoria. */
+  stamp(){ return stampNow(); },
+  logOperation(title, detail){ Operations.activity.unshift({id:Store.uid(), title, detail, date:this.stamp()}); },
 
   saveObjective(id){
     if(!App.canManageObjectives) return;
@@ -2697,9 +3268,9 @@ const Actions = {
       /* I collegamenti a missioni e checklist non si modificano da questo
          modulo: vanno conservati, non azzerati a ogni salvataggio. */
       missionIds:prev?.missionIds||[], checklistIds:prev?.checklistIds||[],
-      updatedAt:this.objectiveNow()};
-    if(prev){ Object.assign(prev,data); toast('Obiettivo aggiornato','ok'); this.logObjective('Obiettivo aggiornato',title); }
-    else{ Operations.objectives.push({id:Store.uid(),...data,createdAt:data.updatedAt}); toast('Obiettivo creato','ok'); this.logObjective('Obiettivo creato',title); }
+      updatedAt:this.stamp()};
+    if(prev){ Object.assign(prev,data); toast('Obiettivo aggiornato','ok'); this.logOperation('Obiettivo aggiornato',title); }
+    else{ Operations.objectives.push({id:Store.uid(),...data,createdAt:data.updatedAt}); toast('Obiettivo creato','ok'); this.logOperation('Obiettivo creato',title); }
     Modals.close(); App.render();
   },
   saveObjectiveProgress(id){
@@ -2708,23 +3279,177 @@ const Actions = {
     /* Il 100% non chiude l'obiettivo da solo: la chiusura resta un atto
        esplicito di chi ha il permesso di completare. */
     if(o.progress===100 && App.canCompleteObjective()) o.status='Completato';
-    o.updatedAt=this.objectiveNow();
-    this.logObjective('Progresso aggiornato',`${o.title}: ${o.progress}%`);
+    o.updatedAt=this.stamp();
+    this.logOperation('Progresso aggiornato',`${o.title}: ${o.progress}%`);
     Modals.close(); App.render(); toast('Progresso aggiornato','ok');
   },
   completeObjective(id){
     if(!App.canCompleteObjective()) return;
     const o=Operations.objectives.find(x=>x.id===id); if(!o) return;
-    o.status='Completato'; o.progress=100; o.updatedAt=this.objectiveNow();
-    this.logObjective('Obiettivo completato',o.title);
+    o.status='Completato'; o.progress=100; o.updatedAt=this.stamp();
+    this.logOperation('Obiettivo completato',o.title);
     Modals.close(); App.render(); toast('Obiettivo completato','ok');
   },
   archiveObjective(id){
     if(!App.canManageObjectives) return;
     const o=Operations.objectives.find(x=>x.id===id); if(!o) return;
-    o.status='Archiviato'; o.updatedAt=this.objectiveNow();
-    this.logObjective('Obiettivo archiviato',o.title);
+    o.status='Archiviato'; o.updatedAt=this.stamp();
+    this.logOperation('Obiettivo archiviato',o.title);
     Modals.close(); App.render(); toast('Obiettivo archiviato');
+  },
+
+  /* ---------- REGOLAMENTI ---------- */
+  saveRegulation(id){
+    const prev = id ? Operations.regulations.find(x=>x.id===id) : null;
+    if(id && !prev) return;
+    if(!App.canEditRegulation(prev)) return;
+    const title = $('#g_title').value.trim();
+    if(!title){ toast('Il titolo è obbligatorio','err'); return; }
+    const audience = [...document.querySelectorAll('.reg-aud:checked')].map(x=>x.value);
+    if(!audience.length){ toast('Indica almeno un destinatario','err'); return; }
+    /* Il modulo non può concedere ciò che il ruolo non ha: categoria, stato
+       archiviato e obbligatorietà restano ancorati ai permessi, non al form. */
+    const chosen = $('#g_status').value;
+    const data = {
+      title,
+      category: App.isAdmin ? $('#g_category').value : REG_DIREZIONE_CATEGORY,
+      description: $('#g_description').value.trim(),
+      version: $('#g_version').value.trim() || '1.0',
+      status: (chosen==='Archiviato' && !App.canArchiveRegulation()) ? (prev?.status || 'Bozza') : chosen,
+      priority: $('#g_priority').value,
+      audience,
+      author: $('#g_author').value,
+      mandatory: App.canSetRegulationMandatory() ? $('#g_mandatory').value==='si' : (prev?.mandatory || false),
+      attachments: $('#g_attachments').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      notes: $('#g_notes').value.trim(),
+      /* Le conferme di lettura sono un registro: non si riscrivono dal modulo. */
+      acknowledgements: prev?.acknowledgements || [],
+      publishedAt: prev?.publishedAt || '',
+      updatedAt: this.stamp()
+    };
+    if(data.status==='Pubblicato' && !data.publishedAt) data.publishedAt = todayISO();
+    if(prev){ Object.assign(prev,data); toast('Regolamento aggiornato','ok'); this.logOperation('Regolamento aggiornato',title); }
+    else{ Operations.regulations.push({id:Store.uid(),...data}); toast('Regolamento creato','ok'); this.logOperation('Regolamento creato',title); }
+    Modals.close(); App.render();
+  },
+  publishRegulation(id){
+    const r = Operations.regulations.find(x=>x.id===id); if(!r) return;
+    if(!App.canPublishRegulation(r)) return;
+    r.status='Pubblicato';
+    if(!r.publishedAt) r.publishedAt = todayISO();
+    r.updatedAt = this.stamp();
+    this.logOperation('Regolamento pubblicato', r.title);
+    Modals.close(); App.render(); toast('Regolamento pubblicato','ok');
+  },
+  archiveRegulation(id){
+    if(!App.canArchiveRegulation()) return;
+    const r = Operations.regulations.find(x=>x.id===id); if(!r) return;
+    r.status='Archiviato'; r.updatedAt = this.stamp();
+    this.logOperation('Regolamento archiviato', r.title);
+    Modals.close(); App.render(); toast('Regolamento archiviato');
+  },
+  toggleRegulationMandatory(id){
+    if(!App.canSetRegulationMandatory()) return;
+    const r = Operations.regulations.find(x=>x.id===id); if(!r) return;
+    r.mandatory = !r.mandatory; r.updatedAt = this.stamp();
+    this.logOperation(r.mandatory?'Regolamento reso obbligatorio':'Regolamento reso facoltativo', r.title);
+    Modals.close(); App.render(); toast(r.mandatory?'Regolamento obbligatorio':'Regolamento facoltativo','ok');
+  },
+  acknowledgeRegulation(id){
+    const r = Operations.regulations.find(x=>x.id===id); if(!r) return;
+    if(!App.canAcknowledgeRegulation(r)) return;
+    (r.acknowledgements ||= []).push({by:App.actorKey, at:this.stamp()});
+    this.logOperation('Lettura confermata', r.title);
+    Modals.close(); App.render(); toast('Lettura confermata','ok');
+  },
+
+  /* ---------- CHECKLIST ---------- */
+  /* Il collegamento con l'obiettivo è scritto in due posti: `objectiveId` sulla
+     checklist e `checklistIds` sull'obiettivo, che esisteva già. Qui li
+     riallineiamo dopo ogni modifica, togliendo il riferimento solo
+     dall'obiettivo che lo perde e senza toccare gli altri collegamenti. */
+  linkChecklistToObjective(chk, prevObjectiveId){
+    if(prevObjectiveId && prevObjectiveId !== chk.objectiveId){
+      const old = Operations.objectives.find(o=>o.id===prevObjectiveId);
+      if(old) old.checklistIds = (old.checklistIds||[]).filter(x=>x!==chk.id);
+    }
+    const target = Operations.objectives.find(o=>o.id===chk.objectiveId);
+    if(target){
+      target.checklistIds ||= [];
+      if(!target.checklistIds.includes(chk.id)) target.checklistIds.push(chk.id);
+    }
+  },
+  saveChecklist(id){
+    if(!App.canManageChecklists) return;
+    const prev = id ? Operations.checklists.find(x=>x.id===id) : null;
+    if(id && !prev) return;
+    const title = $('#c_title').value.trim();
+    if(!title){ toast('Il titolo è obbligatorio','err'); return; }
+    /* Gli elementi già spuntati conservano chi li ha completati e quando. */
+    const items = Modals._editItems
+      .map(it=>({id:it.id, text:String(it.text||'').trim(), done:!!it.done,
+                 restricted:!!it.restricted, doneBy:it.doneBy||'', doneAt:it.doneAt||''}))
+      .filter(it=>it.text);
+    const data = {
+      title, description:$('#c_description').value.trim(), category:$('#c_category').value.trim(),
+      responsible:$('#c_responsible').value, responsibleRole:$('#c_role').value.trim(),
+      participants:[...$('#c_participants').selectedOptions].map(x=>x.value),
+      items, status:$('#c_status').value, priority:$('#c_priority').value,
+      dueDate:$('#c_due').value, recurrence:$('#c_recurrence').value,
+      objectiveId:$('#c_objective').value, missionId:$('#c_mission').value,
+      evidence:$('#c_evidence').value.split('\n').map(x=>x.trim()).filter(Boolean),
+      notes:$('#c_notes').value.trim(), updatedAt:this.stamp()
+    };
+    data.progress = checklistProgress(data);
+    let chk;
+    if(prev){
+      const before = prev.objectiveId;
+      Object.assign(prev,data); chk = prev;
+      this.linkChecklistToObjective(chk, before);
+      toast('Checklist aggiornata','ok'); this.logOperation('Checklist aggiornata',title);
+    }else{
+      chk = {id:Store.uid(), ...data, createdAt:data.updatedAt};
+      Operations.checklists.push(chk);
+      this.linkChecklistToObjective(chk, '');
+      toast('Checklist creata','ok'); this.logOperation('Checklist creata',title);
+    }
+    Modals.close(); App.render();
+  },
+  toggleChecklistItem(chkId, itemId){
+    const c = Operations.checklists.find(x=>x.id===chkId); if(!c) return;
+    const it = (c.items||[]).find(x=>x.id===itemId); if(!it) return;
+    if(!App.canCompleteChecklistItem(c,it)) return;
+    it.done = !it.done;
+    it.doneBy = it.done ? App.actorKey : '';
+    it.doneAt = it.done ? this.stamp() : '';
+    c.progress = checklistProgress(c);
+    /* Spuntare fa avanzare la checklist, ma non la chiude: dichiararla
+       completata resta una decisione di chi la coordina. */
+    if(c.status==='Aperta' && c.progress>0) c.status='In corso';
+    c.updatedAt = this.stamp();
+    this.logOperation(it.done?'Elemento completato':'Elemento riaperto', `${c.title}: ${it.text}`);
+    /* La scheda resta aperta: di norma si spunta più di un elemento. */
+    const reopen = Modals._detailChecklist === chkId;
+    App.render();
+    if(reopen) Modals.checklistDetail(chkId);
+  },
+  completeChecklist(id){
+    const c = Operations.checklists.find(x=>x.id===id); if(!c) return;
+    if(!App.canCompleteChecklist(c)) return;
+    for(const it of (c.items||[])){
+      if(it.done) continue;
+      it.done = true; it.doneBy = App.actorKey; it.doneAt = this.stamp();
+    }
+    c.progress = checklistProgress(c); c.status='Completata'; c.updatedAt = this.stamp();
+    this.logOperation('Checklist completata', c.title);
+    Modals.close(); App.render(); toast('Checklist completata','ok');
+  },
+  archiveChecklist(id){
+    if(!App.canManageChecklists) return;
+    const c = Operations.checklists.find(x=>x.id===id); if(!c) return;
+    c.status='Archiviata'; c.updatedAt = this.stamp();
+    this.logOperation('Checklist archiviata', c.title);
+    Modals.close(); App.render(); toast('Checklist archiviata');
   },
   saveMember(id){
     const nick = $('#f_nick').value.trim();
